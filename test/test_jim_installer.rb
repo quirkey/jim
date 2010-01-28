@@ -64,7 +64,7 @@ class TestJimInstaller < Test::Unit::TestCase
         
       end
       
-      should "determine name from package.json" do
+      should_eventually "determine name from package.json" do
         
       end
       
@@ -83,7 +83,7 @@ class TestJimInstaller < Test::Unit::TestCase
         
       end
       
-      should "determine version from META.json" do
+      should_eventually "determine version from META.json" do
         
       end
       
