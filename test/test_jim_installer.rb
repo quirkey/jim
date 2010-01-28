@@ -116,7 +116,7 @@ class TestJimInstaller < Test::Unit::TestCase
         installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
         assert installer.fetch
         assert installer.install
-        install_path = File.join(tmp_path, 'jquery', '1.4.1')
+        install_path = File.join(tmp_path, 'lib', 'jquery', '1.4.1')
         assert File.directory?(install_path)
         assert File.readable?(File.join(install_path, 'jquery.js'))
         assert_equal fixture('jquery-1.4.1.js'), File.read(File.join(install_path, 'jquery.js'))

@@ -26,11 +26,13 @@ module Jim
     end
     
     def install
-      determine_name
-      determine_version
-      final_dir = install_path + name + version
+      determine_name if !name
+      determine_version if !version
+      final_dir = install_path + 'lib' + name + version
       final_dir.mkpath
-      tmp_path.cp final_dir + "#{name}#{tmp_path.extname}"
+      final_path = final_dir + "#{name}#{tmp_path.extname}"
+      tmp_path.cp final_path
+      final_path.expand_path
     end
     
     def determine_name
