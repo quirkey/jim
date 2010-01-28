@@ -14,11 +14,11 @@ class TestJimInstaller < Test::Unit::TestCase
       end
       
       should "set fetch path" do
-        assert_equal 'fetchpath', @installer.fetch_path
+        assert_equal Pathname.new('fetchpath'), @installer.fetch_path
       end
       
       should "set install path" do
-        assert_equal 'installpath', @installer.install_path
+        assert_equal Pathname.new('installpath'), @installer.install_path
       end
       
       should "set options" do

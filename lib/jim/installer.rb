@@ -12,7 +12,7 @@ module Jim
     def fetch
       tmp_file = File.open(tmp_path, 'w')
       if remote?
-        open(fetch_path) {|f| tmp_file << f.read }
+        open(fetch_path.to_s) {|f| tmp_file << f.read }
       else
         File.open(fetch_path) {|f| tmp_file << f.read }
       end
@@ -25,17 +25,33 @@ module Jim
     end
     
     def determine_name
-      @name = options[:name] and return if options[:name]
-      @name = tmp_path.stem
+      return @name = options[:name] if options[:name]
+      if tmp_path.file?
+        # try to read and determine name
+        tmp_path.each_line do |line|
+          if line.match(/name:\s+([\d\w\.\-]+)/i)
+            return @name = $1
+          end
+        end
+      end
+      @name = tmp_path.stem.gsub(/(\-[\d\w\.]+)$/, '')
     end
     
     def determine_version
-      @version = options[:version] and return if options[:version]
+      return @version = options[:version] if options[:version]
+      if tmp_path.file?
+        # try to read and determine version
+        tmp_path.each_line do |line|
+          if line.match(/version:\s+([\d\w\.\-]+)/i)
+            return @version = $1
+          end
+        end
+      end
       @version = tmp_path.version
     end
     
     def remote?
-      fetch_path =~ /^http/
+      fetch_path.to_s =~ /^http/
     end
         
     private
