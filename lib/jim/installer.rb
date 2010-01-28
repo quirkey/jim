@@ -21,7 +21,11 @@ module Jim
     end
     
     def install
-      
+      determine_name
+      determine_version
+      final_dir = install_path + name + version
+      final_dir.mkpath
+      tmp_path.cp final_dir + "#{name}#{tmp_path.extname}"
     end
     
     def determine_name
