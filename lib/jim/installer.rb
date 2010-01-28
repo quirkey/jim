@@ -9,6 +9,11 @@ module Jim
       @options      = options
     end
     
+    def run
+      fetch
+      install
+    end
+    
     def fetch
       tmp_file = File.open(tmp_path, 'w')
       if remote?
