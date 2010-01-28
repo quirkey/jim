@@ -29,8 +29,8 @@ module Jim
       if tmp_path.file?
         # try to read and determine name
         tmp_path.each_line do |line|
-          if line.match(/name:\s+([\d\w\.\-]+)/i)
-            return @name = $1
+          if /(\*|\/\/)\s+name:\s+([\d\w\.\-]+)/i.match line
+            return @name = $2
           end
         end
       end
@@ -42,8 +42,8 @@ module Jim
       if tmp_path.file?
         # try to read and determine version
         tmp_path.each_line do |line|
-          if line.match(/version:\s+([\d\w\.\-]+)/i)
-            return @version = $1
+          if /(\*|\/\/)\s+version:\s+([\d\w\.\-]+)/i.match line
+            return @version = $2
           end
         end
       end
