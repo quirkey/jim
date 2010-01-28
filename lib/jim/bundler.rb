@@ -2,11 +2,12 @@ module Jim
   class Bundler
     class MissingFile < Jim::Error; end
     
-    attr_accessor :jimfile, :index, :paths
+    attr_accessor :jimfile, :index, :paths, :options 
    
-    def initialize(jimfile, index)
+    def initialize(jimfile, index, options = {})
       @jimfile = jimfile.is_a?(Pathname) ? jimfile.read : jimfile
-      @index = index
+      @index   = index
+      @options = options
       @paths = []
     end
     
@@ -34,7 +35,7 @@ module Jim
     
     def compress!(to = nil)
       io = io_for_path(to)
-      io << ::Closure::Compiler.new.compress(bundle!)
+      io << ::Closure::Compiler.new(options[:compressor] || {}).compress(bundle!)
       io
     end
     

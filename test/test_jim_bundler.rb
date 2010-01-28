@@ -99,14 +99,12 @@ class TestJimBundler < Test::Unit::TestCase
     context "compress!" do
       
       should "run through google compressor" do
-        Closure::Compiler.any_instance.expects(:compress).once
         bundle = @bundler.compress!
         assert bundle.is_a?(String)
         assert_match(/jQuery/, bundle)
       end
       
       should "write to file if path is given" do
-        Closure::Compiler.any_instance.expects(:compress).once
         bundle_path = File.join(tmp_path, 'app.js')
         assert @bundler.compress!(bundle_path)
         assert bundle = File.read(bundle_path)
@@ -114,7 +112,6 @@ class TestJimBundler < Test::Unit::TestCase
       end
       
       should "write to IO if IO is given" do
-        Closure::Compiler.any_instance.expects(:compress).once
         bundle_path = File.join(tmp_path, 'app.js')
         assert @bundler.compress!(File.open(bundle_path, 'w'))
         assert bundle = File.read(bundle_path)
