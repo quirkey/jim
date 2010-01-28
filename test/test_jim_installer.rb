@@ -5,7 +5,7 @@ class TestJimInstaller < Test::Unit::TestCase
   context "Jim::Installer" do
     setup do
       # clear the tmp dir
-      File.unlink(tmp_path)
+      FileUtils.rm_rf(tmp_path) if File.directory?(tmp_path)
     end
     
     context "initializing" do
@@ -22,7 +22,7 @@ class TestJimInstaller < Test::Unit::TestCase
       end
       
       should "set options" do
-        assert_equal {:version => '1.1'}, @installer.options
+        assert_equal({:version => '1.1'}, @installer.options)
       end
       
     end
@@ -30,7 +30,7 @@ class TestJimInstaller < Test::Unit::TestCase
     context "fetch" do
       setup do
         @url = "http://jquery.com/download/jquery-1.4.1.js"
-        FakeWeb.register_uri(@url, :body => fixture('jquery-1.4.1.js'))
+        FakeWeb.register_uri(:get, @url, :body => fixture('jquery-1.4.1.js'))
       end
       
       should "fetch remote file" do
@@ -40,7 +40,7 @@ class TestJimInstaller < Test::Unit::TestCase
       
       should "put file into temporary directory" do
         installer = Jim::Installer.new(@url, tmp_path)
-        install.fetch
+        installer.fetch
         assert File.directory?(File.join(tmp_path, 'tmp', 'jquery-1.4.1'))
         assert File.readable?(File.join(tmp_path, 'tmp', 'jquery-1.4.1', 'jquery-1.4.1.js'))
       end
@@ -51,7 +51,7 @@ class TestJimInstaller < Test::Unit::TestCase
       
       should "fetch local file" do
         installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
-        install.fetch
+        installer.fetch
         assert File.directory?(File.join(tmp_path, 'tmp', 'jquery-1.4.1'))
         assert File.readable?(File.join(tmp_path, 'tmp', 'jquery-1.4.1', 'jquery-1.4.1.js'))
       end
