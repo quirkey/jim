@@ -64,7 +64,7 @@ class TestJimInstaller < Test::Unit::TestCase
         installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
         assert installer.fetch
         assert installer.determine_name
-        assert_equal installer.name, 'jquery'
+        assert_equal 'jquery', installer.name
       end
       
       should_eventually "determine name from package.json"
@@ -73,14 +73,14 @@ class TestJimInstaller < Test::Unit::TestCase
         installer = Jim::Installer.new(fixture_path('infoincomments.js'), tmp_path)
         assert installer.fetch
         assert installer.determine_name
-        assert_equal installer.name, 'myproject'
+        assert_equal 'myproject', installer.name
       end
       
       should "determine name from options" do
         installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path, :name => 'myproject')
         assert installer.fetch
         assert installer.determine_name
-        assert_equal installer.name, 'myproject'
+        assert_equal 'myproject', installer.name
       end      
     end
     
@@ -90,7 +90,7 @@ class TestJimInstaller < Test::Unit::TestCase
         installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
         assert installer.fetch
         assert installer.determine_version
-        assert_equal installer.version, '1.4.1'
+        assert_equal '1.4.1', installer.version
       end
       
       should_eventually "determine version from META.json"
@@ -99,14 +99,14 @@ class TestJimInstaller < Test::Unit::TestCase
         installer = Jim::Installer.new(fixture_path('infoincomments.js'), tmp_path)
         assert installer.fetch
         assert installer.determine_version
-        assert_equal installer.version, '1.2.2'
+        assert_equal '1.2.2', installer.version
       end
       
       should "determine version from options" do
         installer = Jim::Installer.new(fixture_path('infoincomments.js'), tmp_path, :version => '1.0pre')
         assert installer.fetch
         assert installer.determine_version
-        assert_equal installer.version, '1.0pre'
+        assert_equal '1.0pre', installer.version
       end
     end
     
