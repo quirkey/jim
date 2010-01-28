@@ -8,4 +8,6 @@ module Jim
 
   autoload :Installer, File.join(File.dirname(__FILE__), 'jim', 'installer.rb')
   autoload :Index, File.join(File.dirname(__FILE__), 'jim', 'index.rb')
+  autoload :Bundler, File.join(File.dirname(__FILE__), 'jim', 'index.rb')
+  
 end

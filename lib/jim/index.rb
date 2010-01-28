@@ -7,13 +7,13 @@ module Jim
     end
 
     def find(name, version = nil)
-      name = Pathname.new(name)
-      extname = name.extname
-      name = name.stem
-      ext  = (extname.nil? || extname.strip == '') ? '.js' : extname
+      name     = Pathname.new(name)
+      extname  = name.extname
+      basename = name.stem
+      ext      = (extname.nil? || extname.strip == '') ? '.js' : extname
       possible_paths = if version
         [
-          /#{name}\/#{version}\/#{name}#{ext}$/,
+          /#{basename}\/#{version}\/#{name}#{ext}$/,
          /#{name}-#{version}#{ext}$/
         ]
       else

@@ -39,6 +39,13 @@ class TestJimIndex < Test::Unit::TestCase
         assert_equal Pathname.new(fixture_path('jquery-1.4.1.js')), path
       end
       
+      should "find by path and version in local files" do
+        path = @index.find('fixtures/jquery')
+        assert path
+        assert path.is_a?(Pathname)
+        assert_equal Pathname.new(fixture_path('jquery-1.4.1.js')), path
+      end
+      
       should "find by name and version in jim dirs" do
         installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path, :version => '1.5pre')
         jim_path = installer.run
