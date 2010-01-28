@@ -34,7 +34,7 @@ class TestJimBundler < Test::Unit::TestCase
     context "resolve!" do
       
       should "find projects listed in the jimfile and set paths" do
-        assert_nil @bundler.paths
+        assert @bundler.paths.empty?
         @bundler.resolve!
         assert @bundler.paths
         assert_equal 2, @bundler.paths.length
@@ -82,16 +82,16 @@ class TestJimBundler < Test::Unit::TestCase
       
       should "write to file if path is given" do
         bundle_path = File.join(tmp_path, 'app.js')
-        assert @bundle.bundle!(bundle_path)
+        assert @bundler.bundle!(bundle_path)
         assert bundle = File.read(bundle_path)
-        assert_match(/jQuery/, bundle_path)
+        assert_match(/jQuery/, bundle)
       end
       
       should "write to IO if IO is given" do
         bundle_path = File.join(tmp_path, 'app.js')
-        assert @bundle.bundle!(File.open(bundle_path))
+        assert @bundler.bundle!(File.open(bundle_path, 'w'))
         assert bundle = File.read(bundle_path)
-        assert_match(/jQuery/, bundle_path)
+        assert_match(/jQuery/, bundle)
       end
       
     end
@@ -100,7 +100,7 @@ class TestJimBundler < Test::Unit::TestCase
       
       should "run through google compressor" do
         Closure::Compiler.any_instance.expects(:compress).once
-        bundle = @bundle.compress!
+        bundle = @bundler.compress!
         assert bundle.is_a?(String)
         assert_match(/jQuery/, bundle)
       end
@@ -108,17 +108,17 @@ class TestJimBundler < Test::Unit::TestCase
       should "write to file if path is given" do
         Closure::Compiler.any_instance.expects(:compress).once
         bundle_path = File.join(tmp_path, 'app.js')
-        assert @bundle.compress!(bundle_path)
+        assert @bundler.compress!(bundle_path)
         assert bundle = File.read(bundle_path)
-        assert_match(/jQuery/, bundle_path)        
+        assert_match(/jQuery/, bundle)        
       end
       
       should "write to IO if IO is given" do
         Closure::Compiler.any_instance.expects(:compress).once
         bundle_path = File.join(tmp_path, 'app.js')
-        assert @bundle.bundle!(File.open(bundle_path))
+        assert @bundler.compress!(File.open(bundle_path, 'w'))
         assert bundle = File.read(bundle_path)
-        assert_match(/jQuery/, bundle_path)
+        assert_match(/jQuery/, bundle)
       end
       
     end
