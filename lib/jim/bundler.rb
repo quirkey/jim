@@ -49,10 +49,7 @@ module Jim
       dir ||= options[:vendor_dir]
       dir ||= 'vendor' # default
       paths.each do |path|
-        i = Jim::Installer.new(path, nil)
-        i.determine_name
-        i.determine_version
-        path.cp vendor_dir + "#{name}-#{version}#{path.extname}"
+        Jim::Installer.new(path, dir, :shallow => true).install
       end
     end
     
