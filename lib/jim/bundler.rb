@@ -2,24 +2,27 @@ module Jim
   class Bundler
     class MissingFile < Jim::Error; end
     
-    attr_accessor :jimfile, :index, :paths, :options 
+    attr_accessor :jimfile, :index, :requirements, :paths, :options 
    
     def initialize(jimfile, index, options = {})
-      @jimfile = jimfile.is_a?(Pathname) ? jimfile.read : jimfile
-      @index   = index
-      @options = options
-      @paths = []
+      self.jimfile      = jimfile.is_a?(Pathname) ? jimfile.read : jimfile
+      self.index        = index
+      self.options      = {}
+      self.requirements = []
+      parse_jimfile
+      self.options.merge(options)
+      self.paths        = []
     end
     
     def resolve!
-      jimfile.each_line do |search|
+      self.requirements.each do |search|
         name, version = search.strip.split(/\s+/)
         path = index.find(name, version)
         if !path
           raise(MissingFile, 
           "Could not find #{name} #{version} in any of these paths #{index.directories.join(':')}")
         end
-        @paths << path
+        self.paths << path
       end
       paths
     end
@@ -52,6 +55,16 @@ module Jim
         io_for_path(to)
       else
         ""
+      end
+    end
+   
+    def parse_jimfile
+      jimfile.each_line do |line|
+        if /^\/\/\s?([^\:]+)\:\s(.*)$/.match line
+          self.options[$1.to_sym] = $2.strip
+        elsif line.strip != ''
+          self.requirements << line
+        end
       end
     end
     

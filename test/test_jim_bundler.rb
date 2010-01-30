@@ -25,6 +25,11 @@ class TestJimBundler < Test::Unit::TestCase
         assert_equal fixture('jimfile'), @bundler.jimfile
       end
       
+      should "parse options out of jimfile" do
+        assert_equal 'public/javascripts/bundle.js', @bundler.options[:bundle_path]
+        assert_equal 'public/javascripts/vendor', @bundler.options[:vendor_dir]
+      end
+      
       should "set index" do
         assert @bundler.index.is_a?(Jim::Index)
         assert_equal @directories, @bundler.index.directories
@@ -57,10 +62,10 @@ class TestJimBundler < Test::Unit::TestCase
     
     end
     
-    context "localize!" do
+    context "vendor!" do
       
       should "copy files in jemfile to path specified" do
-        
+        flunk
       end
       
     end
@@ -68,6 +73,7 @@ class TestJimBundler < Test::Unit::TestCase
     context "bundle!" do
       
       should "concatenate file into a string" do
+        @bundler.options = {}
         bundle = @bundler.bundle!
         assert bundle.is_a?(String)
         assert_match(/jQuery/, bundle)
@@ -78,6 +84,10 @@ class TestJimBundler < Test::Unit::TestCase
         assert_raise(Jim::Bundler::MissingFile) {
           @bundler.bundle!
         }
+      end
+      
+      should "write to file specified in options" do
+        flunk
       end
       
       should "write to file if path is given" do
