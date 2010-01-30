@@ -1,5 +1,6 @@
-// bundle_path: public/javascripts/bundle.js
-// vendor_dir: public/javascripts/vendor 
+// bundled_path: tmp/public/javascripts/bundled.js
+// compressed_path: tmp/public/javascripts/compressed.js
+// vendor_dir: tmp/public/javascripts/vendor 
 
 jquery 1.4.1
 myproject

@@ -26,8 +26,8 @@ class TestJimBundler < Test::Unit::TestCase
       end
       
       should "parse options out of jimfile" do
-        assert_equal 'public/javascripts/bundle.js', @bundler.options[:bundle_path]
-        assert_equal 'public/javascripts/vendor', @bundler.options[:vendor_dir]
+        assert_equal 'tmp/public/javascripts/bundled.js', @bundler.options[:bundled_path]
+        assert_equal 'tmp/public/javascripts/vendor', @bundler.options[:vendor_dir]
       end
       
       should "set index" do
@@ -65,7 +65,11 @@ class TestJimBundler < Test::Unit::TestCase
     context "vendor!" do
       
       should "copy files in jemfile to path specified" do
-        flunk
+        vendor_dir = Pathname.new(tmp_path) + 'vendor'
+        @bundler.vendor!(vendor_dir)
+        puts `ls -l #{vendor_dir}`
+        assert (vendor_dir + 'jquery-1.4.1.js').readable?
+        assert (vendor_dir + 'myproject-1.2.2.js').readable?
       end
       
     end
@@ -87,7 +91,10 @@ class TestJimBundler < Test::Unit::TestCase
       end
       
       should "write to file specified in options" do
-        flunk
+        bundle_path = @bundler.options[:bundled_path]
+        assert @bundler.bundle!
+        assert bundle = File.read(bundle_path)
+        assert_match(/jQuery/, bundle)
       end
       
       should "write to file if path is given" do
@@ -107,11 +114,22 @@ class TestJimBundler < Test::Unit::TestCase
     end
     
     context "compress!" do
+      setup do
+        @bundler.stubs(:js_compress).returns(@bundler.bundle!(false))
+      end
       
       should "run through google compressor" do
+        @bundler.options = {}
         bundle = @bundler.compress!
         assert bundle.is_a?(String)
         assert_match(/jQuery/, bundle)
+      end
+      
+      should "write to file specified in options" do
+        bundle_path = @bundler.options[:compressed_path]
+        assert @bundler.compress!
+        assert bundle = File.read(bundle_path)
+        assert_match(/jQuery/, bundle)        
       end
       
       should "write to file if path is given" do
