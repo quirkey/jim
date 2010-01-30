@@ -6,6 +6,10 @@ module Jim
       @directories = directories.flatten
     end
 
+    def add(directory)
+      @directories.unshift directory
+    end
+
     def find(name, version = nil)
       name     = Pathname.new(name)
       extname  = name.extname

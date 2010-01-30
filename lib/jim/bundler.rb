@@ -6,11 +6,12 @@ module Jim
    
     def initialize(jimfile, index, options = {})
       self.jimfile      = jimfile.is_a?(Pathname) ? jimfile.read : jimfile
-      self.index        = index
+      self.index        = index || Jim::Index.new
       self.options      = {}
       self.requirements = []
       parse_jimfile
       self.options.merge(options)
+      self.add(options[:vendor_dir]) if options[:vendor_dir]
       self.paths        = []
     end
     
@@ -73,7 +74,7 @@ module Jim
       jimfile.each_line do |line|
         if /^\/\/\s?([^\:]+)\:\s(.*)$/.match line
           self.options[$1.to_sym] = $2.strip
-        elsif line.strip != ''
+        elsif line !~ /^\// && line.strip != ''
           self.requirements << line
         end
       end
