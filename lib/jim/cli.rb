@@ -4,7 +4,6 @@ module Jim
     attr_accessor :jimfile
     
     def intitialize(args)
-      @args = parse_options(args)
       
     end
     
@@ -36,7 +35,7 @@ module Jim
           self.jimfile = Pathname.new(j)
         }
         opts.on_tail("-h", "--help", "Show this message") do
-          puts opts
+          @output << opts.to_s
           exit
         end
 

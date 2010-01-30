@@ -21,4 +21,15 @@ class Test::Unit::TestCase
   def tmp_path
     File.join(File.dirname(__FILE__), 'tmp')
   end
+  
+  def assert_readable(*args)
+    full_path = File.join(*args)
+    assert File.readable?(full_path), "Expected #{full_path} to be a readable file"
+  end
+  
+  def assert_dir(*args)
+    full_path = File.join(*args)
+    assert File.directory?(full_path), "Expected #{full_path} to be a directory"
+  end
+  
 end

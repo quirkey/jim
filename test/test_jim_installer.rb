@@ -41,15 +41,15 @@ class TestJimInstaller < Test::Unit::TestCase
       should "put file into temporary directory" do
         installer = Jim::Installer.new(@url, tmp_path)
         installer.fetch
-        assert File.directory?(File.join(tmp_path, 'tmp', 'jquery-1.4.1'))
-        assert File.readable?(File.join(tmp_path, 'tmp', 'jquery-1.4.1', 'jquery-1.4.1.js'))
+        assert_dir tmp_path, 'tmp', 'jquery-1.4.1'
+        assert_readable tmp_path, 'tmp', 'jquery-1.4.1', 'jquery-1.4.1.js'
       end
             
       should "fetch local file" do
         installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
         installer.fetch
-        assert File.directory?(File.join(tmp_path, 'tmp', 'jquery-1.4.1'))
-        assert File.readable?(File.join(tmp_path, 'tmp', 'jquery-1.4.1', 'jquery-1.4.1.js'))
+        assert_dir tmp_path, 'tmp', 'jquery-1.4.1'
+        assert_readable tmp_path, 'tmp', 'jquery-1.4.1', 'jquery-1.4.1.js'
       end
       
     end
@@ -112,8 +112,8 @@ class TestJimInstaller < Test::Unit::TestCase
         installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
         assert installer.install
         install_path = File.join(tmp_path, 'lib', 'jquery', '1.4.1')
-        assert File.directory?(install_path)
-        assert File.readable?(File.join(install_path, 'jquery.js'))
+        assert_dir install_path
+        assert_readable install_path, 'jquery.js'
         assert_equal fixture('jquery-1.4.1.js'), File.read(File.join(install_path, 'jquery.js'))
       end
       
@@ -122,9 +122,9 @@ class TestJimInstaller < Test::Unit::TestCase
         FakeWeb.register_uri(:get, @url, :body => fixture('jquery.metadata-2.0.zip'))
         installer = Jim::Installer.new(@url, tmp_path)
         path = installer.install
-        assert path.directory?
-        assert (path + 'jquery.metadata.2.0').directory?
-        assert (path + 'jquery.metadata.2.0' +'jquery.metadata.js').readable?
+        assert_dir path
+        assert_dir path + 'jquery.metadata.2.0'
+        assert_readable path + 'jquery.metadata.2.0' +'jquery.metadata.js'
       end
       
     end
