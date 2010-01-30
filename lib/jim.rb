@@ -7,7 +7,7 @@ rescue LoadError
 end
 
 module Jim
-  VERSION = '0.0.1'
+  VERSION = '0.1.0'
   
   class Error < RuntimeError; end
   

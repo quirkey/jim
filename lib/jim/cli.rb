@@ -4,15 +4,18 @@ module Jim
     attr_accessor :jimfile, :jimhome
     
     def initialize(args)
-      @output = StringIO.new
+      @output = ""
       # set the default jimhome
       self.jimhome = Pathname.new(ENV['JIMHOME'] || '~/.jim').expand_path
       # parse the options
       @args = parse_options(args)
       ## try to run based on args
-      command = args.shift
+    end
+    
+    def run
+      command = @args.shift
       if command && respond_to?(command)
-        self.send(command, *args)
+        self.send(command, *@args)
       else 
         @output << "No action found for #{command}. Run -h for help."
       end
@@ -64,7 +67,7 @@ module Jim
         opts.separator ""
         opts.separator "jim options:"
         
-        opts.on("--jimhome", "set the install path/JIMHOME dir") {|h| 
+        opts.on("--jimhome path/to/home", "set the install path/JIMHOME dir (default ~/.jim)") {|h| 
           self.jimhome = Pathname.new(h)
         }
 
@@ -87,7 +90,7 @@ module Jim
     end
     
     def bundler
-      @bundler ||= Jim::Bundler(jimfile, index)
+      @bundler ||= Jim::Bundler.new(jimfile, index)
     end
     
     def template(path)

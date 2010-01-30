@@ -5,6 +5,8 @@ class TestJimCLI < Test::Unit::TestCase
   context "Jim::CLI" do
     setup do
       FileUtils.rm_rf(tmp_path) if File.directory?(tmp_path)
+      other_tmp_path = File.join(File.dirname(__FILE__), '..', 'tmp')
+      FileUtils.rm_rf(other_tmp_path) if File.directory?(other_tmp_path)
       Jim::Installer.new(fixture_path('infoincomments.js'), tmp_path).install
       Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path).install
     end
@@ -17,25 +19,26 @@ class TestJimCLI < Test::Unit::TestCase
     end
     
     context "bundle" do
-      should "write bundle jimfile to path" do
-        run_cli("bundle", tmp_path + '/bundle.js')
+      should "write bundled jimfile to path" do
+        run_cli("bundle", tmp_path + '/bundle.js', "-j", fixture_path('jimfile'), "--jimhome", tmp_path)
         assert_readable tmp_path + '/bundle.js'
       end
       
       should "write to bundled_path if no path provided" do
-        
         run_cli("bundle", "-j", fixture_path('jimfile'), "--jimhome", tmp_path)
-        assert_readable File.join(tmp_path, 'public', 'javasripts', 'bundled.js')
+        assert_readable tmp_path, '..', '..', 'tmp', 'public', 'javascripts', 'bundled.js'
       end
     end
     
     context "compress" do
       should "compress jimfile to path" do
-        
+        run_cli("compress", tmp_path + '/compressed.js', "-j", fixture_path('jimfile'), "--jimhome", tmp_path)
+        assert_readable tmp_path + '/compressed.js'
       end
       
       should "compress to compressed_path if no path provided" do
-        
+        run_cli("compress", "-j", fixture_path('jimfile'), "--jimhome", tmp_path)
+        assert_readable tmp_path, '..', '..', 'tmp', 'public', 'javascripts', 'compressed.js'
       end
     end
     
@@ -51,7 +54,8 @@ class TestJimCLI < Test::Unit::TestCase
     
     context "resolve" do
       should "output resolved paths" do
-        
+        output = run_cli("resolve", "-j", fixture_path('jimfile'), "--jimhome", tmp_path)
+        assert_match(/jquery\.js/, output)
       end
     end
     
@@ -68,7 +72,7 @@ class TestJimCLI < Test::Unit::TestCase
   end
   
   def run_cli(*args)
-    Jim::CLI.new(args.collect {|a| a.to_s })
+    Jim::CLI.new(args.collect {|a| a.to_s }).run
   end
   
 end
