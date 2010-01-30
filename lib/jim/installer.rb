@@ -22,10 +22,6 @@ module Jim
         final_dir + "#{name}.js" : 
         final_dir
       Downlow.extract(tmp_path, :destination => final_path)
-      # final_dir.mkpath
-      # final_path = final_dir + 
-      # tmp_path.cp final_path
-      # final_path.expand_path
     end
     
     def determine_name

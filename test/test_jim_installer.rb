@@ -44,11 +44,7 @@ class TestJimInstaller < Test::Unit::TestCase
         assert File.directory?(File.join(tmp_path, 'tmp', 'jquery-1.4.1'))
         assert File.readable?(File.join(tmp_path, 'tmp', 'jquery-1.4.1', 'jquery-1.4.1.js'))
       end
-      
-      should_eventually "unpack gzips" do
-        
-      end
-      
+            
       should "fetch local file" do
         installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
         installer.fetch
@@ -119,6 +115,16 @@ class TestJimInstaller < Test::Unit::TestCase
         assert File.directory?(install_path)
         assert File.readable?(File.join(install_path, 'jquery.js'))
         assert_equal fixture('jquery-1.4.1.js'), File.read(File.join(install_path, 'jquery.js'))
+      end
+      
+      should "install zips" do
+        @url = "http://jquery.com/download/jquery.metadata-2.0.zip"
+        FakeWeb.register_uri(:get, @url, :body => fixture('jquery.metadata-2.0.zip'))
+        installer = Jim::Installer.new(@url, tmp_path)
+        path = installer.install
+        assert path.directory?
+        assert (path + 'jquery.metadata.2.0').directory?
+        assert (path + 'jquery.metadata.2.0' +'jquery.metadata.js').readable?
       end
       
     end
