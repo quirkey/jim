@@ -8,6 +8,8 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'jim'
 
+Jim.logger = Logger.new('/dev/null')
+
 class Test::Unit::TestCase
   
   def fixture_path(path)

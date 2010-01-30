@@ -1,12 +1,17 @@
 require 'rubygems'
 require 'rake'
 
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
+
+require 'jim'
+
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "jim"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.version = Jim::VERSION
+    gem.summary = %Q{jim is your friendly javascript package manager}
+    gem.description = %Q{jim is your friendly javascript package manager}
     gem.email = "aaron@quirkey.com"
     gem.homepage = "http://github.com/quirkey/jim"
     gem.authors = ["Aaron Quint"]

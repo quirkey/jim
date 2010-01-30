@@ -104,6 +104,13 @@ class TestJimInstaller < Test::Unit::TestCase
         assert installer.determine_version
         assert_equal '1.0pre', installer.version
       end
+      
+      should "have default version if version can not be determined" do
+        installer = Jim::Installer.new(fixture_path('noversion.js'), tmp_path)
+        assert installer.fetch
+        assert installer.determine_version
+        assert_equal '0', installer.version
+      end
     end
     
     context "install" do

@@ -32,6 +32,7 @@ module Jim
       resolve! if paths.empty?
       to = options[:bundled_path] if to.nil? && options[:bundled_path]
       io = io_for_path(to)
+      logger.info "bundling to #{to}"
       paths.each do |path|
         io << path.read
       end
@@ -41,6 +42,7 @@ module Jim
     def compress!(to = nil)
       to = options[:compressed_path] if to.nil? && options[:compressed_path]
       io = io_for_path(to)
+      logger.info "compressing to #{to}"
       io << js_compress(bundle!(false))
       io
     end
@@ -49,6 +51,7 @@ module Jim
       resolve! if paths.empty?
       dir ||= options[:vendor_dir]
       dir ||= 'vendor' # default
+      logger.info "vendoring to #{dir}"
       paths.each do |path|
         Jim::Installer.new(path, dir, :shallow => true).install
       end
@@ -82,6 +85,10 @@ module Jim
     
     def js_compress(uncompressed)
       ::Closure::Compiler.new(options[:compressor] || {}).compress(uncompressed)
+    end
+    
+    def logger
+      Jim.logger
     end
     
   end

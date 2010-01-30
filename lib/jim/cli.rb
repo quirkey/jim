@@ -26,37 +26,35 @@ module Jim
       dir = Pathname.new(dir || '')
       jimfile_path = dir + 'jimfile'
       if jimfile_path.readable?
-        @output << "jimfile already exists at #{jimfile_path}"
+        logger.warn "jimfile already exists at #{jimfile_path}"
       else
         File.open(jimfile_path, 'w') do |f|
           f << template('jimfile')
         end
-        @output << "wrote jimfile to #{jimfile_path}"
+        logger.info "wrote jimfile to #{jimfile_path}"
       end
     end
     
     def install(url)
       Jim::Installer.new(url, jimhome).install
-      @output << "installed #{url}"
     end
     
     def bundle(to = nil)
       path = bundler.bundle!(to)
-      @output << "bundled to #{path}"
     end
     
     def compress(to = nil)
       path = bundler.compress!(to)
-      @output << "compressed to #{path}"
     end
     
     def resolve
       resolved = bundler.resolve!
-      @output << resolved.join("\n")
+      logger.info "Files:\n#{resolved.join("\n")}"
+      resolved
     end
     
-    def vendor(to = nil)
-      
+    def vendor(dir = nil)
+      bundler.vendor!(dir)
     end
     
     private
@@ -74,8 +72,13 @@ module Jim
         opts.on("-j", "--jimfile path/to/jimfile", "load specific jimfile at path (default ./jimfile)") { |j|
           self.jimfile = Pathname.new(j)
         }
+        
+        opts.on("-d", "--debug", "set log level to debug") {|d|
+          logger.level = Logger::DEBUG
+        }
+        
         opts.on_tail("-h", "--help", "Show this message") do
-          @output << opts.to_s
+          puts opts.to_s
           exit
         end
 
@@ -96,5 +99,10 @@ module Jim
     def template(path)
       (Pathname.new(__FILE__).dirname + 'templates' + path).read
     end
+    
+    def logger
+      Jim.logger
+    end
+    
   end
 end

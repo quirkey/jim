@@ -10,6 +10,7 @@ module Jim
     end
     
     def fetch
+      logger.info "fetching #{fetch_path}"
       Downlow.fetch(fetch_path, :destination => tmp_path)
     end
     
@@ -17,6 +18,7 @@ module Jim
       fetch
       determine_name if !name
       determine_version if !version
+      logger.info "installing #{name} #{version}"
       if options[:shallow]
         final_path = install_path + "#{name}-#{version}#{tmp_path.extname}"
       else
@@ -25,6 +27,7 @@ module Jim
           final_dir + "#{name}.js" : 
           final_dir
       end
+      logger.debug "installing to #{final_path}"
       Downlow.extract(tmp_path, :destination => final_path)
     end
     
@@ -51,7 +54,7 @@ module Jim
           end
         end
       end
-      @version = tmp_path.version
+      @version = tmp_path.version || '0'
     end
             
     private
@@ -69,5 +72,8 @@ module Jim
       Pathname.new(tmp_dir) + fetch_path.basename
     end
       
+    def logger
+      Jim.logger
+    end
   end
 end
