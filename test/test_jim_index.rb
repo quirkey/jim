@@ -48,7 +48,7 @@ class TestJimIndex < Test::Unit::TestCase
       
       should "find by name and version in jim dirs" do
         installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path, :version => '1.5pre')
-        jim_path = installer.run
+        jim_path = installer.install
         assert jim_path.is_a?(Pathname)
         path = @index.find('jquery', '1.5pre')
         assert_equal jim_path, path 
@@ -56,7 +56,7 @@ class TestJimIndex < Test::Unit::TestCase
       
       should "find by name in jim dirs" do
         installer = Jim::Installer.new(fixture_path('infoincomments.js'), tmp_path)
-        jim_path = installer.run
+        jim_path = installer.install
         assert jim_path.is_a?(Pathname)
         path = @index.find('myproject')
         assert_equal jim_path, path 

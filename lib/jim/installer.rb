@@ -9,30 +9,23 @@ module Jim
       @options      = options
     end
     
-    def run
-      fetch
-      install
-    end
-    
     def fetch
-      tmp_file = File.open(tmp_path, 'w')
-      if remote?
-        open(fetch_path.to_s) {|f| tmp_file << f.read }
-      else
-        File.open(fetch_path) {|f| tmp_file << f.read }
-      end
-      tmp_file.close
-      tmp_path
+      Downlow.fetch(fetch_path, :destination => tmp_path)
     end
     
     def install
+      fetch
       determine_name if !name
       determine_version if !version
       final_dir = install_path + 'lib' + name + version
-      final_dir.mkpath
-      final_path = final_dir + "#{name}#{tmp_path.extname}"
-      tmp_path.cp final_path
-      final_path.expand_path
+      final_path = (tmp_path.to_s =~ /\.js$/) ? 
+        final_dir + "#{name}.js" : 
+        final_dir
+      Downlow.extract(tmp_path, :destination => final_path)
+      # final_dir.mkpath
+      # final_path = final_dir + 
+      # tmp_path.cp final_path
+      # final_path.expand_path
     end
     
     def determine_name
@@ -60,11 +53,7 @@ module Jim
       end
       @version = tmp_path.version
     end
-    
-    def remote?
-      fetch_path.to_s =~ /^http/
-    end
-        
+            
     private
     def tmp_root
       install_path + 'tmp'

@@ -8,7 +8,7 @@ class TestJimBundler < Test::Unit::TestCase
       FileUtils.rm_rf(tmp_path) if File.directory?(tmp_path)
       root = File.dirname(__FILE__)
       @directories = [File.join(root, 'fixtures'), File.join(root, 'tmp', 'lib')]
-      Jim::Installer.new(fixture_path('infoincomments.js'), tmp_path).run
+      Jim::Installer.new(fixture_path('infoincomments.js'), tmp_path).install
       @bundler = Jim::Bundler.new(fixture('jimfile'), Jim::Index.new(@directories))
     end
     

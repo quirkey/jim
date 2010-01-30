@@ -1,13 +1,10 @@
-require 'open-uri'
-require 'fileutils'
+require 'downlow'
 
 begin
   require 'closure-compiler'
 rescue LoadError
   warn "You must have the closure complier installed in order to use compress!\ngem install closure-compiler"
 end
-
-require File.join(File.dirname(__FILE__), 'jim', 'extensions', 'pathname.rb')
 
 module Jim
   VERSION = '0.0.1'
