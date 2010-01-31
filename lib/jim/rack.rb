@@ -7,7 +7,9 @@ module Jim
       @app = app
       jimfile = Pathname.new(options[:jimfile] || 'jimfile')
       jimhome = Pathname.new(options[:jimhome] || ENV['JIMHOME'] || '~/.jim').expand_path
-      @bundler = Jim::Bundler.new(jimfile, jimhome, options)
+      @bundler = Jim::Bundler.new(jimfile, Jim::Index.new(jimhome), options)
+      @bundled_uri    = options[:bundled_uri] || @bundler.options[:bundled_path]
+      @compressed_uri = options[:compressed_uri] || @bundler.options[:compressed_path]
     end
    
     def call(env)
@@ -15,10 +17,26 @@ module Jim
     end
    
     def _call(env)
-      if env.request_uri == @bundler.options[:bundled_path]
-        [200, {'Content-Type' => 'text/javascript'}, @bundler.bundle!(false)]
+      uri = env['PATH_INFO']
+      if uri == @bundled_uri
+        run_action(:bundle!)
+      elsif uri == @compressed_uri
+        run_action(:compress!)
       else
         @app.call(env)
+      end
+    end
+    
+    def run_action(which)
+      begin
+        [200, {'Content-Type' => 'text/javascript'}, @bundler.send(which, false)]
+      rescue => e
+        [500, {'Content-Type' => 'text/html'}, <<-EOT 
+          <p>Jim failed in helping you out. There was an error when trying to #{which}.</p>
+          <p>#{e}</p>
+          <pre>#{e.backtrace}</pre>
+        EOT
+        ]
       end
     end
     

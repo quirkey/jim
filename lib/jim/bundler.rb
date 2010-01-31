@@ -18,7 +18,7 @@ module Jim
     def resolve!
       self.requirements.each do |search|
         name, version = search.strip.split(/\s+/)
-        path = index.find(name, version)
+        path = self.index.find(name, version)
         if !path
           raise(MissingFile, 
           "Could not find #{name} #{version} in any of these paths #{index.directories.join(':')}")

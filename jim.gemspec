@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
      "lib/jim/cli.rb",
      "lib/jim/index.rb",
      "lib/jim/installer.rb",
+     "lib/jim/rack.rb",
      "lib/jim/templates/jimfile",
      "test/fixtures/infoincomments.js",
      "test/fixtures/jimfile",
