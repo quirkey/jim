@@ -1,7 +1,7 @@
 module Jim
   class Installer
     attr_reader :fetch_path, :install_path, :options, 
-                :name, :version
+                :fetched_path, :name, :version
     
     def initialize(fetch_path, install_path, options = {})
       @fetch_path   = Pathname.new(fetch_path)
@@ -11,7 +11,8 @@ module Jim
     
     def fetch
       logger.info "fetching #{fetch_path}"
-      Downlow.fetch(fetch_path, :destination => tmp_path)
+      @fetched_path = Downlow.fetch(fetch_path, :destination => tmp_path)
+      logger.debug "fetched #{@fetched_path}"
     end
     
     def install
@@ -19,12 +20,12 @@ module Jim
       determine_name if !name
       determine_version if !version
       logger.info "installing #{name} #{version}"
-      logger.debug "tmp_path #{tmp_path}"
+      logger.debug "fetched_path #{@fetched_path}"
       if options[:shallow]
-        final_path = install_path + "#{name}-#{version}#{tmp_path.extname}"
+        final_path = install_path + "#{name}-#{version}#{fetched_path.extname}"
       else
         final_dir = install_path + 'lib' + "#{name}-#{version}"
-        final_path = (tmp_path.to_s =~ /\.js$/) ? 
+        final_path = (fetched_path.to_s =~ /\.js$/) ? 
           final_dir + "#{name}.js" : 
           final_dir
       end
@@ -33,38 +34,38 @@ module Jim
         logger.debug "#{final_path} already exists"
         options[:force] ? FileUtils.rm_rf(final_path) : raise(Jim::FileExists.new(final_path))
       end
-      Downlow.extract(tmp_path, :destination => final_path)
+      Downlow.extract(@fetched_path, :destination => final_path)
       installed = final_path.directory? ? Dir.glob(final_path + '**/*').length : 1
       logger.info "Extracted to #{final_path}, #{installed} file(s)"
     ensure
-      FileUtils.rm_rf(tmp_path) if tmp_path.exist?
+      FileUtils.rm_rf(fetched_path) if fetched_path.exist?
       return final_path
     end
     
     def determine_name
       return @name = options[:name] if options[:name]
-      if tmp_path.file?
+      if fetched_path.file?
         # try to read and determine name
-        tmp_path.each_line do |line|
+        fetched_path.each_line do |line|
           if /(\*|\/\/)\s+name:\s+([\d\w\.\-]+)/i.match line
             return @name = $2
           end
         end
       end
-      @name = tmp_path.stem.gsub(/(\-[^\-]+)$/, '')
+      @name = fetched_path.stem.gsub(/(\-[^\-]+)$/, '')
     end
     
     def determine_version
       return @version = options[:version] if options[:version]
-      if tmp_path.file?
+      if fetched_path.file?
         # try to read and determine version
-        tmp_path.each_line do |line|
+        fetched_path.each_line do |line|
           if /(\*|\/\/)\s+version:\s+([\d\w\.\-]+)/i.match line
             return @version = $2
           end
         end
       end
-      @version = tmp_path.version || '0'
+      @version = fetched_path.version || '0'
     end
             
     private
