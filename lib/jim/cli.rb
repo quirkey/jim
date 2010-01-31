@@ -53,7 +53,9 @@ module Jim
     end
     
     def list
-      
+      logger.info "Getting list of installed files in #{index.directories.join(':')}"
+      list = index.list
+      logger.info "Installed:\n#{list.collect {|i| "#{i[0]} (#{i[1].join(', ')})"}.join("\n")}"
     end
     
     def resolve

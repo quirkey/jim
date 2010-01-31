@@ -51,7 +51,7 @@ module Jim
           end
         end
       end
-      @name = tmp_path.stem.gsub(/(\-[\d\w\.]+)$/, '')
+      @name = tmp_path.stem.gsub(/(\-[^\-]+)$/, '')
     end
     
     def determine_version

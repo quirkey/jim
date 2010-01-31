@@ -13,10 +13,21 @@ module Jim
     def list
       list = {}
       each_file_in_index('.js') do |filename|
-        list[filename.stem] ||= []
-        list[filename.stem] << filename.version
+        if version = filename.version
+          name = filename.stem.gsub(/(\-[^\-]+)$/, '')
+        elsif /lib\/([^\/]+)-([\d\w\.\-]+)\/.+/.match filename
+          name    = $1
+          version = $2
+        else
+          name = filename.stem
+          version = '0'
+        end
+        if name && version
+          list[name] ||= []
+          list[name] << version unless list[name].include?(version)
+        end
       end
-      list
+      list.sort
     end
 
     def find(name, version = nil)
@@ -51,7 +62,7 @@ module Jim
     def each_file_in_index(ext, &block)
       @directories.each do |dir|
         Dir.glob(Pathname.new(dir) + '**' + "*#{ext}") do |filename|
-          yield filename
+          yield Pathname.new(filename)
         end
       end
     end

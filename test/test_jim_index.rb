@@ -8,22 +8,39 @@ class TestJimIndex < Test::Unit::TestCase
       FileUtils.rm_rf(tmp_path) if File.directory?(tmp_path)
       root = File.dirname(__FILE__)
       @directories = [File.join(root, 'fixtures'), File.join(root, 'tmp', 'lib')]
+      @index = Jim::Index.new(*@directories)
     end
     
     context "initializing" do
-      setup do
-        @index = Jim::Index.new(*@directories)
-      end
       
       should "set an array of directories" do
         assert_equal @directories, @index.directories
       end
     end
     
-    context "find" do
+    context "list" do
       setup do
-        @index = Jim::Index.new(*@directories)
+        Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path, :version => '1.5pre').install
+        @list = @index.list
       end
+      
+      should "return list of files and directories" do
+        names = @list.collect {|l| l[0] } 
+        assert names.include?('jquery'), "should include jquery"
+        assert names.include?('infoincomments')
+      end
+      
+      should "only return one of each name" do
+        jquery = @list.find {|l| l[0] == 'jquery' }
+        assert jquery, "should include jquery"
+        assert jquery[1].is_a?(Array), "should have array of versions"
+        assert_equal jquery[1].length, jquery[1].uniq.length
+        assert jquery[1].include?('1.5pre')
+      end
+      
+    end
+    
+    context "find" do
       
       should "find by name and version in local files" do
         path = @index.find('jquery', '1.4.1')

@@ -22,7 +22,7 @@ module Jim
     if !@logger
       @logger           = Logger.new(STDOUT)
       @logger.level     = Logger::INFO
-      @logger.formatter = Proc.new {|s, t, n, msg| "[#{t}] #{msg}\n"}
+      @logger.formatter = Proc.new {|s, t, n, msg| "#{msg}\n"}
       @logger
     end
     @logger
