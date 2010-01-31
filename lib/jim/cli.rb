@@ -1,7 +1,7 @@
 module Jim
   class CLI
     
-    attr_accessor :jimfile, :jimhome
+    attr_accessor :jimfile, :jimhome, :force
     
     def initialize(args)
       @output = ""
@@ -21,6 +21,8 @@ module Jim
         @output << "No action found for #{command}. Run -h for help."
       end
       @output
+    rescue Jim::FileExists => e
+      @output << "#{e.message} already exists, bailing. Use --force if you're sure"
     rescue => e
       @output << e.message + " (#{e.class})"
     end
@@ -39,7 +41,7 @@ module Jim
     end
     
     def install(url)
-      Jim::Installer.new(url, jimhome).install
+      Jim::Installer.new(url, jimhome, :force => force).install
     end
     
     def bundle(to = nil)
@@ -74,6 +76,10 @@ module Jim
 
         opts.on("-j", "--jimfile path/to/jimfile", "load specific jimfile at path (default ./jimfile)") { |j|
           self.jimfile = Pathname.new(j)
+        }
+        
+        opts.on("-f", "--force", "force file creation/overwrite") {|f|
+          self.force = true
         }
         
         opts.on("-d", "--debug", "set log level to debug") {|d|

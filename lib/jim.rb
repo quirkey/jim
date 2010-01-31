@@ -11,6 +11,7 @@ module Jim
   VERSION = '0.1.0'
   
   class Error < RuntimeError; end
+  class FileExists < Error; end
   
   def self.logger=(logger)
     @logger = logger

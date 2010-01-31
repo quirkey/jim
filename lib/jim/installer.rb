@@ -28,7 +28,13 @@ module Jim
           final_dir
       end
       logger.debug "installing to #{final_path}"
+      if final_path.exist? 
+        options[:force] ? final_path.rm_rf : raise(Jim::FileExists.new(final_path))
+      end
       Downlow.extract(tmp_path, :destination => final_path)
+    ensure
+      FileUtils.rm_rf(tmp_path) if tmp_path.exist?
+      final_path
     end
     
     def determine_name
