@@ -48,8 +48,8 @@ module Jim
       end
     end
     
-    def install(url)
-      Jim::Installer.new(url, jimhome, :force => force).install
+    def install(url, name = false, version = false)
+      Jim::Installer.new(url, jimhome, :force => force, :name => name, :version => version).install
     end
     
     def bundle(to = nil)
