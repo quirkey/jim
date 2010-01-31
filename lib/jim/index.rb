@@ -32,9 +32,8 @@ module Jim
 
     def find(name, version = nil)
       name     = Pathname.new(name)
-      extname  = name.extname
-      stem     = name.stem
-      ext      = (extname.nil? || extname.strip == '') ? '.js' : extname
+      stem     = name.basename
+      ext      = '.js'
       possible_paths = if version
         [
           /#{stem}-#{version}\/#{name}#{ext}$/,
@@ -49,7 +48,7 @@ module Jim
       final = false
       each_file_in_index(ext) do |filename|
         possible_paths.each do |p|
-          if p.match filename
+          if File.file?(filename) && p.match(filename)
             final = Pathname.new(filename).expand_path
             break
           end

@@ -71,6 +71,14 @@ class TestJimIndex < Test::Unit::TestCase
         assert_equal jim_path.expand_path, path.expand_path
       end
       
+      should "find by name with dot and version 0 in jim dirs" do
+        installer = Jim::Installer.new(fixture_path('jquery.color.js'), tmp_path)
+        jim_path = installer.install
+        assert jim_path.is_a?(Pathname)
+        path = @index.find('jquery.color', '0')
+        assert_equal jim_path.expand_path, path.expand_path
+      end
+      
       should "find by name in jim dirs" do
         installer = Jim::Installer.new(fixture_path('infoincomments.js'), tmp_path)
         jim_path = installer.install
