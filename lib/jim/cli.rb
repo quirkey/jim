@@ -8,6 +8,7 @@ module Jim
       # set the default jimhome
       self.jimhome = Pathname.new(ENV['JIMHOME'] || '~/.jim').expand_path
       # parse the options
+      self.jimfile = Pathname.new('jimfile')
       @args = parse_options(args)
       ## try to run based on args
     end
@@ -20,6 +21,8 @@ module Jim
         @output << "No action found for #{command}. Run -h for help."
       end
       @output
+    rescue => e
+      @output << e.message + " (#{e.class})"
     end
     
     def init(dir = nil)

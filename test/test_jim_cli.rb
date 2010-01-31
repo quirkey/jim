@@ -51,14 +51,7 @@ class TestJimCLI < Test::Unit::TestCase
         
       end
     end
-    
-    context "resolve" do
-      should "output resolved paths" do
-        output = run_cli("resolve", "-j", fixture_path('jimfile'), "--jimhome", tmp_path)
-        assert_match(/jquery\.js/, output)
-      end
-    end
-    
+        
     context "install" do
       should "install url to jim home" do 
         run_cli("install", fixture_path('jquery-1.4.1.js'), "--jimhome", tmp_path)

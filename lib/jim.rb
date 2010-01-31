@@ -27,8 +27,8 @@ module Jim
     @logger
   end
   
-  autoload :Installer, File.join(File.dirname(__FILE__), 'jim', 'installer.rb')
-  autoload :Index, File.join(File.dirname(__FILE__), 'jim', 'index.rb')
-  autoload :Bundler, File.join(File.dirname(__FILE__), 'jim', 'bundler.rb')
-  autoload :CLI, File.join(File.dirname(__FILE__), 'jim', 'cli.rb')
+  autoload :Installer, 'jim/installer'
+  autoload :Index, 'jim/index'
+  autoload :Bundler, 'jim/bundler'
+  autoload :CLI, 'jim/cli'
 end

@@ -32,7 +32,7 @@ module Jim
       resolve! if paths.empty?
       to = options[:bundled_path] if to.nil? && options[:bundled_path]
       io = io_for_path(to)
-      logger.info "bundling to #{to}"
+      logger.info "bundling to #{to}" if to
       paths.each do |path|
         io << path.read
       end
@@ -84,7 +84,7 @@ module Jim
     end
     
     def js_compress(uncompressed)
-      ::Closure::Compiler.new(options[:compressor] || {}).compress(uncompressed)
+      ::Closure::Compiler.new.compress(uncompressed)
     end
     
     def logger
