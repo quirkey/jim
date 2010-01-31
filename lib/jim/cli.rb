@@ -52,6 +52,10 @@ module Jim
       path = bundler.compress!(to)
     end
     
+    def list
+      
+    end
+    
     def resolve
       resolved = bundler.resolve!
       logger.info "Files:\n#{resolved.join("\n")}"

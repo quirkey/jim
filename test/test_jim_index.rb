@@ -51,7 +51,7 @@ class TestJimIndex < Test::Unit::TestCase
         jim_path = installer.install
         assert jim_path.is_a?(Pathname)
         path = @index.find('jquery', '1.5pre')
-        assert_equal jim_path, path 
+        assert_equal jim_path.expand_path, path.expand_path
       end
       
       should "find by name in jim dirs" do
@@ -59,7 +59,7 @@ class TestJimIndex < Test::Unit::TestCase
         jim_path = installer.install
         assert jim_path.is_a?(Pathname)
         path = @index.find('myproject')
-        assert_equal jim_path, path 
+        assert_equal jim_path.expand_path, path.expand_path
       end
       
       should "return false if file can not be found" do
