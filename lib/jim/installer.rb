@@ -13,6 +13,7 @@ module Jim
       logger.info "fetching #{fetch_path}"
       @fetched_path = Downlow.fetch(fetch_path, :destination => tmp_path)
       logger.debug "fetched #{@fetched_path}"
+      @fetched_path
     end
     
     def install
@@ -22,7 +23,7 @@ module Jim
       logger.info "installing #{name} #{version}"
       logger.debug "fetched_path #{@fetched_path}"
       if options[:shallow]
-        final_path = install_path + "#{name}-#{version}#{fetched_path.extname}"
+        final_path = install_path + "#{name}#{fetched_path.extname}"
       else
         final_dir = install_path + 'lib' + "#{name}-#{version}"
         final_path = (fetched_path.to_s =~ /\.js$/) ? 
@@ -70,17 +71,17 @@ module Jim
             
     private
     def tmp_root
-      install_path + 'tmp'
+      @tmp_root ||= Pathname.new('tmp')
     end
     
     def tmp_dir
-      dir = Pathname.new(File.join(tmp_root, fetch_path.stem))
+      dir = tmp_root + fetch_path.stem
       dir.mkpath
       dir
     end
     
     def tmp_path
-      Pathname.new(tmp_dir) + fetch_path.basename
+      tmp_dir + fetch_path.basename
     end
       
     def logger

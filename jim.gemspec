@@ -37,6 +37,7 @@ Gem::Specification.new do |s|
      "test/fixtures/infoincomments.js",
      "test/fixtures/jimfile",
      "test/fixtures/jquery-1.4.1.js",
+     "test/fixtures/jquery.color.js",
      "test/fixtures/jquery.metadata-2.0.zip",
      "test/fixtures/noversion.js",
      "test/helper.rb",

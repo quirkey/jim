@@ -37,19 +37,12 @@ class TestJimInstaller < Test::Unit::TestCase
         installer = Jim::Installer.new(@url, tmp_path)
         assert installer.fetch
       end
-      
-      should "put file into temporary directory" do
-        installer = Jim::Installer.new(@url, tmp_path)
-        installer.fetch
-        assert_dir tmp_path, 'tmp', 'jquery-1.4.1'
-        assert_readable tmp_path, 'tmp', 'jquery-1.4.1', 'jquery-1.4.1.js'
-      end
             
       should "fetch local file" do
         installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
-        installer.fetch
-        assert_dir tmp_path, 'tmp', 'jquery-1.4.1'
-        assert_readable tmp_path, 'tmp', 'jquery-1.4.1', 'jquery-1.4.1.js'
+        fetched_path = installer.fetch
+        assert_dir fetched_path.dirname
+        assert_equal 'jquery-1.4.1.js', fetched_path.basename.to_s
       end
       
     end
