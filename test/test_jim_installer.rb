@@ -118,7 +118,7 @@ class TestJimInstaller < Test::Unit::TestCase
       should "move file into install path at name/version" do
         installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
         assert installer.install
-        install_path = File.join(tmp_path, 'lib', 'jquery', '1.4.1')
+        install_path = File.join(tmp_path, 'lib', 'jquery-1.4.1')
         assert_dir install_path
         assert_readable install_path, 'jquery.js'
         assert_equal fixture('jquery-1.4.1.js'), File.read(File.join(install_path, 'jquery.js'))

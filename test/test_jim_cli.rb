@@ -55,7 +55,7 @@ class TestJimCLI < Test::Unit::TestCase
     context "install" do
       should "install url to jim home" do 
         run_cli("install", fixture_path('jquery-1.4.1.js'), "--jimhome", tmp_path)
-        install_path = File.join(tmp_path, 'lib', 'jquery', '1.4.1')
+        install_path = File.join(tmp_path, 'lib', 'jquery-1.4.1')
         assert_dir install_path
         assert_readable install_path, 'jquery.js'
         assert_equal fixture('jquery-1.4.1.js'), File.read(File.join(install_path, 'jquery.js'))

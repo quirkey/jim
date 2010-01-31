@@ -22,11 +22,11 @@ module Jim
     def find(name, version = nil)
       name     = Pathname.new(name)
       extname  = name.extname
-      basename = name.stem
+      stem     = name.stem
       ext      = (extname.nil? || extname.strip == '') ? '.js' : extname
       possible_paths = if version
         [
-          /#{basename}\/#{version}\/#{name}#{ext}$/,
+          /#{stem}-#{version}\/#{name}#{ext}$/,
          /#{name}-#{version}#{ext}$/
         ]
       else

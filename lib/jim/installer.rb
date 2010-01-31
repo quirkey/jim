@@ -23,7 +23,7 @@ module Jim
       if options[:shallow]
         final_path = install_path + "#{name}-#{version}#{tmp_path.extname}"
       else
-        final_dir = install_path + 'lib' + name + version
+        final_dir = install_path + 'lib' + "#{name}-#{version}"
         final_path = (tmp_path.to_s =~ /\.js$/) ? 
           final_dir + "#{name}.js" : 
           final_dir
