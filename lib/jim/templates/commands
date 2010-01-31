@@ -1,0 +1,39 @@
+init [path]
+  create an example jimfile at path or the current directory if path is      
+  omitted
+  
+install [url]
+  install the file(s) at url into the JIMHOME directory. URL can be any path
+  or url that Downlow understands. This means:
+    
+    jim install http://code.jquery.com/jquery-1.4.1.js
+    jim install ../sammy/
+    jim install gh://quirkey/sammy
+    jim install git://github.com/jquery/jquery.git
+    
+list
+  List all the installed or available packages
+  
+resolve
+  Resolve all the paths listed in a jimfile and print them to STDOUT. 
+  If no jimfile is set in the options, assumes ./jimfile.  
+
+bundle [bundled_path]
+  Bundle all the files listed in a jimfile and save them to [bundled_path].
+  If the bundled_path is not set, jim will try to use the bundled_path set in 
+  the jimfile. If no bundled_path is found - it will output the entire bundle
+  to STDOUT. 
+  If no jimfile is set in the options, assumes ./jimfile.  
+  
+compress [compressed_path]
+  Bundle all the files listed in a jimfile, run through the google closure 
+  compiler and save them to [compressed_path].
+  If the compressed_path is not set, jim will try to use the compressed_path
+  set in the jimfile. If no compressed_path is found - it will output the
+  entire compressed bundle to STDOUT. 
+  If no jimfile is set in the options, assumes ./jimfile.
+  
+vendor [vendor_dir]
+  Copy all the files listed in jimfile to the vendor_dir
+
+  

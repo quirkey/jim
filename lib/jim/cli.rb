@@ -27,11 +27,16 @@ module Jim
       @output << e.message + " (#{e.class})"
     end
     
+    def commands
+      logger.info "Commands:"
+      logger.info template('commands')
+    end
+    
     def init(dir = nil)
       dir = Pathname.new(dir || '')
       jimfile_path = dir + 'jimfile'
-      if jimfile_path.readable?
-        logger.warn "jimfile already exists at #{jimfile_path}"
+      if jimfile_path.readable? && !force``
+        raise Jim::FileExists(jimfile_path)
       else
         File.open(jimfile_path, 'w') do |f|
           f << template('jimfile')
@@ -71,7 +76,7 @@ module Jim
     private
     def parse_options(runtime_args)
       OptionParser.new("", 24, '  ') do |opts|
-        opts.banner = "Usage: jim [options] [args]"
+        opts.banner = "Usage: jim [options] [command] [args]"
 
         opts.separator ""
         opts.separator "jim options:"
@@ -93,7 +98,8 @@ module Jim
         }
         
         opts.on_tail("-h", "--help", "Show this message") do
-          puts opts.to_s
+          puts opts.help
+          puts commands
           exit
         end
 
