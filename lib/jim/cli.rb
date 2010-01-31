@@ -17,6 +17,8 @@ module Jim
       command = @args.shift
       if command && respond_to?(command)
         self.send(command, *@args)
+      elsif command.nil? || command.strip == ''
+        commands
       else 
         @output << "No action found for #{command}. Run -h for help."
       end
@@ -28,6 +30,7 @@ module Jim
     end
     
     def commands
+      logger.info "Usage: jim [options] [command] [args]\n"
       logger.info "Commands:"
       logger.info template('commands')
     end
@@ -35,7 +38,7 @@ module Jim
     def init(dir = nil)
       dir = Pathname.new(dir || '')
       jimfile_path = dir + 'jimfile'
-      if jimfile_path.readable? && !force``
+      if jimfile_path.readable? && !force
         raise Jim::FileExists(jimfile_path)
       else
         File.open(jimfile_path, 'w') do |f|
@@ -97,9 +100,8 @@ module Jim
           logger.level = Logger::DEBUG
         }
         
-        opts.on_tail("-h", "--help", "Show this message") do
+        opts.on_tail("-h", "--help", "Show this message. Run jim commands for list of commands.") do
           puts opts.help
-          puts commands
           exit
         end
 

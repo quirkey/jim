@@ -35,5 +35,3 @@ compress [compressed_path]
   
 vendor [vendor_dir]
   Copy all the files listed in jimfile to the vendor_dir
-
-  
