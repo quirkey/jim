@@ -19,6 +19,7 @@ module Jim
       determine_name if !name
       determine_version if !version
       logger.info "installing #{name} #{version}"
+      logger.debug "tmp_path #{tmp_path}"
       if options[:shallow]
         final_path = install_path + "#{name}-#{version}#{tmp_path.extname}"
       else
@@ -29,7 +30,7 @@ module Jim
       end
       logger.debug "installing to #{final_path}"
       if final_path.exist? 
-        options[:force] ? final_path.rm_rf : raise(Jim::FileExists.new(final_path))
+        options[:force] ? FileUtils.rm_rf(final_path) : raise(Jim::FileExists.new(final_path))
       end
       Downlow.extract(tmp_path, :destination => final_path)
     ensure
