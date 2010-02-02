@@ -34,7 +34,7 @@ module Jim
       io = io_for_path(to)
       logger.info "bundling to #{to}" if to
       paths.each do |path|
-        io << path.read
+        io << path.read << "\n"
       end
       io
     end
