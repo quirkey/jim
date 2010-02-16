@@ -1,5 +1,6 @@
 require 'downlow'
 require 'logger'
+require 'yajl'
 
 begin
   require 'closure-compiler'
