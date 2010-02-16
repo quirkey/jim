@@ -49,12 +49,12 @@ class TestJimInstaller < Test::Unit::TestCase
     
     context "determine_name_and_version" do
       
-      should "determinefrom filename" do
+      should "determine from filename" do
         installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
         assert installer.fetch
         assert installer.determine_name_and_version
-        assert_equal 'jquery', installer.name
         assert_equal '1.4.1', installer.version
+        assert_equal 'jquery', installer.name
       end
       
       should_eventually "determine name from package.json"

@@ -100,7 +100,8 @@ module Jim
     end
 
     def name_and_version_from_filename
-      @name, @version = VersionParser.parse_filename(fetched_path.to_s)
+      @name, @version = VersionParser.parse_filename(fetched_path.basename.to_s)
+      name && version
     end
 
   end
