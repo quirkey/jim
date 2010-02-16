@@ -38,7 +38,7 @@ class TestJimVersionParser < Test::Unit::TestCase
     context ".parse_package_json" do
       
       should "parse version and name from file" do
-        assert_equal ["mustache", "0.2.2"], Jim::VersionParser.parse_package_json(fixture('package.json'))
+        assert_equal ["mustache", "0.2.2"], Jim::VersionParser.parse_package_json(fixture('mustache.js/package.json'))
       end
       
     end

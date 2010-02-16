@@ -47,63 +47,42 @@ class TestJimInstaller < Test::Unit::TestCase
       
     end
     
-    context "determine_name" do
+    context "determine_name_and_version" do
       
-      should "determine name from filename" do
+      should "determinefrom filename" do
         installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
         assert installer.fetch
-        assert installer.determine_name
+        assert installer.determine_name_and_version
         assert_equal 'jquery', installer.name
+        assert_equal '1.4.1', installer.version
       end
       
       should_eventually "determine name from package.json"
       
-      should "determine name from file comments" do
+      should "determine from file comments" do
         installer = Jim::Installer.new(fixture_path('infoincomments.js'), tmp_path)
         assert installer.fetch
-        assert installer.determine_name
+        assert installer.determine_name_and_version
         assert_equal 'myproject', installer.name
-      end
-      
-      should "determine name from options" do
-        installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path, :name => 'myproject')
-        assert installer.fetch
-        assert installer.determine_name
-        assert_equal 'myproject', installer.name
-      end      
-    end
-    
-    context "determine_version" do
-      
-      should "determine version from filename" do
-        installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
-        assert installer.fetch
-        assert installer.determine_version
-        assert_equal '1.4.1', installer.version
-      end
-      
-      should_eventually "determine version from META.json"
-      
-      should "determine version from file comments" do
-        installer = Jim::Installer.new(fixture_path('infoincomments.js'), tmp_path)
-        assert installer.fetch
-        assert installer.determine_version
         assert_equal '1.2.2', installer.version
       end
       
-      should "determine version from options" do
-        installer = Jim::Installer.new(fixture_path('infoincomments.js'), tmp_path, :version => '1.0pre')
+      should "determine from options" do
+        installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path, :name => 'myproject', :version => '1.1.1')
         assert installer.fetch
-        assert installer.determine_version
-        assert_equal '1.0pre', installer.version
-      end
+        assert installer.determine_name_and_version
+        assert_equal 'myproject', installer.name
+        assert_equal '1.1.1', installer.version
+      end      
       
       should "have default version if version can not be determined" do
         installer = Jim::Installer.new(fixture_path('noversion.js'), tmp_path)
         assert installer.fetch
-        assert installer.determine_version
+        assert installer.determine_name_and_version
+        assert_equal 'noversion', installer.name
         assert_equal '0', installer.version
       end
+      
     end
     
     context "install" do
