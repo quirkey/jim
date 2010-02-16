@@ -94,13 +94,17 @@ module Jim
 
     def name_and_version_from_package_json
       if !fetched_path.file? && (fetched_path + 'package.json').readable?
-        @name, @version = VersionParser.parse_package_json((fetched_path + "package.json").read)
+        sname, sversion = VersionParser.parse_package_json((fetched_path + "package.json").read)
+        @name ||= sname
+        @version ||= sversion
       end
       name && version
     end
 
     def name_and_version_from_filename
-      @name, @version = VersionParser.parse_filename(fetched_path.basename.to_s)
+      fname, fversion = VersionParser.parse_filename(fetched_path.basename.to_s)
+      @name ||= fname
+      @version ||= fversion
       name && version
     end
 
