@@ -26,8 +26,9 @@ class TestJimVersionParser < Test::Unit::TestCase
           ["sammy.plugin.1.0.1.js", ["sammy.plugin", "1.0.1"]],
           ["sammy.plugin.1.0.1.zip", ["sammy.plugin", "1.0.1"]],
           ["sammy.plugin.1.0.1", ["sammy.plugin", "1.0.1"]],
-          ["sammy.plugin-a9asb02", ["sammy.plugin", "a9asb02"]],
-          ["sammy-9asb02", ["sammy", "9asb02"]]
+          # ["sammy.plugin-a9asb02", ["sammy.plugin", "a9asb02"]],
+          ["sammy-9asb02", ["sammy", "9asb02"]],
+          ["noversion.js", ["noversion", "0"]]
         ].each do |name, result|
           assert_equal result, Jim::VersionParser.parse_filename(name), "Should parse #{name} to #{result.inspect}"
         end
