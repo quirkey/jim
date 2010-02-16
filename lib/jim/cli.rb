@@ -8,7 +8,7 @@ module Jim
       # set the default jimhome
       self.jimhome = Pathname.new(ENV['JIMHOME'] || '~/.jim').expand_path
       # parse the options
-      self.jimfile = Pathname.new('jimfile')
+      self.jimfile = Pathname.new('Jimfile')
       @args = parse_options(args)
       ## try to run based on args
     end
@@ -37,14 +37,14 @@ module Jim
     
     def init(dir = nil)
       dir = Pathname.new(dir || '')
-      jimfile_path = dir + 'jimfile'
+      jimfile_path = dir + 'Jimfile'
       if jimfile_path.readable? && !force
         raise Jim::FileExists(jimfile_path)
       else
         File.open(jimfile_path, 'w') do |f|
-          f << template('jimfile')
+          f << template('Jimfile')
         end
-        logger.info "wrote jimfile to #{jimfile_path}"
+        logger.info "wrote Jimfile to #{jimfile_path}"
       end
     end
     
@@ -88,7 +88,7 @@ module Jim
           self.jimhome = Pathname.new(h)
         }
 
-        opts.on("-j", "--jimfile path/to/jimfile", "load specific jimfile at path (default ./jimfile)") { |j|
+        opts.on("-j", "--jimfile path/to/jimfile", "load specific Jimfile at path (default ./Jimfile)") { |j|
           self.jimfile = Pathname.new(j)
         }
         

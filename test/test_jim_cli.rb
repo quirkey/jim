@@ -12,42 +12,42 @@ class TestJimCLI < Test::Unit::TestCase
     end
     
     context "init" do
-      should "write jimfile to path" do
+      should "write Jimfile to path" do
         run_cli("init", tmp_path)
-        assert_readable tmp_path, "jimfile"
+        assert_readable tmp_path, "Jimfile"
       end
     end
     
     context "bundle" do
-      should "write bundled jimfile to path" do
-        run_cli("bundle", tmp_path + '/bundle.js', "-j", fixture_path('jimfile'), "--jimhome", tmp_path)
+      should "write bundled Jimfile to path" do
+        run_cli("bundle", tmp_path + '/bundle.js', "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
         assert_readable tmp_path + '/bundle.js'
       end
       
       should "write to bundled_path if no path provided" do
-        run_cli("bundle", "-j", fixture_path('jimfile'), "--jimhome", tmp_path)
+        run_cli("bundle", "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
         assert_readable tmp_path, '..', '..', 'tmp', 'public', 'javascripts', 'bundled.js'
       end
     end
     
     context "compress" do
-      should "compress jimfile to path" do
-        run_cli("compress", tmp_path + '/compressed.js', "-j", fixture_path('jimfile'), "--jimhome", tmp_path)
+      should "compress Jimfile to path" do
+        run_cli("compress", tmp_path + '/compressed.js', "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
         assert_readable tmp_path + '/compressed.js'
       end
       
       should "compress to compressed_path if no path provided" do
-        run_cli("compress", "-j", fixture_path('jimfile'), "--jimhome", tmp_path)
+        run_cli("compress", "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
         assert_readable tmp_path, '..', '..', 'tmp', 'public', 'javascripts', 'compressed.js'
       end
     end
     
     context "vendor" do
-      should "vendor jimfile to dir" do
+      should "vendor Jimfile to dir" do
         
       end
       
-      should "vendor jimfile to vendor dir" do
+      should "vendor Jimfile to vendor dir" do
         
       end
     end
