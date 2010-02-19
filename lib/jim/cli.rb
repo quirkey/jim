@@ -100,6 +100,11 @@ module Jim
           logger.level = Logger::DEBUG
         }
         
+        opts.on("-v", "--version", "print version") {|d|
+          puts "jim #{Jim::VERSION}"
+          exit
+        }
+        
         opts.on_tail("-h", "--help", "Show this message. Run jim commands for list of commands.") do
           puts opts.help
           exit

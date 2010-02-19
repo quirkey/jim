@@ -9,6 +9,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'jim'
 
 Jim.logger = Logger.new('/dev/null')
+Jim::Installer.tmp_root = File.join(File.dirname(__FILE__), 'tmp', 'jimtmproot')
 
 class Test::Unit::TestCase
   

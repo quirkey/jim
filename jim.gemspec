@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Aaron Quint"]
-  s.date = %q{2010-01-31}
+  s.date = %q{2010-02-19}
   s.default_executable = %q{jim}
   s.description = %q{jim is your friendly javascript package manager}
   s.email = %q{aaron@quirkey.com}
@@ -34,17 +34,21 @@ Gem::Specification.new do |s|
      "lib/jim/rack.rb",
      "lib/jim/templates/commands",
      "lib/jim/templates/jimfile",
+     "lib/jim/version_parser.rb",
      "test/fixtures/infoincomments.js",
      "test/fixtures/jimfile",
      "test/fixtures/jquery-1.4.1.js",
      "test/fixtures/jquery.color.js",
      "test/fixtures/jquery.metadata-2.0.zip",
+     "test/fixtures/mustache.js/mustache.js",
+     "test/fixtures/mustache.js/package.json",
      "test/fixtures/noversion.js",
      "test/helper.rb",
      "test/test_jim_bundler.rb",
      "test/test_jim_cli.rb",
      "test/test_jim_index.rb",
-     "test/test_jim_installer.rb"
+     "test/test_jim_installer.rb",
+     "test/test_jim_version_parser.rb"
   ]
   s.homepage = %q{http://github.com/quirkey/jim}
   s.rdoc_options = ["--charset=UTF-8"]
@@ -56,7 +60,8 @@ Gem::Specification.new do |s|
      "test/test_jim_bundler.rb",
      "test/test_jim_cli.rb",
      "test/test_jim_index.rb",
-     "test/test_jim_installer.rb"
+     "test/test_jim_installer.rb",
+     "test/test_jim_version_parser.rb"
   ]
 
   if s.respond_to? :specification_version then

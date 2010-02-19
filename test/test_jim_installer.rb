@@ -107,6 +107,8 @@ class TestJimInstaller < Test::Unit::TestCase
         FakeWeb.register_uri(:get, @url, :body => fixture('jquery.metadata-2.0.zip'))
         installer = Jim::Installer.new(@url, tmp_path)
         path = installer.install
+        puts Dir.glob(path + '**/**').inspect
+        
         assert_dir path
         assert_dir path + 'jquery.metadata.2.0'
         assert_readable path + 'jquery.metadata.2.0' +'jquery.metadata.js'

@@ -1,5 +1,14 @@
 module Jim
   class Installer
+    
+    def self.tmp_root
+      @tmp_root ||= Pathname.new('/tmp/jim')
+    end
+    
+    def self.tmp_root=(new_tmp_root)
+      @tmp_root = Pathname.new(new_tmp_root)
+    end
+    
     attr_reader :fetch_path, :install_path, :options, 
     :fetched_path, :name, :version
 
@@ -11,7 +20,7 @@ module Jim
 
     def fetch
       logger.info "fetching #{fetch_path}"
-      @fetched_path = Downlow.fetch(fetch_path, :destination => tmp_path)
+      @fetched_path = Downlow.get(fetch_path, tmp_path)
       logger.debug "fetched #{@fetched_path}"
       @fetched_path
     end
@@ -25,9 +34,7 @@ module Jim
         final_path = install_path + "#{name}#{fetched_path.extname}"
       else
         final_dir = install_path + 'lib' + "#{name}-#{version}"
-        final_path = (fetched_path.to_s =~ /\.js$/) ? 
-        final_dir + "#{name}.js" : 
-        final_dir
+        final_path = (fetched_path.to_s =~ /\.js$/) ? final_dir + "#{name}.js" : final_dir
       end
       logger.debug "installing to #{final_path}"
       if final_path.exist? 
@@ -37,9 +44,10 @@ module Jim
       Downlow.extract(@fetched_path, :destination => final_path)
       installed = final_path.directory? ? Dir.glob(final_path + '**/*').length : 1
       logger.info "Extracted to #{final_path}, #{installed} file(s)"
+      final_path
     ensure
       FileUtils.rm_rf(fetched_path) if fetched_path.exist?
-      return final_path
+      final_path
     end
 
     def determine_name_and_version
@@ -53,7 +61,7 @@ module Jim
 
     private
     def tmp_root
-      @tmp_root ||= Pathname.new('tmp')
+      self.class.tmp_root
     end
 
     def tmp_dir
