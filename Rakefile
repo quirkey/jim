@@ -10,11 +10,12 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "jim"
     gem.version = Jim::VERSION
-    gem.summary = %Q{jim is your friendly javascript package manager}
-    gem.description = %Q{jim is your friendly javascript package manager}
+    gem.summary = %Q{jim is your friendly javascript library manager}
+    gem.description = %Q{jim is your friendly javascript library manager. He downloads, stores, bundles, vendors and compresses.}
     gem.email = "aaron@quirkey.com"
     gem.homepage = "http://github.com/quirkey/jim"
     gem.authors = ["Aaron Quint"]
+    gem.add_dependency "downlow", ">= 0.1.1"
     gem.add_development_dependency "shoulda", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
