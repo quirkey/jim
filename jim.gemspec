@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.authors = ["Aaron Quint"]
   s.date = %q{2010-02-19}
   s.default_executable = %q{jim}
-  s.description = %q{jim is your friendly javascript package manager}
+  s.description = %q{jim is your friendly javascript library manager. He downloads, stores, bundles, vendors and compresses.}
   s.email = %q{aaron@quirkey.com}
   s.executables = ["jim"]
   s.extra_rdoc_files = [
@@ -54,7 +54,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.5}
-  s.summary = %q{jim is your friendly javascript package manager}
+  s.summary = %q{jim is your friendly javascript library manager}
   s.test_files = [
     "test/helper.rb",
      "test/test_jim_bundler.rb",
@@ -69,11 +69,14 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<downlow>, [">= 0.1.1"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
     else
+      s.add_dependency(%q<downlow>, [">= 0.1.1"])
       s.add_dependency(%q<shoulda>, [">= 0"])
     end
   else
+    s.add_dependency(%q<downlow>, [">= 0.1.1"])
     s.add_dependency(%q<shoulda>, [">= 0"])
   end
 end
