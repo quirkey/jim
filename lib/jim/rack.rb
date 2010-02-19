@@ -5,7 +5,7 @@ module Jim
    
     def initialize(app, options = {})
       @app = app
-      jimfile = Pathname.new(options[:jimfile] || 'jimfile')
+      jimfile = Pathname.new(options[:jimfile] || 'Jimfile')
       jimhome = Pathname.new(options[:jimhome] || ENV['JIMHOME'] || '~/.jim').expand_path
       @bundler = Jim::Bundler.new(jimfile, Jim::Index.new(jimhome), options)
       @bundled_uri    = options[:bundled_uri] || @bundler.options[:bundled_path]

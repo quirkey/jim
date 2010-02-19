@@ -1,5 +1,5 @@
 init [path]
-  create an example jimfile at path or the current directory if path is      
+  create an example Jimfile at path or the current directory if path is      
   omitted
   
 install [url]
@@ -15,23 +15,29 @@ list
   List all the installed or available packages
   
 resolve
-  Resolve all the paths listed in a jimfile and print them to STDOUT. 
-  If no jimfile is set in the options, assumes ./jimfile.  
+  Resolve all the paths listed in a Jimfile and print them to STDOUT. 
+  If no Jimfile is set in the options, assumes ./Jimfile.  
 
 bundle [bundled_path]
-  Bundle all the files listed in a jimfile and save them to [bundled_path].
+  Bundle all the files listed in a Jimfile and save them to [bundled_path].
   If the bundled_path is not set, jim will try to use the bundled_path set in 
-  the jimfile. If no bundled_path is found - it will output the entire bundle
+  the Jimfile. If no bundled_path is found - it will output the entire bundle
   to STDOUT. 
-  If no jimfile is set in the options, assumes ./jimfile.  
+  If no Jimfile is set in the options, assumes ./Jimfile.  
   
 compress [compressed_path]
-  Bundle all the files listed in a jimfile, run through the google closure 
+  Bundle all the files listed in a Jimfile, run through the google closure 
   compiler and save them to [compressed_path].
   If the compressed_path is not set, jim will try to use the compressed_path
-  set in the jimfile. If no compressed_path is found - it will output the
+  set in the Jimfile. If no compressed_path is found - it will output the
   entire compressed bundle to STDOUT. 
-  If no jimfile is set in the options, assumes ./jimfile.
+  If no Jimfile is set in the options, assumes ./Jimfile.
   
 vendor [vendor_dir]
-  Copy all the files listed in jimfile to the vendor_dir
+  Copy all the files listed in Jimfile to the vendor_dir
+  
+commands
+  Print this help file
+
+cheat
+  Print a quick list of commands without detailed description

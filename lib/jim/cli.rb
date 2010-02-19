@@ -18,7 +18,7 @@ module Jim
       if command && respond_to?(command)
         self.send(command, *@args)
       elsif command.nil? || command.strip == ''
-        commands
+        cheat
       else 
         @output << "No action found for #{command}. Run -h for help."
       end
@@ -33,6 +33,13 @@ module Jim
       logger.info "Usage: jim [options] [command] [args]\n"
       logger.info "Commands:"
       logger.info template('commands')
+    end
+    
+    def cheat
+      logger.info "Usage: jim [options] [command] [args]\n"
+      logger.info "Commands:"
+      logger.info template('commands').find_all {|l| l.match(/^\w/) }.join("")
+      logger.info "run commands for details"
     end
     
     def init(dir = nil)
