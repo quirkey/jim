@@ -114,7 +114,7 @@ class TestJimBundler < Test::Unit::TestCase
     
     context "compress!" do
       setup do
-        @bundler.stubs(:js_compress).returns(@bundler.bundle!(false))
+        @bundler.expects(:js_compress).returns(@bundler.bundle!(false))
       end
       
       should "run through google compressor" do

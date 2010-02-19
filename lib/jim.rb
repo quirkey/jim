@@ -2,12 +2,6 @@ require 'downlow'
 require 'logger'
 require 'yajl'
 
-begin
-  require 'closure-compiler'
-rescue LoadError
-  warn "You must have the closure complier installed in order to use compress!\ngem install closure-compiler"
-end
-
 module Jim
   VERSION = '0.1.0'
   

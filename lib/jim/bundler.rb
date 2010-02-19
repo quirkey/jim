@@ -84,7 +84,14 @@ module Jim
     end
     
     def js_compress(uncompressed)
-      ::Closure::Compiler.new.compress(uncompressed)
+      if options[:compressor] == 'yui'
+        require "yui/compressor"
+        compressor = ::YUI::JavaScriptCompressor.new
+      else 
+        require 'closure-compiler'
+        compressor = ::Closure::Compiler.new
+      end
+      compressor.compress(uncompressed)
     end
     
     def logger
