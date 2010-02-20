@@ -18,6 +18,8 @@ begin
     gem.add_dependency "downlow", ">= 0.1.1"
     gem.add_dependency "yajl-ruby"
     gem.add_development_dependency "shoulda", ">= 0"
+    gem.add_development_dependency "fakeweb", ">= 1.2.8"
+    gem.add_development_dependency "mocha"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
