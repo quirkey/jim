@@ -1,10 +1,29 @@
 module Jim
+  # Bundler takes parses a Jimfile that specifies requirements as names and 
+  # versions and then can bundle, compress, or copy those files into specific dirs
+  # or files.
+  #
+  # A Jimfile has a really simple format:
+  #
+  #     // comments look like JS comments
+  #     // you can set options by adding comments that look like JSON pairs
+  #     // bundle_path: /path/to/bundle.js
+  #
+  #     // A requirement is just a name and an optional version
+  #     // requirements are resolved and bundled in order of specification
+  #     jquery 1.4.2
+  #     jquery.color
+  #     sammy 0.5.0
+  #
+  # 
   class Bundler
     class MissingFile < Jim::Error; end
 
     attr_accessor :jimfile, :index, :requirements, :paths, :options 
-
-    def initialize(jimfile, index, options = {})
+    
+    # create a new bundler instance passing in the Jimfile as a `Pathname` or a
+    # string. `index` is a Jim::Index
+    def initialize(jimfile, index = nil, options = {})
       self.jimfile      = jimfile.is_a?(Pathname) ? jimfile.read : jimfile
       self.index        = index || Jim::Index.new
       self.options      = {}
@@ -15,6 +34,7 @@ module Jim
       self.paths        = []
     end
 
+    # resove the requirements specified into Jimfile or raise a MissingFile error
     def resolve!
       self.requirements.each do |search|
         name, version = search.strip.split(/\s+/)
@@ -28,6 +48,8 @@ module Jim
       paths
     end
 
+    # concatenate all the requirements into a single file and write to `to` or to the
+    # path specified in the :bundled_path option
     def bundle!(to = nil)
       resolve! if paths.empty?
       to = options[:bundled_path] if to.nil? && options[:bundled_path]
@@ -39,6 +61,9 @@ module Jim
       io
     end
 
+    # concatenate all the requirements into a single file then run through a JS 
+    # then write to `to` or to the path specified in the :bundled_path option.
+    # You can also use the YUI compressor by setting the option :compressor to 'yui'
     def compress!(to = nil)
       to = options[:compressed_path] if to.nil? && options[:compressed_path]
       io = io_for_path(to)
@@ -47,6 +72,8 @@ module Jim
       io
     end
 
+    # copy each of the requirements into the dir specified with `dir` or the path
+    # specified with the :vendor_dir option
     def vendor!(dir = nil)
       resolve! if paths.empty?
       dir ||= options[:vendor_dir]

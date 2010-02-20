@@ -1,4 +1,5 @@
 module Jim
+  # Index managages a list of directories which are searched to find requirements
   class Index
     attr_reader :directories
     

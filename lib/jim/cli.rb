@@ -1,8 +1,13 @@
 module Jim
+  
+  # CLI handles the command line interface for the `jim` binary. 
+  # The layout is farily simple. Options are parsed using optparse.rb and 
+  # the different public methods represent 1-1 the commands provided by the bin.
   class CLI
     
     attr_accessor :jimfile, :jimhome, :force
     
+    # create a new instance with the args passed from the command line i.e. ARGV
     def initialize(args)
       @output = ""
       # set the default jimhome
@@ -13,6 +18,7 @@ module Jim
       ## try to run based on args
     end
     
+    # method called by the bin directly after initialization. 
     def run
       command = @args.shift
       if command && respond_to?(command)
@@ -29,12 +35,14 @@ module Jim
       @output << e.message + " (#{e.class})"
     end
     
+    # list the possible commands to the logger
     def commands
       logger.info "Usage: jim [options] [command] [args]\n"
       logger.info "Commands:"
       logger.info template('commands')
     end
     
+    # list the possible commands without detailed descriptions
     def cheat
       logger.info "Usage: jim [options] [command] [args]\n"
       logger.info "Commands:"
@@ -42,6 +50,7 @@ module Jim
       logger.info "run commands for details"
     end
     
+    # initialize the current dir with a new Jimfile
     def init(dir = nil)
       dir = Pathname.new(dir || '')
       jimfile_path = dir + 'Jimfile'
@@ -55,34 +64,40 @@ module Jim
       end
     end
     
+    # install the file/project `url` into `jimhome`
     def install(url, name = false, version = false)
       Jim::Installer.new(url, jimhome, :force => force, :name => name, :version => version).install
     end
     
+    # bundle the files specified in Jimfile into `to`
     def bundle(to = nil)
       path = bundler.bundle!(to)
     end
     
+    # compress the files specified in Jimfile into `to`
     def compress(to = nil)
       path = bundler.compress!(to)
     end
     
+    # copy/vendor all the files specified in Jimfile to `dir`
+    def vendor(dir = nil)
+      bundler.vendor!(dir)
+    end
+    
+    # list the installed projects and versions
     def list
       logger.info "Getting list of installed files in #{index.directories.join(':')}"
       list = index.list
       logger.info "Installed:\n#{list.collect {|i| "#{i[0]} (#{i[1].join(', ')})"}.join("\n")}"
     end
     
+    # list the files and their resolved paths specified in the Jimfile
     def resolve
       resolved = bundler.resolve!
       logger.info "Files:\n#{resolved.join("\n")}"
       resolved
     end
-    
-    def vendor(dir = nil)
-      bundler.vendor!(dir)
-    end
-    
+        
     private
     def parse_options(runtime_args)
       OptionParser.new("", 24, '  ') do |opts|
