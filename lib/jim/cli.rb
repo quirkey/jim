@@ -124,7 +124,7 @@ module Jim
     end
     
     def index
-      @index ||= Jim::Index.new([jimhome + 'lib', ENV["PWD"]])
+      @index ||= Jim::Index.new(jimhome + 'lib', Dir.pwd)
     end
     
     def bundler
