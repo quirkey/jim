@@ -55,8 +55,8 @@ Which create an empty "Jimfile". Open it up and add your requirements:
 
   jquery 1.4.2
   jquery-metadata 2.0
-  // a local file (comments are fine)
-  app.js
+  // a local file, js/app.js (comments are fine)
+  js/app
   
 If its a rack project, mount the Jim::Rack middleware which gives you live updates of your bundled and compressed js files:
 
