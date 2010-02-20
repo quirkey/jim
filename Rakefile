@@ -16,6 +16,7 @@ begin
     gem.homepage = "http://github.com/quirkey/jim"
     gem.authors = ["Aaron Quint"]
     gem.add_dependency "downlow", ">= 0.1.1"
+    gem.add_dependency "yajl-ruby"
     gem.add_development_dependency "shoulda", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
