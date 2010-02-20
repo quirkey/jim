@@ -1,3 +1,5 @@
+require 'optparse'
+
 module Jim
   
   # CLI handles the command line interface for the `jim` binary. 

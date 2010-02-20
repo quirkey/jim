@@ -1,6 +1,14 @@
 require 'jim'
 
 module Jim
+  # Jim::Rack is a Rack middleware for allowing live bundling and compression
+  # of the requirements in your Jimfile without having to rebundle using the command
+  # line. You can specify a number of options:
+  #
+  # :jimfile: Path to your Jimfile (default ./Jimfile)
+  # :jimhome: Path to your JIMHOME directory (default ENV['JIMHOME'] or ~/.jim)
+  # :bundled_uri: URI to serve the bundled requirements
+  # :compressed_uri: URI to serve the compressed requirements
   class Rack
    
     def initialize(app, options = {})
