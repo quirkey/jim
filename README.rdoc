@@ -22,6 +22,18 @@ The goals are simple:
 
 So far I've accomplished the goals, but this is all very very very beta and the API is sure to change and thing straight-up might not work.
 
+== Install
+
+jim is a rubygem:
+
+  $ gem install jim
+
+You can also clone the source from github and use jeweler to install locally (requires jeweler):
+
+  $ git clone git://github.com/quirkey/jim.git
+  $ cd jim
+  $ rake install
+
 == Usage
 
 From anywhere, install a project:
@@ -58,6 +70,8 @@ Otherwise and also before deploys, etc, use the command line tool from your proj
   // or
   $ jim compress
 
+In order for compress to work, you need either the yui-compressor gem or the closure-compiler gem. Closure is the default, add
+
 Run `jim commands` for a full list of commands.
 
 == You're probably wondering
@@ -72,6 +86,10 @@ With that said, I would gladly welcome anyone cloning the API in CommonJS (I'm j
 
 Probably?? Its all very new at this point so please test it out and let me know.
 
+== Thanks
+
+Thanks to Yehuda Katz for talking through some of the ideas with me.
+
 == Note on Patches/Pull Requests
  
 * Fork the project.
@@ -80,7 +98,7 @@ Probably?? Its all very new at this point so please test it out and let me know.
   future version unintentionally.
 * Commit, do not mess with rakefile, version, or history.
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+* Send me a pull request. Bonus points for topic branches
 
 == Copyright
 
