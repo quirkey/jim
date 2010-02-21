@@ -1,4 +1,5 @@
 require 'optparse'
+require 'readline'
 
 module Jim
   
@@ -93,8 +94,27 @@ module Jim
       logger.info "Installed:\n#{list.collect {|i| "#{i[0]} (#{i[1].join(', ')})"}.join("\n")}"
     end
     
-    def remove(matching)
-      logger.info ""
+    # Iterates over matching files and prompts for removal
+    def remove(name, version = nil)
+      logger.info "Looking for files matching #{name} #{version}"
+      files = installed_index.find_all(name, version)
+      if files.length > 0
+        logger.info "Found #{files.length} matching files"
+        removed = 0
+        files.each do |filename|
+          response = Readline.readline("Remove #{filename}? (y/n)\n")
+          if response.strip =~ /y/i
+            logger.info "Removing #{filename}"
+            filename.delete
+            removed += 1
+          else 
+            logger.info "Skipping #{filename}"
+          end
+        end
+        logger.info "Removed #{removed} files."
+      else 
+        logger.info "No installed files matched."
+      end
     end
     
     # list the files and their resolved paths specified in the Jimfile
@@ -145,11 +165,19 @@ module Jim
     end
     
     def index
-      @index ||= Jim::Index.new(jimhome + 'lib', Dir.pwd)
+      @index ||= Jim::Index.new(install_dir, Dir.pwd)
+    end
+    
+    def installed_index 
+      @installed_index ||= Jim::Index.new(install_dir)
     end
     
     def bundler
       @bundler ||= Jim::Bundler.new(jimfile, index)
+    end
+    
+    def install_dir
+      jimhome + 'lib'
     end
     
     def template(path)
