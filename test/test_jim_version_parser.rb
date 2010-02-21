@@ -9,6 +9,7 @@ class TestJimVersionParser < Test::Unit::TestCase
         [
           ["sammy-0.1.0", ["sammy", "0.1.0"]],
           ["sammy_0.1.0", ["sammy", "0.1.0"]],
+          ["/test/fixtures/sammy-0.1.0", ["sammy", "0.1.0"]],
           ["sammy-1", ["sammy", "1"]],
           ["sammy_1", ["sammy", "1"]],
           ["sammy.1.0", ["sammy", "1.0"]],

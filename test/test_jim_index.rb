@@ -26,7 +26,6 @@ class TestJimIndex < Test::Unit::TestCase
       
       should "return list of files" do
         names = @list.collect {|l| l[0] }
-        puts names.inspect
         assert names.include?('jquery'), "should include jquery"
         assert names.include?('infoincomments')
       end

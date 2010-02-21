@@ -17,7 +17,7 @@ module Jim
         if /lib\/([^\/]+)-([\d\w\.\-]+)\/.+/.match filename
           name    = $1
           version = $2
-        else 
+        else
           name, version = Jim::VersionParser.parse_filename(filename)
         end
         if name && version
