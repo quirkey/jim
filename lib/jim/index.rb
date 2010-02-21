@@ -28,7 +28,7 @@ module Jim
       list.sort
     end
 
-    def find(name, version = nil, first = true)
+    def find(name, version = nil)
       name     = Pathname.new(name)
       stem     = name.basename
       ext      = '.js'
@@ -48,12 +48,18 @@ module Jim
         possible_paths.each do |p|
           if File.file?(filename) && p.match(filename)
             final = Pathname.new(filename).expand_path
-            break
+            block_given? ? yield(final) : break
           end
         end
-        break if final
+        break if final && !block_given?
       end
       final
+    end
+    
+    def find_all(name, version = nil)
+      matched = []
+      find(name, version) {|p| matched << p }
+      matched
     end
     
     def each_file_in_index(ext, &block)

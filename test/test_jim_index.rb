@@ -94,6 +94,23 @@ class TestJimIndex < Test::Unit::TestCase
       end
 
     end
+    
+    context "find_all" do
+      setup do
+        Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path, :version => '1.5pre').install
+        @all = @index.find_all("jquery")
+      end
+      
+      should "return array" do
+        assert @all.is_a?(Array)
+      end
+      
+      should "find all files that match the search" do
+        assert @all[0].is_a?(Pathname)
+        assert @all.all? {|p| p.to_s.match /jquery/ }
+      end
+      
+    end
         
   end
 end
