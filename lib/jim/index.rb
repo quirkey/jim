@@ -14,24 +14,21 @@ module Jim
     def list
       list = {}
       each_file_in_index('.js') do |filename|
-        if version = filename.version
-          name = filename.stem.gsub(/(\-[^\-]+)$/, '')
-        elsif /lib\/([^\/]+)-([\d\w\.\-]+)\/.+/.match filename
+        if /lib\/([^\/]+)-([\d\w\.\-]+)\/.+/.match filename
           name    = $1
           version = $2
-        else
-          name = filename.stem
-          version = '0'
+        else 
+          name, version = Jim::VersionParser.parse_filename(filename)
         end
         if name && version
           list[name] ||= []
-          list[name] << version unless list[name].include?(version)
+          list[name] << [version, filename]
         end
       end
       list.sort
     end
 
-    def find(name, version = nil)
+    def find(name, version = nil, first = true)
       name     = Pathname.new(name)
       stem     = name.basename
       ext      = '.js'

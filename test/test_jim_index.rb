@@ -24,8 +24,9 @@ class TestJimIndex < Test::Unit::TestCase
         @list = @index.list
       end
       
-      should "return list of files and directories" do
-        names = @list.collect {|l| l[0] } 
+      should "return list of files" do
+        names = @list.collect {|l| l[0] }
+        puts names.inspect
         assert names.include?('jquery'), "should include jquery"
         assert names.include?('infoincomments')
       end
@@ -33,9 +34,11 @@ class TestJimIndex < Test::Unit::TestCase
       should "only return one of each name" do
         jquery = @list.find {|l| l[0] == 'jquery' }
         assert jquery, "should include jquery"
-        assert jquery[1].is_a?(Array), "should have array of versions"
+        assert jquery[1].is_a?(Array), "should have array of versions and filenames"
         assert_equal jquery[1].length, jquery[1].uniq.length
-        assert jquery[1].include?('1.5pre')
+        assert jquery[1][0].is_a?(Array)
+        assert jquery[1][0][0].is_a?(String), "should have version"
+        assert jquery[1][0][1].is_a?(Pathname), "should include pathname"
       end
       
     end

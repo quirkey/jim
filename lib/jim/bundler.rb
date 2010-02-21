@@ -68,7 +68,7 @@ module Jim
       to = options[:compressed_path] if to.nil? && options[:compressed_path]
       io = io_for_path(to)
       logger.info "compressing to #{to}"
-      io << js_compress(bundle!(false))
+      io << compress_js(bundle!(false))
       io
     end
 
@@ -82,6 +82,27 @@ module Jim
       paths.each do |path|
         Jim::Installer.new(path, dir, :shallow => true).install
       end
+    end
+
+    # Run the uncompressed test through a JS compressor (closure-compiler) by
+    # default. Setting options[:compressor] == 'yui' will force the YUI JS Compressor
+    def compress_js(uncompressed)
+      if options[:compressor] == 'yui'
+        begin
+          require "yui/compressor"
+        rescue LoadError
+          raise "You must install the yui compressor gem to use the compressor\ngem install yui-compressor"
+        end
+        compressor = ::YUI::JavaScriptCompressor.new
+      else 
+        begin
+          require 'closure-compiler'
+        rescue LoadError
+          raise "You must install the closure compiler gem to use the compressor\ngem install closure-compiler"
+        end
+        compressor = ::Closure::Compiler.new
+      end
+      compressor.compress(uncompressed)
     end
 
     private
@@ -109,26 +130,7 @@ module Jim
         end
       end
     end
-
-    def js_compress(uncompressed)
-      if options[:compressor] == 'yui'
-        begin
-          require "yui/compressor"
-        rescue LoadError
-          raise "You must install the yui compressor gem to use the compressor\ngem install yui-compressor"
-        end
-        compressor = ::YUI::JavaScriptCompressor.new
-      else 
-        begin
-          require 'closure-compiler'
-        rescue LoadError
-          raise "You must install the closure compiler gem to use the compressor\ngem install closure-compiler"
-        end
-        compressor = ::Closure::Compiler.new
-      end
-      compressor.compress(uncompressed)
-    end
-
+    
     def logger
       Jim.logger
     end

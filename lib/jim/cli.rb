@@ -93,6 +93,10 @@ module Jim
       logger.info "Installed:\n#{list.collect {|i| "#{i[0]} (#{i[1].join(', ')})"}.join("\n")}"
     end
     
+    def remove(matching)
+      logger.info ""
+    end
+    
     # list the files and their resolved paths specified in the Jimfile
     def resolve
       resolved = bundler.resolve!

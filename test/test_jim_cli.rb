@@ -31,6 +31,10 @@ class TestJimCLI < Test::Unit::TestCase
     end
     
     context "compress" do
+      setup do
+        Jim::Bundler.any_instance.stubs(:compress_js).returns("compressed.js")
+      end
+      
       should "compress Jimfile to path" do
         run_cli("compress", tmp_path + '/compressed.js', "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
         assert_readable tmp_path + '/compressed.js'

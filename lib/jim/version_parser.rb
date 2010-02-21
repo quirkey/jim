@@ -4,7 +4,7 @@ module Jim
     NOT_EXTENSIONS = %w{.min .pre .beta}
 
     def self.parse_filename(filename)
-      f = filename.dup
+      f = filename.to_s
       extension = f.scan(/\.[^\.\d\s\-\_][^\.]*$/)[0]
       if NOT_EXTENSIONS.include?(extension)
         extension = nil
