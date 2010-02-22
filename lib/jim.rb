@@ -25,12 +25,12 @@ module Jim
   end
   
   def self.each_path_in_directories(directories, ext, ignore_directories = [], &block)
-    ignore_regexps = ignore_directories.collect {|d| Regexp.new(d + '/') }
+    ignore_regexp = ignore_directories.empty? ? false : /(\/|^)(#{ignore_directories.join('|')})\//
     directories.each do |dir|
       dir = Pathname.new(dir).expand_path
       Dir.glob(Pathname.new(dir) + '**' + "*#{ext}") do |filename|
-        basepath = filename.to_s.gsub(dir.to_s, '')
-        next if ignore_regexps.any? {|i_regexp| basepath =~ i_regexp }
+        basepath = filename.to_s.gsub(dir.to_s, '/')
+        next if ignore_regexp && basepath =~ ignore_regexp
         yield Pathname.new(filename)
       end
     end
