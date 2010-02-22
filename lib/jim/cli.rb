@@ -87,11 +87,22 @@ module Jim
       bundler.vendor!(dir)
     end
     
-    # list the installed projects and versions
+    # list the only the _installed_ projects and versions
     def list
-      logger.info "Getting list of installed files in #{index.directories.join(':')}"
+      logger.info "Getting list of installed files in\n#{installed_index.directories.join(':')}"
+      list = installed_index.list
+      logger.info "Installed:"
+      print_verison_list(list)
+    end
+    alias :installed :list
+    
+    # list all available projects and versions including those in the local path, or 
+    # paths specified in a jimfile
+    def available
+      logger.info "Getting list of all available files in\n#{index.directories.join("\n")}"
       list = index.list
-      logger.info "Installed:\n#{list.collect {|i| "#{i[0]} (#{i[1].join(', ')})"}.join("\n")}"
+      logger.info "Available:"
+      print_verison_list(list)
     end
     
     # Iterates over matching files and prompts for removal
@@ -186,6 +197,12 @@ module Jim
     
     def logger
       Jim.logger
+    end
+    
+    def print_verison_list(list)
+      list.each do |file, versions|
+        logger.info "#{file} (#{versions.collect {|v| v[0] }.join(',')})"
+      end
     end
     
   end
