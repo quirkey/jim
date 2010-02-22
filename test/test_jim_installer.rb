@@ -93,13 +93,15 @@ class TestJimInstaller < Test::Unit::TestCase
     
     context "install" do
       
-      should "move file into install path at name/version" do
-        installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
-        assert installer.install
-        install_path = File.join(tmp_path, 'lib', 'jquery-1.4.1')
-        assert_dir install_path
-        assert_readable install_path, 'jquery.js'
-        assert_equal fixture('jquery-1.4.1.js'), File.read(File.join(install_path, 'jquery.js'))
+      context "with a single file" do
+        should "move file into install path at name/version" do
+          installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
+          assert installer.install
+          install_path = File.join(tmp_path, 'lib', 'jquery-1.4.1')
+          assert_dir install_path
+          assert_readable install_path, 'jquery.js'
+          assert_equal fixture('jquery-1.4.1.js'), File.read(File.join(install_path, 'jquery.js'))
+        end
       end
       
       should "install zips" do
@@ -111,6 +113,33 @@ class TestJimInstaller < Test::Unit::TestCase
         assert_dir path
         assert_dir path + 'jquery.metadata-2.0.zip'
         assert_readable path + 'jquery.metadata-2.0.zip' + 'jquery.metadata.2.0' +'jquery.metadata.js'
+      end
+      
+      context "with a package" do
+        setup do
+          @installer = Jim::Installer.new(fixture_path('sammy-0.5.0'), tmp_path)
+          @paths = @installer.install
+        end
+        
+        should "return an array of paths" do
+          assert @paths.is_a?(Array)
+          assert @paths.all? {|p| p.is_a?(Pathname) }
+        end
+        
+        should "install each js file found separately" do
+          assert_dir tmp_path + 'lib' + 'sammy-0.5.0'
+          assert_readable tmp_path + 'lib' + 'sammy-0.5.0' + 'sammy.js'
+          assert_readable tmp_path + 'lib' + 'sammy.template-0.5.0' + 'sammy.template.js'
+          assert_readable tmp_path + 'lib' + 'sammy.haml-0.5.0' + 'sammy.haml.js'
+        end
+        
+        should "not install files found in ignored directories" do
+          assert_not_readable tmp_path + 'lib' + 'qunit-spec-0.5.0' + 'qunit-spec.js'
+          assert_not_readable tmp_path + 'lib' + 'qunit-spec-0' + 'qunit-spec.js'
+          assert_not_readable tmp_path + 'lib' + 'test_sammy_application-0.5.0' + 'test_sammy_application.js'
+          assert_not_readable tmp_path + 'lib' + 'test_sammy_application-0' + 'test_sammy_application.js'
+        end
+        
       end
       
     end

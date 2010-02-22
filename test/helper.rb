@@ -36,4 +36,9 @@ class Test::Unit::TestCase
     assert File.directory?(full_path), "Expected #{full_path} to be a directory"
   end
   
+  def assert_not_readable(*args)
+    full_path = File.join(*args)
+    assert !File.readable?(full_path), "Expected #{full_path} to not be a readable file"
+  end
+  
 end

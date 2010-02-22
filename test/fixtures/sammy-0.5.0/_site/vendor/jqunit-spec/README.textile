@@ -1,0 +1,22 @@
+h2. jqunit-spec
+
+http://github.com/quirkey/jqunit-jspec
+
+h3. DESCRIPTION:
+
+A thin wrapper around jqUnit for BDD style testing.
+
+h3. CONTRIBUTORS
+
+* Aaron Quint ("quirkey":http://github.com/quirkey)
+* Chris Thatcher ("thatcher":http://github.com/thatcher)
+
+h3. SYNOPSIS:
+
+jqunit-spec is a very small very light wrapper around jqunit. You can setup your test suites the exact same way as you do now: a test html, include jquery and jqunit. Including jqunit-spec gives you a couple more methods for defining your tests, most notably: describe, it, context, and should.
+
+See "sample_spec.js":http://github.com/quirkey/jquery-spec/blob/master/sample_spec.js for simple usage.
+
+h3. LICENSE:
+
+MIT-LICENSE - See LICENSE
