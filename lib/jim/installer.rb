@@ -11,8 +11,8 @@ module Jim
       examples
       demo
       min
-      \_([^\/]+)
-      \.([^\/]+)
+      ^\_([^\/]+)
+      ^\.([^\/]+)
     }
     
     def self.tmp_root
