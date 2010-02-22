@@ -63,11 +63,7 @@ module Jim
     end
     
     def each_file_in_index(ext, &block)
-      @directories.each do |dir|
-        Dir.glob(Pathname.new(dir) + '**' + "*#{ext}") do |filename|
-          yield Pathname.new(filename)
-        end
-      end
+      Jim.each_path_in_directories(@directories, ext, [], &block)
     end
 
   end

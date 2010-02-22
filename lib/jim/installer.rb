@@ -1,6 +1,19 @@
 module Jim
   class Installer
     
+    IGNORE_DIRS = %w{
+      vendor
+      external
+      test
+      tests
+      unit
+      site
+      examples
+      demo
+      \_([^\/]+)
+      \.([^\/]+)
+    }
+    
     def self.tmp_root
       @tmp_root ||= Pathname.new('/tmp/jim')
     end
@@ -9,8 +22,11 @@ module Jim
       @tmp_root = Pathname.new(new_tmp_root)
     end
     
-    attr_reader :fetch_path, :install_path, :options, 
-    :fetched_path, :name, :version
+    def self.ignore_dirs
+      @ignore_dirs ||= INGORE_DIRS.dup
+    end
+    
+    attr_reader :fetch_path, :install_path, :options, :fetched_path, :name, :version
 
     def initialize(fetch_path, install_path, options = {})
       @fetch_path   = Pathname.new(fetch_path)
@@ -31,10 +47,13 @@ module Jim
       logger.info "installing #{name} #{version}"
       logger.debug "fetched_path #{@fetched_path}"
       if options[:shallow]
-        final_path = install_path + "#{name}#{fetched_path.extname}"
+        final_path = install_path + "#{name}-#{version}.#{fetched_path.extname}"
       else
         final_dir = install_path + 'lib' + "#{name}-#{version}"
         final_path = (fetched_path.to_s =~ /\.js$/) ? final_dir + "#{name}.js" : final_dir
+      end
+      if @fetched_path.directory?
+        
       end
       logger.debug "installing to #{final_path}"
       if final_path.exist? 

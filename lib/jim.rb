@@ -24,6 +24,18 @@ module Jim
     @logger
   end
   
+  def self.each_path_in_directories(directories, ext, ignore_directories = [], &block)
+    ignore_regexps = ignore_directories.collect {|d| Regexp.new(d + '/') }
+    directories.each do |dir|
+      dir = Pathname.new(dir).expand_path
+      Dir.glob(Pathname.new(dir) + '**' + "*#{ext}") do |filename|
+        basepath = filename.to_s.gsub(dir.to_s, '')
+        next if ignore_regexps.any? {|i_regexp| basepath =~ i_regexp }
+        yield Pathname.new(filename)
+      end
+    end
+  end
+  
   autoload :Installer, 'jim/installer'
   autoload :Index, 'jim/index'
   autoload :Bundler, 'jim/bundler'
