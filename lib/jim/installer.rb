@@ -44,7 +44,7 @@ module Jim
       logger.info "installing #{name} #{version}"
       logger.debug "fetched_path #{@fetched_path}"
       if options[:shallow]
-        final_path = install_path + "#{name}.#{fetched_path.extname}"
+        final_path = install_path + "#{[name, version].compact.join('-')}#{fetched_path.extname}"
       else
         final_dir = install_path + 'lib' + "#{name}-#{version}"
         final_path = (fetched_path.to_s =~ /\.js$/) ? final_dir + "#{name}.js" : final_dir

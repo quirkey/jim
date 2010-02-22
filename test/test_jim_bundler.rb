@@ -67,8 +67,8 @@ class TestJimBundler < Test::Unit::TestCase
       should "copy files in jemfile to path specified" do
         vendor_dir = Pathname.new(tmp_path) + 'vendor'
         @bundler.vendor!(vendor_dir)
-        assert_readable vendor_dir + 'jquery.js'
-        assert_readable vendor_dir + 'myproject.js'
+        assert_readable vendor_dir + 'jquery-1.4.1.js'
+        assert_readable vendor_dir + 'myproject-1.2.2.js'
       end
       
     end
