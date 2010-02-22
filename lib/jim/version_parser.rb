@@ -12,7 +12,7 @@ module Jim
         f.gsub!(/#{extension}$/, '')
       end 
 
-      name, after_name, delimiter, version = f.scan(/^([a-z\.\-]+)(([\.\-\_\s])(([\w\d]{6,7})|([\d\w\.]+)))?$/i)[0]
+      name, after_name, delimiter, version = f.scan(/^([a-z\.\-\_]+)(([\.\-\_\s])(([\w\d]{6,7})|([\d\w\.]+)))?$/i)[0]
 
       [name, version || "0"]
     end

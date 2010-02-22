@@ -127,17 +127,17 @@ class TestJimInstaller < Test::Unit::TestCase
         end
         
         should "install each js file found separately" do
-          assert_dir tmp_path + 'lib' + 'sammy-0.5.0'
-          assert_readable tmp_path + 'lib' + 'sammy-0.5.0' + 'sammy.js'
-          assert_readable tmp_path + 'lib' + 'sammy.template-0.5.0' + 'sammy.template.js'
-          assert_readable tmp_path + 'lib' + 'sammy.haml-0.5.0' + 'sammy.haml.js'
+          assert_dir tmp_path, 'lib', 'sammy-0.5.0'
+          assert_readable tmp_path, 'lib', 'sammy-0.5.0', 'sammy.js'
+          assert_readable tmp_path, 'lib', 'sammy.template-0.5.0', 'sammy.template.js'
+          assert_readable tmp_path, 'lib', 'sammy.haml-0.5.0', 'sammy.haml.js'
         end
         
         should "not install files found in ignored directories" do
-          assert_not_readable tmp_path + 'lib' + 'qunit-spec-0.5.0' + 'qunit-spec.js'
-          assert_not_readable tmp_path + 'lib' + 'qunit-spec-0' + 'qunit-spec.js'
-          assert_not_readable tmp_path + 'lib' + 'test_sammy_application-0.5.0' + 'test_sammy_application.js'
-          assert_not_readable tmp_path + 'lib' + 'test_sammy_application-0' + 'test_sammy_application.js'
+          assert_not_readable tmp_path, 'lib', 'qunit-spec-0.5.0', 'qunit-spec.js'
+          assert_not_readable tmp_path, 'lib', 'qunit-spec-0', 'qunit-spec.js'
+          assert_not_readable tmp_path, 'lib', 'test_sammy_application-0.5.0', 'test_sammy_application.js'
+          assert_not_readable tmp_path, 'lib', 'test_sammy_application-0', 'test_sammy_application.js'
         end
         
       end

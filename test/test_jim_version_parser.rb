@@ -27,6 +27,7 @@ class TestJimVersionParser < Test::Unit::TestCase
           ["sammy.plugin.1.0.1.js", ["sammy.plugin", "1.0.1"]],
           ["sammy.plugin.1.0.1.zip", ["sammy.plugin", "1.0.1"]],
           ["sammy.plugin.1.0.1", ["sammy.plugin", "1.0.1"]],
+          ["sammy.nested_params-0.5.0.js", ["sammy.nested_params", "0.5.0"]],
           # ["sammy.plugin-a9asb02", ["sammy.plugin", "a9asb02"]],
           ["sammy-9asb02", ["sammy", "9asb02"]],
           ["noversion.js", ["noversion", "0"]]

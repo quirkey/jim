@@ -21,11 +21,7 @@ module Jim
     def self.tmp_root=(new_tmp_root)
       @tmp_root = Pathname.new(new_tmp_root)
     end
-    
-    def self.ignore_dirs
-      @ignore_dirs ||= INGORE_DIRS.dup
-    end
-    
+        
     attr_reader :fetch_path, :install_path, :options, :fetched_path, :name, :version
 
     def initialize(fetch_path, install_path, options = {})
@@ -47,13 +43,20 @@ module Jim
       logger.info "installing #{name} #{version}"
       logger.debug "fetched_path #{@fetched_path}"
       if options[:shallow]
-        final_path = install_path + "#{name}-#{version}.#{fetched_path.extname}"
+        final_path = install_path + "#{name}.#{fetched_path.extname}"
       else
         final_dir = install_path + 'lib' + "#{name}-#{version}"
         final_path = (fetched_path.to_s =~ /\.js$/) ? final_dir + "#{name}.js" : final_dir
       end
       if @fetched_path.directory?
-        
+        # install every js file
+        installed_paths = []
+        sub_options = options.merge({:name => nil, :version => nil})
+        Jim.each_path_in_directories([@fetched_path], '.js', IGNORE_DIRS) do |subfile|
+          logger.info "found file #{subfile}"
+          installed_paths << Jim::Installer.new(subfile, install_path, sub_options).install
+        end
+        return installed_paths
       end
       logger.debug "installing to #{final_path}"
       if final_path.exist? 
