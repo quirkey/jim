@@ -9,7 +9,14 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'jim'
 
-# Jim.logger = Logger.new('/dev/null') unless !!ENV['PRINT']
+unless !!ENV['PRINT']
+  Jim.logger = Logger.new('/dev/null') 
+else 
+  logger           = Logger.new(STDOUT)
+  logger.level     = Logger::DEBUG
+  logger.formatter = Proc.new {|s, t, n, msg| "\n* #{s}: #{msg}\n"}
+  Jim.logger = logger
+end
 Jim::Installer.tmp_root = File.join(File.dirname(__FILE__), 'tmp', 'jimtmproot')
 
 class Test::Unit::TestCase
