@@ -23,6 +23,7 @@ class TestJimVersionParser < Test::Unit::TestCase
           ["sammy.plugin-1.0.1beta", ["sammy.plugin", "1.0.1beta"]],
           ["sammy.plugin.1.0.1.pre", ["sammy.plugin", "1.0.1.pre"]],
           ["sammy.plugin-1.0.1.beta", ["sammy.plugin", "1.0.1.beta"]],
+          ["sammy.plugin-1.0.1.min", ["sammy.plugin", "1.0.1.min"]],
           ["sammy 1.0.1", ["sammy", "1.0.1"]],
           ["sammy.plugin.1.0.1.js", ["sammy.plugin", "1.0.1"]],
           ["sammy.plugin.1.0.1.zip", ["sammy.plugin", "1.0.1"]],

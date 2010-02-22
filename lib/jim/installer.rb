@@ -10,6 +10,7 @@ module Jim
       site
       examples
       demo
+      min
       \_([^\/]+)
       \.([^\/]+)
     }
@@ -51,11 +52,12 @@ module Jim
       if @fetched_path.directory?
         # install every js file
         installed_paths = []
-        sub_options = options.merge({:name => nil, :version => nil})
+        sub_options = options.merge({:name => nil, :version => nil, :parent_version => version})
         Jim.each_path_in_directories([@fetched_path], '.js', IGNORE_DIRS) do |subfile|
           logger.info "found file #{subfile}"
           installed_paths << Jim::Installer.new(subfile, install_path, sub_options).install
         end
+        logger.info "Extracted to #{install_path}, #{installed_paths.length} file(s)"
         return installed_paths
       end
       logger.debug "installing to #{final_path}"
@@ -78,7 +80,7 @@ module Jim
       name_and_version_from_comments ||
       name_and_version_from_package_json ||
       name_and_version_from_filename
-      @version ||= '0'
+      @version = (version == "0" && options[:parent_version]) ? options[:parent_version] : version
     end
 
     private
@@ -103,6 +105,7 @@ module Jim
     def name_and_version_from_options
       @name = options[:name] if options[:name] && !name
       @version = options[:version] if options[:version] && !version
+      logger.debug "name and version from options: #{name} #{version}"
       name && version
     end
 
@@ -119,6 +122,7 @@ module Jim
           end
         end
       end
+      logger.debug "name and version from comments: #{name} #{version}"
       name && version
     end
 
@@ -128,6 +132,7 @@ module Jim
         @name ||= sname
         @version ||= sversion
       end
+      logger.debug "name and version from package.json: #{name} #{version}"
       name && version
     end
 
@@ -135,6 +140,7 @@ module Jim
       fname, fversion = VersionParser.parse_filename(fetched_path.basename.to_s)
       @name ||= fname
       @version ||= fversion
+      logger.debug "name and version from filename: #{name} #{version}"
       name && version
     end
 
