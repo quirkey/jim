@@ -29,8 +29,10 @@ module Jim
     directories.each do |dir|
       dir = Pathname.new(dir).expand_path
       Dir.glob(Pathname.new(dir) + '**' + "*#{ext}") do |filename|
-        basepath = filename.to_s.gsub(dir.to_s, '/')
-        next if ignore_regexp && basepath =~ ignore_regexp
+        if ignore_regexp
+          basepath = filename.to_s.gsub(dir.to_s, '/')
+          next if basepath =~ ignore_regexp
+        end
         yield Pathname.new(filename)
       end
     end
