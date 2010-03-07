@@ -94,13 +94,21 @@ class TestJimInstaller < Test::Unit::TestCase
     context "install" do
 
       context "with a single file" do
+        setup do 
+          @installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
+          assert @installer.install
+          @install_path = File.join(tmp_path, 'lib', 'jquery-1.4.1')
+        end
+        
+        should "install a package.json" do
+          assert_readable @install_path,  'package.json'
+          assert_file_contents(/\"name\"\:\s*\"jquery\"/, @install_path,  'package.json')
+        end
+        
         should "move file into install path at name/version" do
-          installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
-          assert installer.install
-          install_path = File.join(tmp_path, 'lib', 'jquery-1.4.1')
-          assert_dir install_path
-          assert_readable install_path, 'jquery.js'
-          assert_equal fixture('jquery-1.4.1.js'), File.read(File.join(install_path, 'jquery.js'))
+          assert_dir @install_path
+          assert_readable @install_path, 'jquery.js'
+          assert_equal fixture('jquery-1.4.1.js'), File.read(File.join(@install_path, 'jquery.js'))
         end
       end
 
@@ -110,6 +118,7 @@ class TestJimInstaller < Test::Unit::TestCase
           FakeWeb.register_uri(:get, @url, :body => fixture('jquery.metadata-2.0.zip'))
           @installer = Jim::Installer.new(@url, tmp_path)
           @paths = @installer.install
+          @install_path = tmp_path + 'lib'
         end
 
         should "return an array of paths" do
@@ -128,6 +137,12 @@ class TestJimInstaller < Test::Unit::TestCase
           assert_not_readable tmp_path, 'lib', 'test-2.0', 'test.js'
           assert_not_readable tmp_path, 'lib', 'test-0', 'test.js'
         end
+        
+        should "install a package.json" do
+          json_path = @install_path + 'jquery.metadata-2.0' + 'package.json'
+          assert_readable json_path
+          assert_file_contents(/\"name\"\:\s*\"jquery\.metadata\"/, json_path)
+        end
 
       end
 
@@ -135,6 +150,7 @@ class TestJimInstaller < Test::Unit::TestCase
         setup do
           @installer = Jim::Installer.new(fixture_path('sammy-0.5.0'), tmp_path)
           @paths = @installer.install
+          @install_path = tmp_path + 'lib'
         end
 
         should "return an array of paths" do
@@ -155,7 +171,24 @@ class TestJimInstaller < Test::Unit::TestCase
           assert_not_readable tmp_path, 'lib', 'test_sammy_application-0.5.0', 'test_sammy_application.js'
           assert_not_readable tmp_path, 'lib', 'test_sammy_application-0', 'test_sammy_application.js'
         end
-
+        
+        should "install a package.json" do
+          json_path = @install_path + 'sammy-0.5.0' + 'package.json'
+          assert_readable json_path
+          assert_file_contents(/\"name\"\:\s*\"sammy\"/, json_path)
+        end
+        
+        context "with an existing package.json" do
+          setup do
+            @installer = Jim::Installer.new(fixture_path('sammy-0.5.0'), tmp_path)
+            @paths = @installer.install
+            @install_path = tmp_path + 'lib'
+          end
+          
+          should "merge initial package.json values" do
+        
+          end
+        end
       end
 
     end

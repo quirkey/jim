@@ -43,7 +43,7 @@ module Jim
           raise(MissingFile, 
           "Could not find #{name} #{version} in any of these paths #{index.directories.join(':')}")
         end
-        self.paths << path
+        self.paths << [path, name, version]
       end
       paths
     end
@@ -55,7 +55,7 @@ module Jim
       to = options[:bundled_path] if to.nil? && options[:bundled_path]
       io = io_for_path(to)
       logger.info "bundling to #{to}" if to
-      paths.each do |path|
+      paths.each do |path, name, version|
         io << path.read << "\n"
       end
       io
@@ -79,8 +79,8 @@ module Jim
       dir ||= options[:vendor_dir]
       dir ||= 'vendor' # default
       logger.info "vendoring to #{dir}"
-      paths.each do |path|
-        Jim::Installer.new(path, dir, :shallow => true).install
+      paths.each do |path, name, version|
+        Jim::Installer.new(path, dir, :shallow => true, :name => name, :version => version).install
       end
     end
 

@@ -66,6 +66,8 @@ module Jim
         options[:force] ? FileUtils.rm_rf(final_path) : raise(Jim::FileExists.new(final_path))
       end
       Downlow.extract(@fetched_path, :destination => final_path)
+      # install json
+      install_package_json(final_path.dirname + 'package.json')
       installed = final_path.directory? ? Dir.glob(final_path + '**/*').length : 1
       logger.info "Extracted to #{final_path}, #{installed} file(s)"
       final_path
@@ -100,6 +102,13 @@ module Jim
 
     def logger
       Jim.logger
+    end
+
+    def install_package_json(to_path, options = {})
+      hash = {"name" =>  name, "version" => version}.merge(options)
+      Pathname.new(to_path).open('w') do |f|
+        Yajl::Encoder.encode(hash, f)
+      end
     end
 
     def name_and_version_from_options

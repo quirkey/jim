@@ -30,12 +30,18 @@ class Test::Unit::TestCase
   end
   
   def tmp_path
-    File.join(File.dirname(__FILE__), 'tmp')
+    Pathname.new(File.join(File.dirname(__FILE__), 'tmp'))
   end
   
   def assert_readable(*args)
     full_path = File.join(*args)
     assert File.readable?(full_path), "Expected #{full_path} to be a readable file"
+  end
+  
+  def assert_file_contents(match, *args)
+    full_path = File.join(*args)
+    file_contents = File.read(full_path)
+    assert_match(match, file_contents, "Expected file at #{full_path} with content #{file_contents} to match #{match.inspect}")
   end
   
   def assert_dir(*args)

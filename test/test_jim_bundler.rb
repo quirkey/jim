@@ -43,14 +43,16 @@ class TestJimBundler < Test::Unit::TestCase
         @bundler.resolve!
         assert @bundler.paths
         assert_equal 2, @bundler.paths.length
-        @bundler.paths.each do |path|
+        @bundler.paths.each do |path, name, version|
           assert path.is_a?(Pathname)
+          assert name.is_a?(String)
+          assert version.is_a?(String)
         end
       end
       
       should "set paths in same order as in jimfile" do
         @bundler.resolve!
-        assert_equal Pathname.new(fixture_path('jquery-1.4.1.js')), @bundler.paths.first
+        assert_equal Pathname.new(fixture_path('jquery-1.4.1.js')), @bundler.paths[0][0]
       end
       
       should "raise error if file can not be found" do
