@@ -49,7 +49,7 @@ module Jim
     def cheat
       logger.info "Usage: jim [options] [command] [args]\n"
       logger.info "Commands:"
-      logger.info template('commands').find_all {|l| l.match(/^\w/) }.join("")
+      logger.info [*template('commands')].grep(/^\w/).join
       logger.info "run commands for details"
     end
     
