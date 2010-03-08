@@ -32,6 +32,8 @@ module Jim
         @output << "No action found for #{command}. Run -h for help."
       end
       @output
+    rescue ArgumentError => e
+      @output << "#{e.message} for #{command}"
     rescue Jim::FileExists => e
       @output << "#{e.message} already exists, bailing. Use --force if you're sure"
     rescue => e
