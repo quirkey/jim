@@ -52,6 +52,7 @@ module Jim
       logger.info template('commands').find_all {|l| l.match(/^\w/) }.join("")
       logger.info "run commands for details"
     end
+    alias :help :cheat
     
     # initialize the current dir with a new Jimfile
     def init(dir = nil)
@@ -92,7 +93,7 @@ module Jim
       logger.info "Getting list of installed files in\n#{installed_index.directories.join(':')}"
       list = installed_index.list
       logger.info "Installed:"
-      print_verison_list(list)
+      print_version_list(list)
     end
     alias :installed :list
     
@@ -102,7 +103,7 @@ module Jim
       logger.info "Getting list of all available files in\n#{index.directories.join("\n")}"
       list = index.list
       logger.info "Available:"
-      print_verison_list(list)
+      print_version_list(list)
     end
     
     # Iterates over matching files and prompts for removal
@@ -199,7 +200,7 @@ module Jim
       Jim.logger
     end
     
-    def print_verison_list(list)
+    def print_version_list(list)
       list.each do |file, versions|
         logger.info "#{file} (#{versions.collect {|v| v[0] }.join(',')})"
       end
