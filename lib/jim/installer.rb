@@ -67,7 +67,7 @@ module Jim
       end
       Downlow.extract(@fetched_path, :destination => final_path, :tmp_dir => tmp_root)
       # install json
-      install_package_json(final_path.dirname + 'package.json')
+      install_package_json(final_path.dirname + 'package.json') if !options[:shallow]
       installed = final_path.directory? ? Dir.glob(final_path + '**/*').length : 1
       logger.info "Extracted to #{final_path}, #{installed} file(s)"
       final_path
@@ -124,7 +124,11 @@ module Jim
       hash = @package_json.merge({
         "name" =>  name, 
         "version" => version,
-        "installed_at" => Time.now.httpdate
+        "install" => {
+          "at" => Time.now.httpdate,
+          "from" => fetch_path,
+          "with" => "jim #{Jim::VERSION}"
+        }
       }).merge(options)
       Pathname.new(to_path).open('w') do |f|
         Yajl::Encoder.encode(hash, f, :pretty => true)

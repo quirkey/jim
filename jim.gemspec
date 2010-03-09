@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{jim}
-  s.version = "0.1.2"
+  s.version = "0.2.0pre"
 
-  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
+  s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["Aaron Quint"]
-  s.date = %q{2010-02-22}
+  s.date = %q{2010-03-09}
   s.default_executable = %q{jim}
   s.description = %q{jim is your friendly javascript library manager. He downloads, stores, bundles, vendors and compresses.}
   s.email = %q{aaron@quirkey.com}
@@ -47,17 +47,6 @@ Gem::Specification.new do |s|
      "test/fixtures/sammy-0.5.0/LICENSE",
      "test/fixtures/sammy-0.5.0/README.md",
      "test/fixtures/sammy-0.5.0/Rakefile",
-     "test/fixtures/sammy-0.5.0/_site/docs/api.html",
-     "test/fixtures/sammy-0.5.0/_site/docs/events.html",
-     "test/fixtures/sammy-0.5.0/_site/docs/faq.html",
-     "test/fixtures/sammy-0.5.0/_site/docs/index.html",
-     "test/fixtures/sammy-0.5.0/_site/docs/routes.html",
-     "test/fixtures/sammy-0.5.0/_site/index.html",
-     "test/fixtures/sammy-0.5.0/_site/install.html",
-     "test/fixtures/sammy-0.5.0/_site/vendor/jqunit-spec/LICENSE",
-     "test/fixtures/sammy-0.5.0/_site/vendor/jqunit-spec/README.textile",
-     "test/fixtures/sammy-0.5.0/_site/vendor/jqunit-spec/jqunit-spec.js",
-     "test/fixtures/sammy-0.5.0/_site/vendor/jqunit-spec/sample_spec.js",
      "test/fixtures/sammy-0.5.0/examples/backend/README.md",
      "test/fixtures/sammy-0.5.0/examples/backend/Rakefile",
      "test/fixtures/sammy-0.5.0/examples/backend/app.rb",
@@ -78,20 +67,6 @@ Gem::Specification.new do |s|
      "test/fixtures/sammy-0.5.0/examples/location_override/data.html",
      "test/fixtures/sammy-0.5.0/examples/location_override/index.html",
      "test/fixtures/sammy-0.5.0/examples/location_override/test.html",
-     "test/fixtures/sammy-0.5.0/lib/min/plugins/sammy.cache-0.5.0.min.js",
-     "test/fixtures/sammy-0.5.0/lib/min/plugins/sammy.cache-lastest.min.js",
-     "test/fixtures/sammy-0.5.0/lib/min/plugins/sammy.haml-0.5.0.min.js",
-     "test/fixtures/sammy-0.5.0/lib/min/plugins/sammy.haml-lastest.min.js",
-     "test/fixtures/sammy-0.5.0/lib/min/plugins/sammy.json-0.5.0.min.js",
-     "test/fixtures/sammy-0.5.0/lib/min/plugins/sammy.json-lastest.min.js",
-     "test/fixtures/sammy-0.5.0/lib/min/plugins/sammy.mustache-0.5.0.min.js",
-     "test/fixtures/sammy-0.5.0/lib/min/plugins/sammy.mustache-lastest.min.js",
-     "test/fixtures/sammy-0.5.0/lib/min/plugins/sammy.nested_params-0.5.0.min.js",
-     "test/fixtures/sammy-0.5.0/lib/min/plugins/sammy.nested_params-lastest.min.js",
-     "test/fixtures/sammy-0.5.0/lib/min/plugins/sammy.storage-0.5.0.min.js",
-     "test/fixtures/sammy-0.5.0/lib/min/plugins/sammy.storage-lastest.min.js",
-     "test/fixtures/sammy-0.5.0/lib/min/plugins/sammy.template-0.5.0.min.js",
-     "test/fixtures/sammy-0.5.0/lib/min/plugins/sammy.template-lastest.min.js",
      "test/fixtures/sammy-0.5.0/lib/min/sammy-0.5.0.min.js",
      "test/fixtures/sammy-0.5.0/lib/min/sammy-lastest.min.js",
      "test/fixtures/sammy-0.5.0/lib/plugins/sammy.cache.js",
@@ -102,152 +77,6 @@ Gem::Specification.new do |s|
      "test/fixtures/sammy-0.5.0/lib/plugins/sammy.storage.js",
      "test/fixtures/sammy-0.5.0/lib/plugins/sammy.template.js",
      "test/fixtures/sammy-0.5.0/lib/sammy.js",
-     "test/fixtures/sammy-0.5.0/site/.gitignore",
-     "test/fixtures/sammy-0.5.0/site/.gitmodules",
-     "test/fixtures/sammy-0.5.0/site/_config.yml",
-     "test/fixtures/sammy-0.5.0/site/docs/api.html",
-     "test/fixtures/sammy-0.5.0/site/docs/api_template.html",
-     "test/fixtures/sammy-0.5.0/site/docs/events.textile",
-     "test/fixtures/sammy-0.5.0/site/docs/faq.textile",
-     "test/fixtures/sammy-0.5.0/site/docs/index.textile",
-     "test/fixtures/sammy-0.5.0/site/docs/plugins.textile",
-     "test/fixtures/sammy-0.5.0/site/docs/routes.textile",
-     "test/fixtures/sammy-0.5.0/site/examples/backend/README.md",
-     "test/fixtures/sammy-0.5.0/site/examples/backend/Rakefile",
-     "test/fixtures/sammy-0.5.0/site/examples/backend/app.rb",
-     "test/fixtures/sammy-0.5.0/site/examples/backend/app.ru",
-     "test/fixtures/sammy-0.5.0/site/examples/backend/public/javascripts/app.js",
-     "test/fixtures/sammy-0.5.0/site/examples/backend/public/javascripts/jquery.cloudkit.js",
-     "test/fixtures/sammy-0.5.0/site/examples/backend/public/javascripts/jquery.js",
-     "test/fixtures/sammy-0.5.0/site/examples/backend/public/javascripts/sammy.js",
-     "test/fixtures/sammy-0.5.0/site/examples/backend/public/templates/index.html.erb",
-     "test/fixtures/sammy-0.5.0/site/examples/backend/public/templates/task.html.erb",
-     "test/fixtures/sammy-0.5.0/site/examples/backend/public/templates/task_details.html.erb",
-     "test/fixtures/sammy-0.5.0/site/examples/backend/views/app.sass",
-     "test/fixtures/sammy-0.5.0/site/examples/backend/views/index.haml",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/backend/README.md",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/backend/Rakefile",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/backend/app.rb",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/backend/app.ru",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/backend/public/javascripts/app.js",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/backend/public/javascripts/jquery.cloudkit.js",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/backend/public/javascripts/jquery.js",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/backend/public/javascripts/sammy.js",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/backend/public/templates/index.html.erb",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/backend/public/templates/task.html.erb",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/backend/public/templates/task_details.html.erb",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/backend/views/app.sass",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/backend/views/index.haml",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/form_handling/files/form.html",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/form_handling/index.html",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/hello_world/index.html",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/location_override/README.md",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/location_override/data.html",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/location_override/index.html",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/location_override/test.html",
-     "test/fixtures/sammy-0.5.0/site/examples/form_handling/files/form.html",
-     "test/fixtures/sammy-0.5.0/site/examples/form_handling/index.html",
-     "test/fixtures/sammy-0.5.0/site/examples/hello_world/index.html",
-     "test/fixtures/sammy-0.5.0/site/examples/location_override/README.md",
-     "test/fixtures/sammy-0.5.0/site/examples/location_override/data.html",
-     "test/fixtures/sammy-0.5.0/site/examples/location_override/index.html",
-     "test/fixtures/sammy-0.5.0/site/examples/location_override/test.html",
-     "test/fixtures/sammy-0.5.0/site/index.textile",
-     "test/fixtures/sammy-0.5.0/site/install.textile",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.cache-0.3.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.cache-0.3.1.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.cache-0.4.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.cache-0.4.1.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.cache-0.5.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.cache-0.5.0pre.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.cache-lastest.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.haml-0.5.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.haml-0.5.0pre.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.haml-lastest.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.json-0.4.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.json-0.4.1.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.json-0.5.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.json-0.5.0pre.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.json-lastest.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.mustache-0.3.1.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.mustache-0.4.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.mustache-0.4.1.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.mustache-0.5.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.mustache-0.5.0pre.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.mustache-lastest.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.nested_params-0.3.1.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.nested_params-0.4.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.nested_params-0.4.1.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.nested_params-0.5.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.nested_params-0.5.0pre.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.nested_params-lastest.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.storage-0.4.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.storage-0.4.1.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.storage-0.5.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.storage-0.5.0pre.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.storage-lastest.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.template-0.3.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.template-0.3.1.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.template-0.4.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.template-0.4.1.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.template-0.5.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.template-0.5.0pre.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/plugins/sammy.template-lastest.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/sammy-0.3.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/sammy-0.3.1.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/sammy-0.4.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/sammy-0.4.1.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/sammy-0.5.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/sammy-0.5.0pre.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/min/sammy-lastest.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/plugins/sammy.cache.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/plugins/sammy.haml.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/plugins/sammy.json.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/plugins/sammy.mustache.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/plugins/sammy.nested_params.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/plugins/sammy.storage.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/plugins/sammy.template.js",
-     "test/fixtures/sammy-0.5.0/site/lib/lib/sammy.js",
-     "test/fixtures/sammy-0.5.0/site/lib/min/plugins/sammy.cache-0.3.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/min/plugins/sammy.cache-lastest.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/min/plugins/sammy.template-0.3.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/min/plugins/sammy.template-lastest.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/min/sammy-0.3.0.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/min/sammy-lastest.min.js",
-     "test/fixtures/sammy-0.5.0/site/lib/plugins/sammy.cache.js",
-     "test/fixtures/sammy-0.5.0/site/lib/plugins/sammy.template.js",
-     "test/fixtures/sammy-0.5.0/site/lib/sammy.js",
-     "test/fixtures/sammy-0.5.0/site/resources.textile",
-     "test/fixtures/sammy-0.5.0/site/test/fixtures/partial.html",
-     "test/fixtures/sammy-0.5.0/site/test/fixtures/partial.template",
-     "test/fixtures/sammy-0.5.0/site/test/sammy.html",
-     "test/fixtures/sammy-0.5.0/site/test/test/fixtures/partial",
-     "test/fixtures/sammy-0.5.0/site/test/test/fixtures/partial.html",
-     "test/fixtures/sammy-0.5.0/site/test/test/fixtures/partial.noengine",
-     "test/fixtures/sammy-0.5.0/site/test/test/fixtures/partial.template",
-     "test/fixtures/sammy-0.5.0/site/test/test/index.html",
-     "test/fixtures/sammy-0.5.0/site/test/test/sammy.html",
-     "test/fixtures/sammy-0.5.0/site/test/test/test_sammy_application.js",
-     "test/fixtures/sammy-0.5.0/site/test/test/test_sammy_event_context.js",
-     "test/fixtures/sammy-0.5.0/site/test/test/test_sammy_location_proxy.js",
-     "test/fixtures/sammy-0.5.0/site/test/test/test_sammy_plugins.js",
-     "test/fixtures/sammy-0.5.0/site/test/test/test_sammy_storage.js",
-     "test/fixtures/sammy-0.5.0/site/test/test/test_server",
-     "test/fixtures/sammy-0.5.0/site/test/test_sammy_application.js",
-     "test/fixtures/sammy-0.5.0/site/test/test_sammy_event_context.js",
-     "test/fixtures/sammy-0.5.0/site/test/test_sammy_plugins.js",
-     "test/fixtures/sammy-0.5.0/site/tutorials/index.textile",
-     "test/fixtures/sammy-0.5.0/site/tutorials/json_store_part1.textile",
-     "test/fixtures/sammy-0.5.0/site/tutorials/json_store_part2.textile",
-     "test/fixtures/sammy-0.5.0/site/vendor/jqUnit/fixtures/1.html",
-     "test/fixtures/sammy-0.5.0/site/vendor/jqUnit/jqUnit.js",
-     "test/fixtures/sammy-0.5.0/site/vendor/jqUnit/jquery.js",
-     "test/fixtures/sammy-0.5.0/site/vendor/jqUnit/test.html",
-     "test/fixtures/sammy-0.5.0/site/vendor/jqUnit/testsuite.css",
-     "test/fixtures/sammy-0.5.0/site/vendor/jquery-1.3.2.js",
-     "test/fixtures/sammy-0.5.0/site/vendor/jquery-1.3.2.min.js",
-     "test/fixtures/sammy-0.5.0/site/vendor/jsdoc/doc.haml",
-     "test/fixtures/sammy-0.5.0/site/vendor/jsdoc/jsdoc.rb",
      "test/fixtures/sammy-0.5.0/test/fixtures/partial",
      "test/fixtures/sammy-0.5.0/test/fixtures/partial.html",
      "test/fixtures/sammy-0.5.0/test/fixtures/partial.noengine",
@@ -277,16 +106,10 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/quirkey/jim}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.5}
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{jim is your friendly javascript library manager}
   s.test_files = [
     "test/fixtures/sammy-0.5.0/examples/backend/app.rb",
-     "test/fixtures/sammy-0.5.0/site/_site/examples/backend/app.rb",
-     "test/fixtures/sammy-0.5.0/site/_site/examples/examples/backend/app.rb",
-     "test/fixtures/sammy-0.5.0/site/_site/vendor/jsdoc/jsdoc.rb",
-     "test/fixtures/sammy-0.5.0/site/examples/backend/app.rb",
-     "test/fixtures/sammy-0.5.0/site/examples/examples/backend/app.rb",
-     "test/fixtures/sammy-0.5.0/site/vendor/jsdoc/jsdoc.rb",
      "test/fixtures/sammy-0.5.0/vendor/jsdoc/jsdoc.rb",
      "test/helper.rb",
      "test/test_jim_bundler.rb",
@@ -301,20 +124,20 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<downlow>, [">= 0.1.2"])
+      s.add_runtime_dependency(%q<downlow>, [">= 0.1.3"])
       s.add_runtime_dependency(%q<yajl-ruby>, [">= 0"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<fakeweb>, [">= 1.2.8"])
       s.add_development_dependency(%q<mocha>, [">= 0"])
     else
-      s.add_dependency(%q<downlow>, [">= 0.1.2"])
+      s.add_dependency(%q<downlow>, [">= 0.1.3"])
       s.add_dependency(%q<yajl-ruby>, [">= 0"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<fakeweb>, [">= 1.2.8"])
       s.add_dependency(%q<mocha>, [">= 0"])
     end
   else
-    s.add_dependency(%q<downlow>, [">= 0.1.2"])
+    s.add_dependency(%q<downlow>, [">= 0.1.3"])
     s.add_dependency(%q<yajl-ruby>, [">= 0"])
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<fakeweb>, [">= 1.2.8"])

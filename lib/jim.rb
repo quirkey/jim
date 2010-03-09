@@ -4,7 +4,7 @@ require 'yajl'
 
 
 module Jim
-  VERSION = '0.1.2'
+  VERSION = '0.2.0pre'
   
   class Error < RuntimeError; end
   class FileExists < Error; end
