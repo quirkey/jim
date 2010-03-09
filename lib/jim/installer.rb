@@ -87,13 +87,11 @@ module Jim
 
     private
     def tmp_root
-      self.class.tmp_root
+      @tmp_root ||= make_tmp_root 
     end
 
     def tmp_dir
-      dir = tmp_root + fetch_path.stem
-      dir.mkpath
-      dir
+      @tmp_dir ||= make_tmp_dir
     end
 
     def tmp_path
@@ -103,7 +101,17 @@ module Jim
     def logger
       Jim.logger
     end
-
+    
+    def make_tmp_root
+      self.class.tmp_root + Time.now.to_i.to_s + rand(1000).to_s
+    end
+    
+    def make_tmp_dir
+      dir = tmp_root + fetch_path.stem
+      dir.mkpath
+      dir
+    end
+    
     def parse_package_json
       @package_json = @options[:package_json] || {}
       package_json_path = fetched_path + 'package.json'

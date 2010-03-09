@@ -194,7 +194,7 @@ class TestJimInstaller < Test::Unit::TestCase
 
         should "install each js file found separately" do
           assert_dir tmp_path, 'lib', 'mustache-0.2.2'
-          assert_dir tmp_path, 'lib', 'mustache-0.2.2', 'mustache.js'
+          assert_readable tmp_path, 'lib', 'mustache-0.2.2', 'mustache.js'
         end
         
         should "merge initial package.json values" do
