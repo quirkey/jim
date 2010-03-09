@@ -32,6 +32,8 @@ module Jim
         @output << "No action found for #{command}. Run -h for help."
       end
       @output
+    rescue ArgumentError => e
+      @output << "#{e.message} for #{command}"
     rescue Jim::FileExists => e
       @output << "#{e.message} already exists, bailing. Use --force if you're sure"
     rescue => e
@@ -49,7 +51,7 @@ module Jim
     def cheat
       logger.info "Usage: jim [options] [command] [args]\n"
       logger.info "Commands:"
-      logger.info template('commands').find_all {|l| l.match(/^\w/) }.join("")
+      logger.info [*template('commands')].grep(/^\w/).join
       logger.info "run commands for details"
     end
     alias :help :cheat
