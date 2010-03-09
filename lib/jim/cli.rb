@@ -204,7 +204,7 @@ module Jim
     
     def print_version_list(list)
       list.each do |file, versions|
-        logger.info "#{file} (#{versions.collect {|v| v[0] }.join(',')})"
+        logger.info "#{file} (#{VersionSorter.rsort(versions.collect {|v| v[0] }).join(',')})"
       end
     end
     

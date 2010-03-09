@@ -1,7 +1,7 @@
 require 'downlow'
 require 'logger'
 require 'yajl'
-
+require 'version_sorter'
 
 module Jim
   VERSION = '0.2.0pre'

@@ -18,6 +18,7 @@ begin
     
     gem.add_dependency "downlow", ">= 0.1.3"
     gem.add_dependency "yajl-ruby"
+    gem.add_dependency "version_sorter", ">= 1.1.0"
     
     gem.add_development_dependency "shoulda", ">= 0"
     gem.add_development_dependency "fakeweb", ">= 1.2.8"
