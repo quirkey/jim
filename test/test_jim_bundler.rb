@@ -9,7 +9,7 @@ class TestJimBundler < Test::Unit::TestCase
       root = File.dirname(__FILE__)
       @directories = [File.join(root, 'fixtures'), File.join(root, 'tmp', 'lib')]
       Jim::Installer.new(fixture_path('infoincomments.js'), tmp_path).install
-      @bundler = Jim::Bundler.new(fixture('jimfile'), Jim::Index.new(@directories))
+      @bundler = Jim::Bundler.new(fixture('Jimfile'), Jim::Index.new(@directories))
     end
     
     context "initialize" do
@@ -46,7 +46,6 @@ class TestJimBundler < Test::Unit::TestCase
         @bundler.paths.each do |path, name, version|
           assert path.is_a?(Pathname)
           assert name.is_a?(String)
-          assert version.is_a?(String)
         end
       end
       

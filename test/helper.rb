@@ -17,7 +17,9 @@ else
   logger.formatter = Proc.new {|s, t, n, msg| "\n* #{s}: #{msg}\n"}
   Jim.logger = logger
 end
-Jim::Installer.tmp_root = File.join(File.dirname(__FILE__), 'tmp', 'jimtmproot')
+
+JIM_TMP_ROOT = File.join(File.dirname(__FILE__), 'tmp', 'jimtmproot')
+Jim::Installer.tmp_root = JIM_TMP_ROOT
 
 class Test::Unit::TestCase
   
@@ -30,7 +32,7 @@ class Test::Unit::TestCase
   end
   
   def tmp_path
-    Pathname.new(File.join(File.dirname(__FILE__), 'tmp'))
+    Pathname.new(File.join(File.dirname(__FILE__), 'tmp', 'tmpdir')).expand_path
   end
   
   def assert_readable(*args)

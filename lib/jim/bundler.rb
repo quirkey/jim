@@ -80,7 +80,7 @@ module Jim
       dir ||= 'vendor' # default
       logger.info "vendoring to #{dir}"
       paths.each do |path, name, version|
-        Jim::Installer.new(path, dir, :shallow => true, :name => name, :version => version).install
+        Jim::Installer.new(path, dir, :shallow => true).install
       end
     end
 

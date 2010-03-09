@@ -14,7 +14,7 @@ module Jim
     def list
       list = {}
       each_file_in_index('.js') do |filename|
-        if /lib\/([^\/]+)-([\d\w\.\-]+)\/.+/.match filename
+        if /lib\/([^\/\-]+)-([\d\w\.\-]+)\/.+/.match filename
           name    = $1
           version = $2
         else

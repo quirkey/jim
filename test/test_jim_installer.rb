@@ -5,7 +5,8 @@ class TestJimInstaller < Test::Unit::TestCase
   context "Jim::Installer" do
     setup do
       # clear the tmp dir
-      FileUtils.rm_rf(tmp_path) if File.directory?(tmp_path)
+      FileUtils.rm_rf(tmp_path) if File.exist?(tmp_path)
+      FileUtils.rm_rf(JIM_TMP_ROOT) if File.exist?(JIM_TMP_ROOT)
     end
 
     context "initializing" do
@@ -176,21 +177,34 @@ class TestJimInstaller < Test::Unit::TestCase
           json_path = @install_path + 'sammy-0.5.0' + 'package.json'
           assert_readable json_path
           assert_file_contents(/\"name\"\:\s*\"sammy\"/, json_path)
+        end        
+      end
+      
+      context "with an existing package.json" do
+        setup do
+          @installer = Jim::Installer.new(fixture_path('mustache.js'), tmp_path)
+          @paths = @installer.install
+          @install_path = tmp_path + 'lib'
         end
         
-        context "with an existing package.json" do
-          setup do
-            @installer = Jim::Installer.new(fixture_path('sammy-0.5.0'), tmp_path)
-            @paths = @installer.install
-            @install_path = tmp_path + 'lib'
-          end
-          
-          should "merge initial package.json values" do
+        should "return an array of paths" do
+          assert @paths.is_a?(Array)
+          assert @paths.all? {|p| p.is_a?(Pathname) }
+        end
+
+        should "install each js file found separately" do
+          assert_dir tmp_path, 'lib', 'mustache-0.2.2'
+          assert_dir tmp_path, 'lib', 'mustache-0.2.2', 'mustache.js'
+        end
         
-          end
+        should "merge initial package.json values" do
+          json_path = @install_path + 'mustache-0.2.2' + 'package.json'
+          assert_readable json_path
+          assert_file_contents(/\"name\"\:\s*\"mustache\"/, json_path)
+          assert_file_contents(/\"author\"\:\s*\"Jan Lehnardt\"/, json_path)
         end
       end
-
+    
     end
 
   end

@@ -23,7 +23,7 @@ module Jim
       @tmp_root = Pathname.new(new_tmp_root)
     end
         
-    attr_reader :fetch_path, :install_path, :options, :fetched_path, :name, :version
+    attr_reader :fetch_path, :install_path, :options, :fetched_path, :name, :version, :package_json
 
     def initialize(fetch_path, install_path, options = {})
       @fetch_path   = Pathname.new(fetch_path)
@@ -33,26 +33,26 @@ module Jim
 
     def fetch
       logger.info "fetching #{fetch_path}"
-      @fetched_path = Downlow.get(fetch_path, tmp_path)
+      @fetched_path = Downlow.get(fetch_path, tmp_path, :tmp_dir => tmp_root)
       logger.debug "fetched #{@fetched_path}"
       @fetched_path
     end
 
     def install
       fetch
+      parse_package_json
       determine_name_and_version
       logger.info "installing #{name} #{version}"
       logger.debug "fetched_path #{@fetched_path}"
       if options[:shallow]
         final_path = install_path + "#{[name, version].compact.join('-')}#{fetched_path.extname}"
       else
-        final_dir = install_path + 'lib' + "#{name}-#{version}"
-        final_path = (fetched_path.to_s =~ /\.js$/) ? final_dir + "#{name}.js" : final_dir
+        final_path = install_path + 'lib' + "#{name}-#{version}" + "#{name}.js"
       end
       if @fetched_path.directory?
         # install every js file
         installed_paths = []
-        sub_options = options.merge({:name => nil, :version => nil, :parent_version => version})
+        sub_options = options.merge({:name => nil, :version => nil, :parent_version => version, :package_json => package_json})
         Jim.each_path_in_directories([@fetched_path], '.js', IGNORE_DIRS) do |subfile|
           logger.info "found file #{subfile}"
           installed_paths << Jim::Installer.new(subfile, install_path, sub_options).install
@@ -65,14 +65,14 @@ module Jim
         logger.debug "#{final_path} already exists"
         options[:force] ? FileUtils.rm_rf(final_path) : raise(Jim::FileExists.new(final_path))
       end
-      Downlow.extract(@fetched_path, :destination => final_path)
+      Downlow.extract(@fetched_path, :destination => final_path, :tmp_dir => tmp_root)
       # install json
       install_package_json(final_path.dirname + 'package.json')
       installed = final_path.directory? ? Dir.glob(final_path + '**/*').length : 1
       logger.info "Extracted to #{final_path}, #{installed} file(s)"
       final_path
     ensure
-      FileUtils.rm_rf(fetched_path) if fetched_path.exist?
+      FileUtils.rm_rf(@fetched_path) if @fetched_path && @fetched_path.exist?
       final_path
     end
 
@@ -104,10 +104,22 @@ module Jim
       Jim.logger
     end
 
+    def parse_package_json
+      @package_json = @options[:package_json] || {}
+      package_json_path = fetched_path + 'package.json'
+      if !fetched_path.file? && package_json_path.readable?
+        @package_json = Yajl::Parser.parse(package_json_path.read)
+      end
+    end
+
     def install_package_json(to_path, options = {})
-      hash = {"name" =>  name, "version" => version}.merge(options)
+      hash = @package_json.merge({
+        "name" =>  name, 
+        "version" => version,
+        "installed_at" => Time.now.httpdate
+      }).merge(options)
       Pathname.new(to_path).open('w') do |f|
-        Yajl::Encoder.encode(hash, f)
+        Yajl::Encoder.encode(hash, f, :pretty => true)
       end
     end
 
@@ -136,11 +148,10 @@ module Jim
     end
 
     def name_and_version_from_package_json
-      if !fetched_path.file? && (fetched_path + 'package.json').readable?
-        sname, sversion = VersionParser.parse_package_json((fetched_path + "package.json").read)
-        @name ||= sname
-        @version ||= sversion
-      end
+      parse_package_json if !@package_json
+      sname, sversion = @package_json['name'], @package_json['version']
+      @name ||= sname
+      @version ||= sversion
       logger.debug "name and version from package.json: #{name} #{version}"
       name && version
     end
