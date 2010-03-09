@@ -32,7 +32,7 @@ class Test::Unit::TestCase
   end
   
   def tmp_path
-    Pathname.new(File.join(File.dirname(__FILE__), 'tmp', 'tmpdir')).expand_path
+    Pathname.new(File.join(File.dirname(__FILE__), 'tmp')).expand_path
   end
   
   def assert_readable(*args)

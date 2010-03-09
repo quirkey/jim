@@ -20,8 +20,8 @@ class TestJimCLI < Test::Unit::TestCase
     
     context "bundle" do
       should "write bundled Jimfile to path" do
-        run_cli("bundle", tmp_path + '/bundle.js', "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
-        assert_readable tmp_path + '/bundle.js'
+        run_cli("bundle", tmp_path + 'bundle.js', "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
+        assert_readable tmp_path + 'bundle.js'
       end
       
       should "write to bundled_path if no path provided" do
@@ -36,8 +36,8 @@ class TestJimCLI < Test::Unit::TestCase
       end
       
       should "compress Jimfile to path" do
-        run_cli("compress", tmp_path + '/compressed.js', "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
-        assert_readable tmp_path + '/compressed.js'
+        run_cli("compress", tmp_path + 'compressed.js', "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
+        assert_readable tmp_path + 'compressed.js'
       end
       
       should "compress to compressed_path if no path provided" do
