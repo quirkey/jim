@@ -134,7 +134,10 @@ module Jim
     # list the files and their resolved paths specified in the Jimfile
     def resolve
       resolved = bundler.resolve!
-      logger.info "Files:\n#{resolved.join("\n")}"
+      logger.info "Files:"
+      resolved.each do |r|
+        logger.info r.join(" | ")
+      end
       resolved
     end
         
