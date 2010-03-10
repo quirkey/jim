@@ -61,7 +61,7 @@ module Jim
       dir = Pathname.new(dir || '')
       jimfile_path = dir + 'Jimfile'
       if jimfile_path.readable? && !force
-        raise Jim::FileExists(jimfile_path)
+        raise Jim::FileExists.new(jimfile_path)
       else
         File.open(jimfile_path, 'w') do |f|
           f << template('jimfile')
