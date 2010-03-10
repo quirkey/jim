@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["Aaron Quint"]
-  s.date = %q{2010-03-09}
+  s.date = %q{2010-03-10}
   s.default_executable = %q{jim}
   s.description = %q{jim is your friendly javascript library manager. He downloads, stores, bundles, vendors and compresses.}
   s.email = %q{aaron@quirkey.com}
@@ -126,12 +126,14 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<downlow>, [">= 0.1.3"])
       s.add_runtime_dependency(%q<yajl-ruby>, [">= 0"])
+      s.add_runtime_dependency(%q<version_sorter>, [">= 1.1.0"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<fakeweb>, [">= 1.2.8"])
       s.add_development_dependency(%q<mocha>, [">= 0"])
     else
       s.add_dependency(%q<downlow>, [">= 0.1.3"])
       s.add_dependency(%q<yajl-ruby>, [">= 0"])
+      s.add_dependency(%q<version_sorter>, [">= 1.1.0"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<fakeweb>, [">= 1.2.8"])
       s.add_dependency(%q<mocha>, [">= 0"])
@@ -139,6 +141,7 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<downlow>, [">= 0.1.3"])
     s.add_dependency(%q<yajl-ruby>, [">= 0"])
+    s.add_dependency(%q<version_sorter>, [">= 1.1.0"])
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<fakeweb>, [">= 1.2.8"])
     s.add_dependency(%q<mocha>, [">= 0"])

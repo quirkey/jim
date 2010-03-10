@@ -52,7 +52,12 @@ module Jim
       if @fetched_path.directory?
         # install every js file
         installed_paths = []
-        sub_options = options.merge({:name => nil, :version => nil, :parent_version => version, :package_json => package_json})
+        sub_options = options.merge({
+          :name => nil, 
+          :version => nil, 
+          :parent_version => version, 
+          :package_json => package_json.merge("name" => nil)
+        })
         Jim.each_path_in_directories([@fetched_path], '.js', IGNORE_DIRS) do |subfile|
           logger.info "found file #{subfile}"
           installed_paths << Jim::Installer.new(subfile, install_path, sub_options).install
@@ -103,7 +108,7 @@ module Jim
     end
     
     def make_tmp_root
-      self.class.tmp_root + Time.now.to_i.to_s + rand(1000).to_s
+      self.class.tmp_root + (Time.now.to_i + rand(10000)).to_s
     end
     
     def make_tmp_dir
