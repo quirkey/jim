@@ -78,11 +78,13 @@ module Jim
     # bundle the files specified in Jimfile into `to`
     def bundle(to = nil)
       path = bundler.bundle!(to)
+      logger.info "Wrote #{File.size(path) / 1024}kb"
     end
     
     # compress the files specified in Jimfile into `to`
     def compress(to = nil)
       path = bundler.compress!(to)
+      logger.info "Wrote #{File.size(path) / 1024}kb"
     end
     
     # copy/vendor all the files specified in Jimfile to `dir`
