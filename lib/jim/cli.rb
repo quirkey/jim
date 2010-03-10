@@ -64,7 +64,7 @@ module Jim
         raise Jim::FileExists(jimfile_path)
       else
         File.open(jimfile_path, 'w') do |f|
-          f << template('Jimfile')
+          f << template('jimfile')
         end
         logger.info "wrote Jimfile to #{jimfile_path}"
       end
