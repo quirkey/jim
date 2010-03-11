@@ -4,7 +4,7 @@ module Jim
     attr_reader :directories
     
     def initialize(*directories)
-      @directories = directories.flatten
+      @directories = directories.flatten.compact
     end
 
     def add(directory)

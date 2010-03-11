@@ -30,9 +30,9 @@ class TestJimBundler < Test::Unit::TestCase
         assert_equal 'tmp/public/javascripts/vendor', @bundler.options[:vendor_dir]
       end
       
-      should "set index" do
+      should "set index and include vendor dir" do
         assert @bundler.index.is_a?(Jim::Index)
-        assert_equal @directories, @bundler.index.directories
+        assert_equal [@bundler.options[:vendor_dir]] + @directories, @bundler.index.directories
       end      
     end        
     

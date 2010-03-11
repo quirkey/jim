@@ -23,15 +23,18 @@ module Jim
     
     # create a new bundler instance passing in the Jimfile as a `Pathname` or a
     # string. `index` is a Jim::Index
-    def initialize(jimfile, index = nil, options = {})
+    def initialize(jimfile, index = nil, extra_options = {})
       self.jimfile      = jimfile.is_a?(Pathname) ? jimfile.read : jimfile
       self.index        = index || Jim::Index.new
       self.options      = {}
       self.requirements = []
       parse_jimfile
-      self.options.merge(options)
-      self.add(options[:vendor_dir]) if options[:vendor_dir]
+      self.options = options.merge(extra_options)
       self.paths        = []
+      if options[:vendor_dir]
+        logger.debug "adding vendor dir to index #{options[:vendor_dir]}"
+        self.index.add(options[:vendor_dir]) 
+      end
     end
 
     # resove the requirements specified into Jimfile or raise a MissingFile error
