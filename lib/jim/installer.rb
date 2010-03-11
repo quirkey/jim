@@ -45,7 +45,8 @@ module Jim
       logger.info "installing #{name} #{version}"
       logger.debug "fetched_path #{@fetched_path}"
       if options[:shallow]
-        final_path = install_path + "#{[name, version].compact.join('-')}#{fetched_path.extname}"
+        shallow_filename = [name, (version == "0" ? nil : version)].compact.join('-')
+        final_path = install_path + "#{shallow_filename}#{fetched_path.extname}"
       else
         final_path = install_path + 'lib' + "#{name}-#{version}" + "#{name}.js"
       end
@@ -119,8 +120,13 @@ module Jim
     
     def parse_package_json
       @package_json = @options[:package_json] || {}
-      package_json_path = fetched_path + 'package.json'
-      if !fetched_path.file? && package_json_path.readable?
+      package_json_path = if fetched_path.directory?
+        fetched_path + 'package.json'
+      else
+        fetched_path.dirname + 'package.json'
+      end
+      logger.debug "package.json path: #{package_json_path}"
+      if package_json_path.readable?
         @package_json = Yajl::Parser.parse(package_json_path.read)
       end
     end

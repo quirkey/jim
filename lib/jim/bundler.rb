@@ -74,13 +74,13 @@ module Jim
 
     # copy each of the requirements into the dir specified with `dir` or the path
     # specified with the :vendor_dir option
-    def vendor!(dir = nil)
+    def vendor!(dir = nil, force = false)
       resolve! if paths.empty?
       dir ||= options[:vendor_dir]
       dir ||= 'vendor' # default
       logger.info "Vendoring to #{dir}"
       paths.each do |path, name, version|
-        Jim::Installer.new(path, dir, :shallow => true).install
+        Jim::Installer.new(path, dir, :shallow => true, :force => force).install
       end
     end
 

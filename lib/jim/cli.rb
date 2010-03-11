@@ -89,7 +89,7 @@ module Jim
     
     # copy/vendor all the files specified in Jimfile to `dir`
     def vendor(dir = nil)
-      bundler.vendor!(dir)
+      bundler.vendor!(dir, force)
     end
     
     # list the only the _installed_ projects and versions
