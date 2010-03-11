@@ -55,7 +55,7 @@ module Jim
         installed_paths = []
         sub_options = options.merge({
           :name => nil, 
-          :version => nil, 
+          :version => nil,
           :parent_version => version, 
           :package_json => package_json.merge("name" => nil)
         })
@@ -122,6 +122,8 @@ module Jim
       @package_json = @options[:package_json] || {}
       package_json_path = if fetched_path.directory?
         fetched_path + 'package.json'
+      elsif options[:shallow] && fetch_path.file?
+        fetch_path.dirname + 'package.json'
       else
         fetched_path.dirname + 'package.json'
       end
