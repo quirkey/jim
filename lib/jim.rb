@@ -2,6 +2,7 @@ require 'downlow'
 require 'logger'
 require 'yajl'
 require 'version_sorter'
+require 'digest/md5'
 
 module Jim
   VERSION = '0.2.0pre'

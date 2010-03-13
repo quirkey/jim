@@ -112,6 +112,31 @@ class TestJimInstaller < Test::Unit::TestCase
           assert_equal fixture('jquery-1.4.1.js'), File.read(File.join(@install_path, 'jquery.js'))
         end
       end
+      
+      context "with a file that seems to be installed already" do
+        should "raise error" do
+          @installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
+          assert @installer.install
+          @install_path = File.join(tmp_path, 'lib', 'jquery-1.4.1')
+          assert_readable @install_path, 'jquery.js'
+          @installer = Jim::Installer.new(fixture_path('jquery.color.js'), tmp_path, :name => 'jquery', :version => '1.4.1')
+          assert_raise(Jim::FileExists) {
+            @installer.install
+          }
+        end
+      end
+      
+      context "with a duplicate file" do
+        should "skip install but not raise error" do
+          @installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
+          assert @installer.install
+          @install_path = File.join(tmp_path, 'lib', 'jquery-1.4.1')
+          assert_readable @install_path, 'jquery.js'
+          @installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
+          assert @installer.install
+          assert_readable @install_path, 'jquery.js'
+        end
+      end
 
       context "with a zip" do
         setup do

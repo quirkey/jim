@@ -69,7 +69,13 @@ module Jim
       logger.debug "installing to #{final_path}"
       if final_path.exist? 
         logger.debug "#{final_path} already exists"
-        options[:force] ? FileUtils.rm_rf(final_path) : raise(Jim::FileExists.new(final_path))
+        if options[:force]
+          FileUtils.rm_rf(final_path)
+        elsif Digest::MD5.hexdigest(File.read(final_path)) == Digest::MD5.hexdigest(File.read(@fetched_path))
+          return final_path
+        else
+          raise(Jim::FileExists.new(final_path))
+        end
       end
       Downlow.extract(@fetched_path, :destination => final_path, :tmp_dir => tmp_root)
       # install json
