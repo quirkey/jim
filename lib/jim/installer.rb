@@ -72,6 +72,7 @@ module Jim
         if options[:force]
           FileUtils.rm_rf(final_path)
         elsif Digest::MD5.hexdigest(File.read(final_path)) == Digest::MD5.hexdigest(File.read(@fetched_path))
+          logger.info "duplicate file, skipping"
           return final_path
         else
           raise(Jim::FileExists.new(final_path))
