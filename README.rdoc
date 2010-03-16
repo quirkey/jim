@@ -47,7 +47,7 @@ In your project run:
 
   $ jim init
 
-Which create an empty "Jimfile". Open it up and add your requirements:
+Which creates an empty "Jimfile". Open it up and add your requirements:
 
   // bundled_path: public/javascripts/bundled.js
   // compressed_path: public/javascripts/compressed.js

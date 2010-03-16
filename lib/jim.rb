@@ -8,6 +8,7 @@ module Jim
   VERSION = '0.2.0pre'
   
   class Error < RuntimeError; end
+  class InstallError < Error; end
   class FileExists < Error; end
   
   def self.logger=(logger)

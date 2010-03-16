@@ -1,4 +1,9 @@
 module Jim
+  # Installer is the workhorse of Jim. It handles taking an install path 
+  # (a url, a local path, anything that Downlow.get can handle), staging it 
+  # into a temporary directory and extracting the file(s) into a path for the 
+  # specific name and version of the lib. names and versions are determined 
+  # automatically or can be passed in as options. 
   class Installer
     
     IGNORE_DIRS = %w{
@@ -15,22 +20,28 @@ module Jim
       \.([^\/]+)
     }
     
+    # get the tmp_root where files are staged
     def self.tmp_root
       @tmp_root ||= Pathname.new('/tmp/jim')
     end
     
+    # set the tmp_root where files are staged. Default: '/tmp/jim'
     def self.tmp_root=(new_tmp_root)
       @tmp_root = Pathname.new(new_tmp_root)
     end
         
     attr_reader :fetch_path, :install_path, :options, :fetched_path, :name, :version, :package_json
-
+    
+    # create an installer. fetch_path is anything that Downlow can understand.
+    # install path is the final directory
     def initialize(fetch_path, install_path, options = {})
       @fetch_path   = Pathname.new(fetch_path)
       @install_path = Pathname.new(install_path)
       @options      = options
     end
 
+    # fetch the file at fetch_path with and stage into a tmp directory. 
+    # returns the staged directory of fetched file(s).
     def fetch
       logger.info "fetching #{fetch_path}"
       @fetched_path = Downlow.get(fetch_path, tmp_path, :tmp_dir => tmp_root)
@@ -38,18 +49,34 @@ module Jim
       @fetched_path
     end
 
+    # fetch and install the files determining their name and version if not provided.
+    # if the fetch_path contains a directory of files, it itterates over the directory
+    # installing each file that isn't in IGNORE_DIRS and a name and version can be
+    # determined for. It also installs a package.json file along side the JS file
+    # that contains meta data including the name and version, also merging with the
+    # original package.json if found.
+    # 
+    # If options[:shallow] == true it will just copy the single file without any leading
+    # directories or a package.json. 'shallow' installation is used for Bundle#vendor
     def install
       fetch
       parse_package_json
       determine_name_and_version
+      
+      if !name || name.to_s =~ /^\s*$/ # blank
+        raise(Jim::InstallError, "could not determine name for #{@fetched_path}")
+      end
+      
       logger.info "installing #{name} #{version}"
       logger.debug "fetched_path #{@fetched_path}"
+      
       if options[:shallow]
         shallow_filename = [name, (version == "0" ? nil : version)].compact.join('-')
         final_path = install_path + "#{shallow_filename}#{fetched_path.extname}"
       else
         final_path = install_path + 'lib' + "#{name}-#{version}" + "#{name}.js"
       end
+      
       if @fetched_path.directory?
         # install every js file
         installed_paths = []
@@ -63,9 +90,10 @@ module Jim
           logger.info "found file #{subfile}"
           installed_paths << Jim::Installer.new(subfile, install_path, sub_options).install
         end
-        logger.info "Extracted to #{install_path}, #{installed_paths.length} file(s)"
+        logger.info "extracted to #{install_path}, #{installed_paths.length} file(s)"
         return installed_paths
       end
+      
       logger.debug "installing to #{final_path}"
       if final_path.exist? 
         logger.debug "#{final_path} already exists"
@@ -78,17 +106,27 @@ module Jim
           raise(Jim::FileExists.new(final_path))
         end
       end
+      
       Downlow.extract(@fetched_path, :destination => final_path, :tmp_dir => tmp_root)
       # install json
       install_package_json(final_path.dirname + 'package.json') if !options[:shallow]
       installed = final_path.directory? ? Dir.glob(final_path + '**/*').length : 1
-      logger.info "Extracted to #{final_path}, #{installed} file(s)"
+      logger.info "extracted to #{final_path}, #{installed} file(s)"
       final_path
     ensure
       FileUtils.rm_rf(@fetched_path) if @fetched_path && @fetched_path.exist?
       final_path
     end
-
+    
+    # determine the name and version of the @fetched_path. Tries a number of 
+    # strategies in order until both name and version are found:
+    #
+    # * from options (options[:name] ...)
+    # * from comments (// name: )
+    # * from a package.json ({"name": })
+    # * from the filename (name-1.0.js)
+    # 
+    # If no version can be found, version is set as "0"
     def determine_name_and_version
       (name && version) ||
       name_and_version_from_options ||
