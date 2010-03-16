@@ -1,22 +1,32 @@
 init [path]
-  create an example Jimfile at path or the current directory if path is      
+  Create an example Jimfile at path or the current directory if path is      
   omitted
   
-install [url]
-  install the file(s) at url into the JIMHOME directory. URL can be any path
+install <url> [name] [version]
+  Install the file(s) at url into the JIMHOME directory. URL can be any path
   or url that Downlow understands. This means:
     
     jim install http://code.jquery.com/jquery-1.4.1.js
     jim install ../sammy/
     jim install gh://quirkey/sammy
     jim install git://github.com/jquery/jquery.git
-    
+
+remove <name> [version]
+uninstall <name> [version]
+  Iterate through the install files and prompt for the removal of those matching
+  the supplied name and version 
+
 list
-  List all the installed or available packages
+installed
+  List all the installed packages and their versions
+  
+available
+  List all available projects and versions including those in the local path, or 
+  paths specified in a Jimfile
   
 resolve
   Resolve all the paths listed in a Jimfile and print them to STDOUT. 
-  If no Jimfile is set in the options, assumes ./Jimfile.  
+  If no Jimfile is set in the options, assumes ./Jimfile.
 
 bundle [bundled_path]
   Bundle all the files listed in a Jimfile and save them to [bundled_path].
