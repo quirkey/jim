@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["Aaron Quint"]
-  s.date = %q{2010-03-13}
+  s.date = %q{2010-03-16}
   s.default_executable = %q{jim}
   s.description = %q{jim is your friendly javascript library manager. He downloads, stores, bundles, vendors and compresses.}
   s.email = %q{aaron@quirkey.com}

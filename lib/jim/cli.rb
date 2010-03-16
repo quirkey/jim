@@ -132,6 +132,7 @@ module Jim
         logger.info "No installed files matched."
       end
     end
+    alias :uninstall :remove
     
     # list the files and their resolved paths specified in the Jimfile
     def resolve
