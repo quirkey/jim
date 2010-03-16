@@ -26,8 +26,8 @@ class TestJimBundler < Test::Unit::TestCase
       end
       
       should "parse options out of jimfile" do
-        assert_equal 'tmp/public/javascripts/bundled.js', @bundler.options[:bundled_path]
-        assert_equal 'tmp/public/javascripts/vendor', @bundler.options[:vendor_dir]
+        assert_equal 'test/tmp/public/javascripts/bundled.js', @bundler.options[:bundled_path]
+        assert_equal 'test/tmp/public/javascripts/vendor', @bundler.options[:vendor_dir]
       end
       
       should "set index and include vendor dir" do

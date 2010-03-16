@@ -46,6 +46,11 @@ compress [compressed_path]
 vendor [vendor_dir]
   Copy all the files listed in Jimfile to the vendor_dir
   
+pack [vendor_dir]
+  Runs in order, vendor, bundle, compress. This command simplifies the common
+  workflow of vendoring and re-bundling before commiting or deploying changes
+  to a project
+
 commands
   Print this help file
 

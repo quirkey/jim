@@ -146,8 +146,12 @@ module Jim
       resolved
     end
     
-    def quick(requirements)
-      
+    # vendor to dir, then bundle and compress the Jimfile contents
+    def pack(dir = nil)
+      logger.info "packing the Jimfile for this project"
+      vendor(dir)
+      bundle
+      compress
     end
         
     private
