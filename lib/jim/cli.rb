@@ -8,7 +8,7 @@ module Jim
   # the different public methods represent 1-1 the commands provided by the bin.
   class CLI
     
-    attr_accessor :jimfile, :jimhome, :force
+    attr_accessor :jimfile, :jimhome, :force, :stdout
     
     # create a new instance with the args passed from the command line i.e. ARGV
     def initialize(args)
@@ -77,12 +77,14 @@ module Jim
     
     # bundle the files specified in Jimfile into `to`
     def bundle(to = nil)
+      to = STDOUT if stdout
       path = bundler.bundle!(to)
       logger.info "Wrote #{File.size(path) / 1024}kb"
     end
     
     # compress the files specified in Jimfile into `to`
     def compress(to = nil)
+      to = STDOUT if stdout
       path = bundler.compress!(to)
       logger.info "Wrote #{File.size(path) / 1024}kb"
     end
@@ -143,6 +145,10 @@ module Jim
       end
       resolved
     end
+    
+    def quick(requirements)
+      
+    end
         
     private
     def parse_options(runtime_args)
@@ -168,10 +174,16 @@ module Jim
           logger.level = Logger::DEBUG
         }
         
+        opts.on("-o", "--stdout", "write output of commands (like bundle and compress to STDOUT)") {|o| 
+          logger.level = Logger::ERROR
+          self.stdout = true
+        }
+        
         opts.on("-v", "--version", "print version") {|d|
           puts "jim #{Jim::VERSION}"
           exit
         }
+      
         
         opts.on_tail("-h", "--help", "Show this message. Run jim commands for list of commands.") do
           puts opts.help
