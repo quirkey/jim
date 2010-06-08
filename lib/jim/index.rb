@@ -11,7 +11,7 @@ module Jim
       @directories.unshift directory
     end
     
-    def list
+    def list(search = nil)
       list = {}
       each_file_in_index('.js') do |filename|
         if /lib\/([^\/\-]+)-([\d\w\.\-]+)\/.+/.match filename
@@ -24,6 +24,10 @@ module Jim
           list[name] ||= []
           list[name] << [version, filename]
         end
+      end
+      if search
+        search = /#{search}/i
+        list = list.find_all {|lib| lib[0] =~ search }
       end
       list.sort
     end

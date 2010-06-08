@@ -94,20 +94,24 @@ module Jim
       bundler.vendor!(dir, force)
     end
     
-    # list the only the _installed_ projects and versions
-    def list
+    # list the only the _installed_ projects and versions.
+    # Match names against `search` if supplied.
+    def list(search = nil)
       logger.info "Getting list of installed files in\n#{installed_index.directories.join(':')}"
-      list = installed_index.list
+      logger.info "Searching for '#{search}'" if search
+      list = installed_index.list(search)
       logger.info "Installed:"
       print_version_list(list)
     end
     alias :installed :list
     
     # list all available projects and versions including those in the local path, or 
-    # paths specified in a jimfile
-    def available
+    # paths specified in a Jimfile. 
+    # Match names against `search` if supplied.
+    def available(search = nil)
       logger.info "Getting list of all available files in\n#{index.directories.join("\n")}"
-      list = index.list
+      logger.info "Searching for '#{search}'" if search
+      list = index.list(search)
       logger.info "Available:"
       print_version_list(list)
     end
@@ -226,7 +230,7 @@ module Jim
     
     def print_version_list(list)
       list.each do |file, versions|
-        logger.info "#{file} (#{VersionSorter.rsort(versions.collect {|v| v[0] }).join(',')})"
+        logger.info "#{file} (#{VersionSorter.rsort(versions.collect {|v| v[0] }).join(', ')})"
       end
     end
     

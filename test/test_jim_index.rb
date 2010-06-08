@@ -40,6 +40,12 @@ class TestJimIndex < Test::Unit::TestCase
         assert jquery[1][0][1].is_a?(Pathname), "should include pathname"
       end
       
+      should "only return files matching search" do
+        @list = @index.list('jquery')
+        names = @list.collect {|l| l[0] }
+        assert names.include?('jquery'), "should include jquery"
+        assert !names.include?('infoincomments')
+      end
     end
     
     context "find" do

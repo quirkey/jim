@@ -13,16 +13,16 @@ install <url> [name] [version]
 
 remove <name> [version]
 uninstall <name> [version]
-  Iterate through the install files and prompt for the removal of those matching
-  the supplied name and version 
+  Iterate through the install files and prompt for the removal of those 
+  matching the supplied name and version 
 
-list
-installed
+list [search]
+installed [search]
   List all the installed packages and their versions
   
-available
-  List all available projects and versions including those in the local path, or 
-  paths specified in a Jimfile
+available [search]
+  List all available projects and versions including those in the local path, 
+  or paths specified in a Jimfile
   
 resolve
   Resolve all the paths listed in a Jimfile and print them to STDOUT. 
