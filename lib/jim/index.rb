@@ -4,7 +4,8 @@ module Jim
     attr_reader :directories
     
     def initialize(*directories)
-      @directories = directories.flatten.compact
+      @directories = [directories].flatten.compact
+      @jimhome_re  = /#{Pathname.new(@directories.first).expand_path.to_s}/
     end
 
     def add(directory)
@@ -58,6 +59,10 @@ module Jim
         break if final && !block_given?
       end
       final
+    end
+    
+    def in_jimhome?(path)
+      path.to_s =~ @jimhome_re
     end
     
     def find_all(name, version = nil)

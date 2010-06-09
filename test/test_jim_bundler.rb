@@ -7,8 +7,8 @@ class TestJimBundler < Test::Unit::TestCase
       # clear the tmp dir
       FileUtils.rm_rf(tmp_path) if File.directory?(tmp_path)
       root = File.dirname(__FILE__)
-      @directories = [File.join(root, 'fixtures'), File.join(root, 'tmp', 'lib')]
-      Jim::Installer.new(fixture_path('infoincomments.js'), tmp_path).install
+      @directories = [File.join(root, 'tmp', 'lib'), File.join(root, 'fixtures')]
+      Jim::Installer.new(fixture_path('infoincomments.js'), File.join(root, 'tmp', 'lib')).install
       @bundler = Jim::Bundler.new(fixture('jimfile'), Jim::Index.new(@directories))
     end
     
@@ -42,7 +42,7 @@ class TestJimBundler < Test::Unit::TestCase
         assert @bundler.paths.empty?
         @bundler.resolve!
         assert @bundler.paths
-        assert_equal 2, @bundler.paths.length
+        assert_equal 3, @bundler.paths.length
         @bundler.paths.each do |path, name, version|
           assert path.is_a?(Pathname)
           assert name.is_a?(String)
@@ -65,10 +65,12 @@ class TestJimBundler < Test::Unit::TestCase
     
     context "vendor!" do
       
-      should "copy files in jemfile to path specified" do
+      should "copy files in jimfile to path specified" do
         vendor_dir = Pathname.new(tmp_path) + 'vendor'
+        puts @bundler.resolve!
         @bundler.vendor!(vendor_dir)
         assert_readable vendor_dir + 'jquery-1.4.1.js'
+        assert !File.readable?(vendor_dir + 'localfile.js'), "shouldnt vendor local files"
         assert_readable vendor_dir + 'myproject-1.2.2.js'
       end
       
