@@ -62,7 +62,7 @@ module Jim
     end
     
     def in_jimhome?(path)
-      path.to_s =~ @jimhome_re
+      !!(path.to_s =~ @jimhome_re)
     end
     
     def find_all(name, version = nil)

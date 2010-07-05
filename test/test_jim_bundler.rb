@@ -67,11 +67,9 @@ class TestJimBundler < Test::Unit::TestCase
       
       should "copy files in jimfile to path specified" do
         vendor_dir = Pathname.new(tmp_path) + 'vendor'
-        puts @bundler.resolve!
         @bundler.vendor!(vendor_dir)
-        assert_readable vendor_dir + 'jquery-1.4.1.js'
-        assert !File.readable?(vendor_dir + 'localfile.js'), "shouldnt vendor local files"
         assert_readable vendor_dir + 'myproject-1.2.2.js'
+        assert !File.readable?(vendor_dir + 'localfile.js'), "shouldnt vendor local files"
       end
       
     end
