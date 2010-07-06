@@ -1,3 +1,8 @@
+== 0.2.1 [07-06-10]
+
+* Local (non JIMHOME) files specified in the Jimfiles are not copied into vendor
+* jim list and available now take an option search param
+
 == 0.2.0 [03-16-10]
 
 * Major rewrite of the installer and version parser

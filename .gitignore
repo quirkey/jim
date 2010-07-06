@@ -20,3 +20,4 @@ pkg
 tmp
 
 ## PROJECT::SPECIFIC
+*.rbc

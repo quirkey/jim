@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{jim}
-  s.version = "0.2.0"
+  s.version = "0.2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Aaron Quint"]
-  s.date = %q{2010-06-08}
+  s.date = %q{2010-07-04}
   s.default_executable = %q{jim}
   s.description = %q{jim is your friendly javascript library manager. He downloads, stores, bundles, vendors and compresses.}
   s.email = %q{aaron@quirkey.com}
@@ -40,6 +40,7 @@ Gem::Specification.new do |s|
      "test/fixtures/jquery-1.4.1.js",
      "test/fixtures/jquery.color.js",
      "test/fixtures/jquery.metadata-2.0.zip",
+     "test/fixtures/localfile.js",
      "test/fixtures/mustache.js/mustache.js",
      "test/fixtures/mustache.js/package.json",
      "test/fixtures/noversion.js",
