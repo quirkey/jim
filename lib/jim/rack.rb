@@ -36,15 +36,18 @@ module Jim
     end
     
     def run_action(which)
+      # wrap body in an array for compatibility with Rack and 1.9
+      # because the Rack response must respond to each, but String no longer
+      # does in 1.9
       begin
-        [200, {'Content-Type' => 'text/javascript'}, @bundler.send(which, false)]
+        [200, {'Content-Type' => 'text/javascript'}, [@bundler.send(which, false)]]
       rescue => e
-        [500, {'Content-Type' => 'text/html'}, <<-EOT 
+        response = <<-EOT 
           <p>Jim failed in helping you out. There was an error when trying to #{which}.</p>
           <p>#{e}</p>
           <pre>#{e.backtrace}</pre>
         EOT
-        ]
+        [500, {'Content-Type' => 'text/html'}, [response]]
       end
     end
     

@@ -23,6 +23,7 @@ begin
     gem.add_development_dependency "shoulda", ">= 0"
     gem.add_development_dependency "fakeweb", ">= 1.2.8"
     gem.add_development_dependency "mocha"
+    gem.add_development_dependency "rack-test", ">= 0.5.4"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
