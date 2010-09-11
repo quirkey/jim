@@ -1,3 +1,8 @@
+== 0.2.2 [09-10-10]
+
+* Fixed issue where io's passed to bundle not closed properly before returning
+  resulting in truncated files
+
 == 0.2.1 [07-06-10]
 
 * Local (non JIMHOME) files specified in the Jimfiles are not copied into vendor
@@ -9,14 +14,14 @@
   * Each file in a package is installed separately
   * Each file is installed with a package.json file that describes the install
     and is merged with any existing package.json files
-  * version parser was rewritten and handles many different formats 
+  * version parser was rewritten and handles many different formats
   * Existing JIMHOMEs are probably now invalid (SORRY!!)
 * The install, specify, vendor, bundle workflow works from start to finish
 * passing the -o option to bundle or compress outputs to STDOUT
 * New commands:
   * available
   * pack
-  
+
 
 == 0.1.2 [02-21-10]
 

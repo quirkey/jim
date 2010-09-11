@@ -5,16 +5,16 @@ require 'version_sorter'
 require 'digest/md5'
 
 module Jim
-  VERSION = '0.2.1'
-  
+  VERSION = '0.2.2'
+
   class Error < RuntimeError; end
   class InstallError < Error; end
   class FileExists < Error; end
-  
+
   def self.logger=(logger)
     @logger = logger
   end
-  
+
   def self.logger
     @logger ||= LOGGER if defined?(LOGGER)
     if !@logger
@@ -25,7 +25,7 @@ module Jim
     end
     @logger
   end
-  
+
   def self.each_path_in_directories(directories, ext, ignore_directories = [], &block)
     ignore_regexp = ignore_directories.empty? ? false : /(\/|^)(#{ignore_directories.join('|')})\//
     directories.each do |dir|
@@ -40,7 +40,7 @@ module Jim
       end
     end
   end
-  
+
   autoload :Installer, 'jim/installer'
   autoload :Index, 'jim/index'
   autoload :Bundler, 'jim/bundler'
