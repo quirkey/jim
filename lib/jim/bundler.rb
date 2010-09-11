@@ -55,9 +55,9 @@ module Jim
     # path specified in the :bundled_path option
     def bundle!(to = nil)
       resolve! if paths.empty?
-      to = options[:bundled_path] if to.nil? && to != false && options[:bundled_path]
+      to = options[:bundled_path] if to.nil? && options[:bundled_path]
       io_for_path(to) do |io|
-        logger.info "Bundling to #{to}" if to
+        logger.info "Bundling to #{to}"
         paths.each do |path, name, version|
           io << path.read << "\n"
         end
@@ -123,7 +123,10 @@ module Jim
         to
       when Pathname
         to.dirname.mkpath
-        io = to.open('w') {|f| yield f }
+        io = to.open('w') 
+        yield io
+        io.close
+        io
       when String
         to = Pathname.new(to)
         io_for_path(to, &block)
