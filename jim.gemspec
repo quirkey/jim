@@ -20,6 +20,8 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".gitignore",
+     "Gemfile",
+     "Gemfile.lock",
      "HISTORY",
      "LICENSE",
      "README.rdoc",
@@ -131,6 +133,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<fakeweb>, [">= 1.2.8"])
       s.add_development_dependency(%q<mocha>, [">= 0"])
+      s.add_development_dependency(%q<leftright>, [">= 0"])
     else
       s.add_dependency(%q<downlow>, [">= 0.1.3"])
       s.add_dependency(%q<yajl-ruby>, [">= 0"])
@@ -138,6 +141,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<fakeweb>, [">= 1.2.8"])
       s.add_dependency(%q<mocha>, [">= 0"])
+      s.add_dependency(%q<leftright>, [">= 0"])
     end
   else
     s.add_dependency(%q<downlow>, [">= 0.1.3"])
@@ -146,5 +150,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<fakeweb>, [">= 1.2.8"])
     s.add_dependency(%q<mocha>, [">= 0"])
+    s.add_dependency(%q<leftright>, [">= 0"])
   end
 end
+
