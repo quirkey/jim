@@ -1,0 +1,28 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    archive-tar-minitar (0.5.2)
+    downlow (0.1.3)
+      archive-tar-minitar (>= 0.5.2)
+      rubyzip (>= 0.9.4)
+    fakeweb (1.3.0)
+    leftright (0.9.0)
+    mocha (0.9.8)
+      rake
+    rake (0.8.7)
+    rubyzip (0.9.4)
+    shoulda (2.11.3)
+    version_sorter (1.1.0)
+    yajl-ruby (0.7.7)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  downlow (~> 0.1.3)
+  fakeweb (>= 1.2.8)
+  leftright
+  mocha
+  shoulda
+  version_sorter (~> 1.1.0)
+  yajl-ruby

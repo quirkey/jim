@@ -21,3 +21,4 @@ tmp
 
 ## PROJECT::SPECIFIC
 *.rbc
+.bundle
