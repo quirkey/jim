@@ -1,5 +1,5 @@
 module Jim
-  # Bundler takes parses a Jimfile that specifies requirements as names and 
+  # Bundler takes parses a Jimfile that specifies requirements as names and
   # versions and then can bundle, compress, or copy those files into specific dirs
   # or files.
   #
@@ -15,12 +15,12 @@ module Jim
   #     jquery.color
   #     sammy 0.5.0
   #
-  # 
+  #
   class Bundler
     class MissingFile < Jim::Error; end
 
-    attr_accessor :jimfile, :index, :requirements, :paths, :options 
-    
+    attr_accessor :jimfile, :index, :requirements, :paths, :options
+
     # create a new bundler instance passing in the Jimfile as a `Pathname` or a
     # string. `index` is a Jim::Index
     def initialize(jimfile, index = nil, extra_options = {})
@@ -33,7 +33,7 @@ module Jim
       self.paths        = []
       if options[:vendor_dir]
         logger.debug "adding vendor dir to index #{options[:vendor_dir]}"
-        self.index.add(options[:vendor_dir]) 
+        self.index.add(options[:vendor_dir])
       end
     end
 
@@ -43,7 +43,7 @@ module Jim
         name, version = search.strip.split(/\s+/)
         path = self.index.find(name, version)
         if !path
-          raise(MissingFile, 
+          raise(MissingFile,
           "Could not find #{name} #{version} in any of these paths #{index.directories.join(':')}")
         end
         self.paths << [path, name, version]
@@ -55,24 +55,24 @@ module Jim
     # path specified in the :bundled_path option
     def bundle!(to = nil)
       resolve! if paths.empty?
-      to = options[:bundled_path] if to.nil? && options[:bundled_path]
-      io = io_for_path(to)
-      logger.info "Bundling to #{to}" if to
-      paths.each do |path, name, version|
-        io << path.read << "\n"
+      to = options[:bundled_path] if to.nil? && to != false && options[:bundled_path]
+      io_for_path(to) do |io|
+        logger.info "Bundling to #{to}" if to
+        paths.each do |path, name, version|
+          io << path.read << "\n"
+        end
       end
-      io
     end
 
-    # concatenate all the requirements into a single file then run through a JS 
+    # concatenate all the requirements into a single file then run through a JS
     # then write to `to` or to the path specified in the :bundled_path option.
     # You can also use the YUI compressor by setting the option :compressor to 'yui'
     def compress!(to = nil)
       to = options[:compressed_path] if to.nil? && options[:compressed_path]
-      io = io_for_path(to)
-      logger.info "Compressing to #{to}"
-      io << compress_js(bundle!(false))
-      io
+      io_for_path(to) do |io|
+        logger.info "Compressing to #{to}"
+        io << compress_js(bundle!(false))
+      end
     end
 
     # copy each of the requirements into the dir specified with `dir` or the path
@@ -92,6 +92,10 @@ module Jim
     # Run the uncompressed test through a JS compressor (closure-compiler) by
     # default. Setting options[:compressor] == 'yui' will force the YUI JS Compressor
     def compress_js(uncompressed)
+      # if uncompressed.is_a?(File) && uncompressed.closed?
+      #   puts "uncompressed is a file"
+      #   uncompressed = File.read(uncompressed.path)
+      # end
       if options[:compressor] == 'yui'
         begin
           require "yui/compressor"
@@ -99,7 +103,7 @@ module Jim
           raise "You must install the yui compressor gem to use the compressor\ngem install yui-compressor"
         end
         compressor = ::YUI::JavaScriptCompressor.new
-      else 
+      else
         begin
           require 'closure-compiler'
         rescue LoadError
@@ -111,18 +115,22 @@ module Jim
     end
 
     private
-    def io_for_path(to)
+    def io_for_path(to, &block)
       case to
       when IO
+        yield to
+        to.close
         to
       when Pathname
         to.dirname.mkpath
-        to.open('w')
+        io = to.open('w') {|f| yield f }
       when String
         to = Pathname.new(to)
-        io_for_path(to)
+        io_for_path(to, &block)
       else
-        ""
+        io = ""
+        yield io
+        io
       end
     end
 
@@ -135,7 +143,7 @@ module Jim
         end
       end
     end
-    
+
     def logger
       Jim.logger
     end
