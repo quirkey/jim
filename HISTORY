@@ -1,4 +1,4 @@
-== 0.2.2 [09-10-10]
+== 0.2.3 [09-10-10]
 
 * Fixed issue where io's passed to bundle not closed properly before returning
   resulting in truncated files

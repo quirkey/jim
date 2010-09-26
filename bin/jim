@@ -3,4 +3,4 @@
 require 'jim'
 
 cli = Jim::CLI.new(ARGV)
-puts cli.run
+cli.run
