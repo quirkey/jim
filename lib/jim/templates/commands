@@ -51,6 +51,10 @@ pack [vendor_dir]
   workflow of vendoring and re-bundling before commiting or deploying changes
   to a project
 
+watch
+  Watches your Jimfile and JS files and triggers a `jim bundle` if something
+  changes. Handy for development.
+
 commands
   Print this help file
 

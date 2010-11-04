@@ -76,6 +76,12 @@ class TestJimCLI < Test::Unit::TestCase
       end
     end
 
+    context "watch" do
+      should_eventually "watch changed js files then run bundle" do
+        #not sure how this should be tested... ideas?
+      end
+    end
+
   end
 
   def run_cli(*args)

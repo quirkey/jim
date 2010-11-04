@@ -161,6 +161,30 @@ module Jim
       compress
     end
 
+    def watch(dir = nil)
+      require 'fssm'
+
+      puts "*** Now watching JS files..."
+
+      FSSM.monitor(Dir.pwd, [File.join('dir','*.js'), 'Jimfile']) do
+        update do |base, relative|
+          puts "--> #{relative} changed!"
+          system "jim bundle"
+        end
+
+        create do |base, relative|
+          puts "--> #{relative} created!"
+          system "jim bundle"
+        end
+
+        delete do |base, relative|
+          puts "--> #{relative} deleted!"
+          system "jim bundle"
+        end
+      end
+
+    end
+
     private
     def parse_options(runtime_args)
       OptionParser.new("", 24, '  ') do |opts|

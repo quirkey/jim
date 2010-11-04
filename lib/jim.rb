@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'downlow'
 require 'logger'
 require 'yajl'
