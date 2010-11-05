@@ -166,15 +166,20 @@ module Jim
 
       puts "*** Now watching JS files..."
 
-      FSSM.monitor(Dir.pwd, [File.join('dir','*.js'), 'Jimfile']) do
+      puts File.join('**','*.js')
+      FSSM.monitor(Dir.pwd, [File.join('**','*.js'), 'Jimfile']) do
         update do |base, relative|
-          puts "--> #{relative} changed!"
-          system "jim bundle"
+          unless relative.include?('bundled.js')
+            puts "--> #{relative} changed!"
+            system "jim bundle"
+          end
         end
 
         create do |base, relative|
-          puts "--> #{relative} created!"
-          system "jim bundle"
+          unless relative.include?('bundled.js')
+            puts "--> #{relative} created!"
+            system "jim bundle"
+          end
         end
 
         delete do |base, relative|
