@@ -20,9 +20,9 @@ class TestJimCLI < Test::Unit::TestCase
 
     context "pack" do
       should "run vendor, bundle, compress" do
-        Jim::CLI.any_instance.expects(:compress).once
-        Jim::Bundler.any_instance.stubs(:compress_js).returns("compressed.js")
+        Jim::Bundler.any_instance.expects(:compress_js).returns("compressed.js")
         run_cli("pack", "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
+        puts `tree -r #{File.join(tmp_path, 'public', 'javascripts')}`
         assert_readable tmp_path, 'public', 'javascripts', 'vendor', 'jquery-1.4.1.js'
         assert_readable tmp_path, 'public', 'javascripts', 'vendor', 'myproject-1.2.2.js'
         assert_readable tmp_path, 'public', 'javascripts', 'bundled.js'
@@ -79,7 +79,9 @@ class TestJimCLI < Test::Unit::TestCase
   end
 
   def run_cli(*args)
-    Jim::CLI.new(args.collect {|a| a.to_s }).run(true)
+    @stdout = capture(:stdout) do
+      Jim::CLI.start(args.collect(&:to_s))
+    end
   end
 
 end

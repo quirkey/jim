@@ -143,7 +143,7 @@ or url that Downlow understands. This means:
       logger.info "Installed:"
       print_version_list(list)
     end
-    alias :installed :list
+    map "installed" => "list"
 
     desc "available [SEARCH]" ,"List all available projects and versions including those in the local path, or paths specified in a Jimfile"
     def available(search = nil)
@@ -176,7 +176,7 @@ or url that Downlow understands. This means:
         logger.info "No installed files matched."
       end
     end
-    alias :uninstall :remove
+    map "uninstall" => "remove"
 
     desc "resolve", "Resolve all the paths listed in a Jimfile and print them to STDOUT. If no Jimfile is set in the options, assumes ./Jimfile."
     def resolve

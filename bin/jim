@@ -2,5 +2,4 @@
 
 require 'jim'
 
-cli = Jim::CLI.new(ARGV)
-cli.run
+Jim::CLI.start

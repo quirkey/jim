@@ -57,4 +57,19 @@ class Test::Unit::TestCase
     assert !File.readable?(full_path), "Expected #{full_path} to not be a readable file"
   end
 
+  # stolen from the thor specs
+  def capture(stream)
+    begin
+      stream = stream.to_s
+      eval "$#{stream} = StringIO.new"
+      yield
+      result = eval("$#{stream}").string
+    ensure
+      eval("$#{stream} = #{stream.upcase}")
+    end
+
+    result
+  end
+  alias :silence :capture
+
 end
