@@ -1,65 +1,75 @@
-require 'optparse'
-require 'readline'
+require 'thor'
+require 'thor/actions'
+
 
 module Jim
 
   # CLI handles the command line interface for the `jim` binary.
   # The layout is farily simple. Options are parsed using optparse.rb and
   # the different public methods represent 1-1 the commands provided by the bin.
-  class CLI
+  class CLI < ::Thor
+    include Thor::Actions
 
-    attr_accessor :jimfile, :jimhome, :force, :stdout
+    attr_accessor :jimfile, :jimhome, :debug , :force, :stdout
+
+    class_option "jimhome",
+        :type => :string,
+        # :aliases => '-d',
+        :banner => "set the install path/JIMHOME dir (default ~/.jim)"
+
+    class_option "jimfile",
+        :type => :string,
+        :aliases => '-j',
+        :banner => "load specific Jimfile at path (default ./Jimfile)"
+
+    class_option "force",
+        :default => false,
+        :aliases => '-f',
+        :banner => "force file creation/overwrite"
+
+    class_option "debug",
+        :default => false,
+        :aliases => '-d',
+        :banner => "set log level to debug"
+
+    class_option "version",
+        :type => :boolean,
+        :aliases => '-v',
+        :banner => "print version and exit"
 
     # create a new instance with the args passed from the command line i.e. ARGV
-    def initialize(args)
+    def initialize(*)
+      super
+      if options[:version]
+        say "jim #{Jim::VERSION}", :red
+        exit
+      end
       @output = ""
       # set the default jimhome
       self.jimhome = Pathname.new(ENV['JIMHOME'] || '~/.jim').expand_path
       # parse the options
-      self.jimfile = Pathname.new('Jimfile')
-      @args = parse_options(args)
-      ## try to run based on args
+      self.jimfile = Pathname.new(options[:jimfile] || 'Jimfile').expand_path
+      self.force = options[:force]
+      self.debug = options[:debug]
+      logger.level = Logger::DEBUG if debug
     end
 
-    # method called by the bin directly after initialization.
-    def run(reraise = false)
-      command = @args.shift
-      if command && respond_to?(command)
-        self.send(command, *@args)
-      elsif command.nil? || command.strip == ''
-        cheat
-      else
-        @output << "No action found for #{command}. Run -h for help."
-      end
-      @output
-    rescue ArgumentError => e
-      @output << "#{e.message} for #{command}"
-      raise e if reraise
-    rescue Jim::FileExists => e
-      @output << "#{e.message} already exists, bailing. Use --force if you're sure"
-      raise e if reraise
-    rescue => e
-      @output << e.message + " (#{e.class})"
-      raise e if reraise
-    end
+    # def commands
+    #   logger.info "Usage: jim [options] [command] [args]\n"
+    #   logger.info "Commands:"
+    #   logger.info template('commands')
+    # end
+    #
+    # # list the possible commands without detailed descriptions
+    # def cheat
+    #   logger.info "Usage: jim [options] [command] [args]\n"
+    #   logger.info "Commands:"
+    #   logger.info [*template('commands')].grep(/^\w/).join
+    #   logger.info "run commands for details"
+    # end
+    # alias :help :cheat
 
-    # list the possible commands to the logger
-    def commands
-      logger.info "Usage: jim [options] [command] [args]\n"
-      logger.info "Commands:"
-      logger.info template('commands')
-    end
-
-    # list the possible commands without detailed descriptions
-    def cheat
-      logger.info "Usage: jim [options] [command] [args]\n"
-      logger.info "Commands:"
-      logger.info [*template('commands')].grep(/^\w/).join
-      logger.info "run commands for details"
-    end
-    alias :help :cheat
-
-    # initialize the current dir with a new Jimfile
+    desc 'init [APPDIR]', 'Create an example Jimfile at path or the current directory if path is omitted'
     def init(dir = nil)
       dir = Pathname.new(dir || '')
       jimfile_path = dir + 'Jimfile'
@@ -73,32 +83,59 @@ module Jim
       end
     end
 
-    # install the file/project `url` into `jimhome`
+    desc 'install <URL> [NAME] [VERSION]',
+      "Install the file(s) at url into the JIMHOME directory."
+
+    long_desc <<-EOT
+Install the file(s) at url into the JIMHOME directory. URL can be any path
+or url that Downlow understands. This means:
+
+  jim install http://code.jquery.com/jquery-1.4.1.js
+  jim install ../sammy/
+  jim install gh://quirkey/sammy
+  jim install git://github.com/jquery/jquery.git
+    EOT
     def install(url, name = false, version = false)
       Jim::Installer.new(url, jimhome, :force => force, :name => name, :version => version).install
     end
 
-    # bundle the files specified in Jimfile into `to`
+    desc 'bundle [BUNDLED_PATH]',
+      "Bundle all the files listed in a Jimfile and save them to [BUNDLED_PATH]."
+    long_desc <<-EOT
+      Bundle all the files listed in a Jimfile and save them to [BUNDLED_PATH].
+      If the bundled_path is not set, jim will try to use the bundled_path set in
+      the Jimfile. If no bundled_path is found - it will output the entire bundle
+      to STDOUT.
+      If no Jimfile is set in the options, assumes ./Jimfile.
+    EOT
     def bundle(to = nil)
       to = STDOUT if stdout
       io = bundler.bundle!(to)
       logger.info "Wrote #{File.size(io.path) / 1024}kb" if io.respond_to? :path
     end
 
-    # compress the files specified in Jimfile into `to`
+    desc "compress [COMPRESSED_PATH]",
+      "Bundle all the files listed in a Jimfile, run through the google closure compiler and save them to [COMPRESSED_PATH]."
+    long_desc <<-EOT
+      Bundle all the files listed in a Jimfile, run through the google closure
+      compiler and save them to [compressed_path].
+      If the compressed_path is not set, jim will try to use the compressed_path
+      set in the Jimfile. If no compressed_path is found - it will output the
+      entire compressed bundle to STDOUT.
+      If no Jimfile is set in the options, assumes ./Jimfile.
+    EOT
     def compress(to = nil)
       to = STDOUT if stdout
       io = bundler.compress!(to)
       logger.info "Wrote #{File.size(io.path) / 1024}kb" if io.respond_to? :path
     end
 
-    # copy/vendor all the files specified in Jimfile to `dir`
+    desc "vendor [VENDOR_DIR]", "Copy all the files listed in Jimfile to the vendor_dir"
     def vendor(dir = nil)
       bundler.vendor!(dir, force)
     end
 
-    # list the only the _installed_ projects and versions.
-    # Match names against `search` if supplied.
+    desc "list [SEARCH]", "List all the installed packages and their versions, optionally limiting by [SEARCH]"
     def list(search = nil)
       logger.info "Getting list of installed files in\n#{installed_index.directories.join(':')}"
       logger.info "Searching for '#{search}'" if search
@@ -108,9 +145,7 @@ module Jim
     end
     alias :installed :list
 
-    # list all available projects and versions including those in the local path, or
-    # paths specified in a Jimfile.
-    # Match names against `search` if supplied.
+    desc "available [SEARCH]" ,"List all available projects and versions including those in the local path, or paths specified in a Jimfile"
     def available(search = nil)
       logger.info "Getting list of all available files in\n#{index.directories.join("\n")}"
       logger.info "Searching for '#{search}'" if search
@@ -119,7 +154,7 @@ module Jim
       print_version_list(list)
     end
 
-    # Iterates over matching files and prompts for removal
+    desc "remove <NAME> [VERSION]", "Iterate through the install files and prompt for the removal of those matching the supplied NAME and VERSION"
     def remove(name, version = nil)
       logger.info "Looking for files matching #{name} #{version}"
       files = installed_index.find_all(name, version)
@@ -143,7 +178,7 @@ module Jim
     end
     alias :uninstall :remove
 
-    # list the files and their resolved paths specified in the Jimfile
+    desc "resolve", "Resolve all the paths listed in a Jimfile and print them to STDOUT. If no Jimfile is set in the options, assumes ./Jimfile."
     def resolve
       resolved = bundler.resolve!
       logger.info "Files:"
@@ -153,7 +188,7 @@ module Jim
       resolved
     end
 
-    # vendor to dir, then bundle and compress the Jimfile contents
+    desc "pack [DIR]", "Runs in order, vendor, bundle, compress. This command simplifies the common workflow of vendoring and re-bundling before committing or deploying changes to a project"
     def pack(dir = nil)
       logger.info "packing the Jimfile for this project"
       vendor(dir)
@@ -162,51 +197,6 @@ module Jim
     end
 
     private
-    def parse_options(runtime_args)
-      OptionParser.new("", 24, '  ') do |opts|
-        opts.banner = "Usage: jim [options] [command] [args]"
-
-        opts.separator ""
-        opts.separator "jim options:"
-
-        opts.on("--jimhome path/to/home", "set the install path/JIMHOME dir (default ~/.jim)") {|h|
-          self.jimhome = Pathname.new(h)
-        }
-
-        opts.on("-j", "--jimfile path/to/jimfile", "load specific Jimfile at path (default ./Jimfile)") { |j|
-          self.jimfile = Pathname.new(j)
-        }
-
-        opts.on("-f", "--force", "force file creation/overwrite") {|f|
-          self.force = true
-        }
-
-        opts.on("-d", "--debug", "set log level to debug") {|d|
-          logger.level = Logger::DEBUG
-        }
-
-        opts.on("-o", "--stdout", "write output of commands (like bundle and compress to STDOUT)") {|o|
-          logger.level = Logger::ERROR
-          self.stdout = true
-        }
-
-        opts.on("-v", "--version", "print version") {|d|
-          puts "jim #{Jim::VERSION}"
-          exit
-        }
-
-
-        opts.on_tail("-h", "--help", "Show this message. Run jim commands for list of commands.") do
-          puts opts.help
-          exit
-        end
-
-      end.parse! runtime_args
-    rescue OptionParser::MissingArgument => e
-      logger.warn "#{e}, run -h for options"
-      exit
-    end
-
     def index
       @index ||= Jim::Index.new(install_dir, Dir.pwd)
     end
