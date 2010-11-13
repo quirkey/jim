@@ -5,7 +5,7 @@ class TestJimCLI < Test::Unit::TestCase
   context "Jim::CLI" do
     setup do
       FileUtils.rm_rf(tmp_path) if File.directory?(tmp_path)
-      other_tmp_path = File.join(File.dirname(__FILE__), '..', '..' 'tmp')
+      other_tmp_path = File.expand_path(File.join(File.dirname(__FILE__), '..', '..' 'tmp'))
       FileUtils.rm_rf(other_tmp_path) if File.directory?(other_tmp_path)
       Jim::Installer.new(fixture_path('infoincomments.js'), tmp_path).install
       Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path).install
@@ -22,11 +22,10 @@ class TestJimCLI < Test::Unit::TestCase
       should "run vendor, bundle, compress" do
         Jim::Bundler.any_instance.expects(:compress_js).returns("compressed.js")
         run_cli("pack", "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
-        puts @stdout
         assert_readable tmp_path, 'public', 'javascripts', 'vendor', 'jquery-1.4.1.js'
         assert_readable tmp_path, 'public', 'javascripts', 'vendor', 'myproject-1.2.2.js'
         assert_readable tmp_path, 'public', 'javascripts', 'bundled.js'
-        # assert_readable tmp_path, 'public', 'javascripts', 'compressed.js'
+        assert_readable tmp_path, 'public', 'javascripts', 'compressed.js'
       end
     end
 

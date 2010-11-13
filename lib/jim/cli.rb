@@ -14,7 +14,6 @@ module Jim
 
     class_option "jimhome",
         :type => :string,
-        # :aliases => '-d',
         :banner => "set the install path/JIMHOME dir (default ~/.jim)"
 
     class_option "jimfile",
@@ -46,7 +45,7 @@ module Jim
       end
       @output = ""
       # set the default jimhome
-      self.jimhome = Pathname.new(ENV['JIMHOME'] || '~/.jim').expand_path
+      self.jimhome = Pathname.new(options[:jimhome] || ENV['JIMHOME'] || '~/.jim').expand_path
       # parse the options
       self.jimfile = Pathname.new(options[:jimfile] || 'Jimfile').expand_path
       self.force = options[:force]
