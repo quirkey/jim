@@ -78,7 +78,9 @@ module Jim
     # copy each of the requirements into the dir specified with `dir` or the path
     # specified with the :vendor_dir option
     def vendor!(dir = nil, force = false)
+      puts "vendoring"
       resolve! if paths.empty?
+      puts paths.inspect
       dir ||= options[:vendor_dir]
       dir ||= 'vendor' # default
       logger.info "Vendoring to #{dir}"

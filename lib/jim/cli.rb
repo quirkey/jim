@@ -111,7 +111,7 @@ or url that Downlow understands. This means:
     def bundle(to = nil)
       to = STDOUT if stdout
       io = bundler.bundle!(to)
-      logger.info "Wrote #{File.size(io.path) / 1024}kb" if io.respond_to? :path
+      say("Wrote #{File.size(io.path) / 1024}kb", :green) if io.respond_to? :path
     end
 
     desc "compress [COMPRESSED_PATH]",
@@ -127,7 +127,7 @@ or url that Downlow understands. This means:
     def compress(to = nil)
       to = STDOUT if stdout
       io = bundler.compress!(to)
-      logger.info "Wrote #{File.size(io.path) / 1024}kb" if io.respond_to? :path
+      say("Wrote #{File.size(io.path) / 1024}kb", :green) if io.respond_to? :path
     end
 
     desc "vendor [VENDOR_DIR]", "Copy all the files listed in Jimfile to the vendor_dir"
@@ -191,9 +191,9 @@ or url that Downlow understands. This means:
     desc "pack [DIR]", "Runs in order, vendor, bundle, compress. This command simplifies the common workflow of vendoring and re-bundling before committing or deploying changes to a project"
     def pack(dir = nil)
       logger.info "packing the Jimfile for this project"
-      vendor(dir)
-      bundle
-      compress
+      invoke :vendor, [dir]
+      invoke :bundle
+      invoke :compress
     end
 
     private
