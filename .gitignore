@@ -22,3 +22,4 @@ tmp
 ## PROJECT::SPECIFIC
 *.rbc
 .bundle
+.gem

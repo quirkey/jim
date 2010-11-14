@@ -57,7 +57,7 @@ module Jim
       resolve! if paths.empty?
       to = options[:bundled_path] if to.nil? && options[:bundled_path]
       io_for_path(to) do |io|
-        logger.info "Bundling to #{to}" if to
+        logger.debug "Bundling to #{to}" if to
         paths.each do |path, name, version|
           io << path.read << "\n"
         end
@@ -70,23 +70,24 @@ module Jim
     def compress!(to = nil)
       to = options[:compressed_path] if to.nil? && options[:compressed_path]
       io_for_path(to) do |io|
-        logger.info "Compressing to #{to}"
+        logger.debug "Compressing to #{to}"
         io << compress_js(bundle!(false))
       end
     end
 
     # copy each of the requirements into the dir specified with `dir` or the path
-    # specified with the :vendor_dir option
+    # specified with the :vendor_dir option. Returns the dir it was vendored to.
     def vendor!(dir = nil, force = false)
       resolve! if paths.empty?
       dir ||= options[:vendor_dir]
       dir ||= 'vendor' # default
-      logger.info "Vendoring to #{dir}"
+      logger.debug "Vendoring #{paths.length} files to #{dir}"
       paths.each do |path, name, version|
         if index.in_jimhome?(path)
           Jim::Installer.new(path, dir, :shallow => true, :force => force).install
         end
       end
+      dir
     end
 
     # Run the uncompressed test through a JS compressor (closure-compiler) by

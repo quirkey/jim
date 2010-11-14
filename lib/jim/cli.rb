@@ -50,7 +50,8 @@ module Jim
       logger.level = Logger::DEBUG if debug
     end
 
-    desc 'init [APPDIR]', 'Create an example Jimfile at path or the current directory if path is omitted'
+    desc 'init [APPDIR]',
+      'Create an example Jimfile at path or the current directory if path is omitted'
     def init(dir = nil)
       dir = Pathname.new(dir || '')
       jimfile_path = dir + 'Jimfile'
@@ -60,7 +61,7 @@ module Jim
         File.open(jimfile_path, 'w') do |f|
           f << template('jimfile')
         end
-        logger.info "wrote Jimfile to #{jimfile_path}"
+        say "Wrote Jimfile to #{jimfile_path}", :green
       end
     end
 
@@ -93,11 +94,12 @@ module Jim
     def bundle(to = nil)
       to = STDOUT if stdout
       io = bundler.bundle!(to)
-      say("Wrote #{File.size(io.path) / 1024}kb", :green) if io.respond_to? :path
+      say("Wrote #{io.path} #{File.size(io.path) / 1024}kb", :green) if io.respond_to? :path
     end
 
     desc "compress [COMPRESSED_PATH]",
-      "Bundle all the files listed in a Jimfile, run through the google closure compiler and save them to [COMPRESSED_PATH]."
+      "Bundle all the files listed in a Jimfile, run through the google closure " +
+      "compiler and save them to [COMPRESSED_PATH]."
     long_desc <<-EOT
       Bundle all the files listed in a Jimfile, run through the google closure
       compiler and save them to [compressed_path].
@@ -114,22 +116,28 @@ module Jim
       say("Wrote #{File.size(io.path) / 1024}kb", :green) if io.respond_to? :path
     end
 
-    desc "vendor [VENDOR_DIR]", "Copy all the files listed in Jimfile to the vendor_dir"
+    desc "vendor [VENDOR_DIR]",
+      "Copy all the files listed in Jimfile to the vendor_dir"
     def vendor(dir = nil)
-      bundler.vendor!(dir, force)
+      dir = bundler.vendor!(dir, force)
+      say("Vendored files to #{dir}", :green)
     end
 
-    desc "list [SEARCH]", "List all the installed packages and their versions, optionally limiting by [SEARCH]"
+    desc "list [SEARCH]",
+      "List all the installed packages and their versions, optionally limiting by [SEARCH]"
     def list(search = nil)
-      say "Getting list of installed files in\n#{installed_index.directories.join(':')}"
-      say "Searching for '#{search}'" if search
+      say "Getting list of installed files in"
+      say("#{installed_index.directories.join(':')}", :yellow)
+      say("Searching for '#{search}'", :yellow) if search
       list = installed_index.list(search)
       say "Installed:"
       print_version_list(list)
     end
     map "installed" => "list"
 
-    desc "available [SEARCH]" ,"List all available projects and versions including those in the local path, or paths specified in a Jimfile"
+    desc "available [SEARCH]",
+      "List all available projects and versions " +
+      "including those in the local path, or paths specified in a Jimfile"
     def available(search = nil)
       say "Getting list of all available files in\n#{index.directories.join("\n")}"
       say "Searching for '#{search}'" if search
@@ -138,7 +146,9 @@ module Jim
       print_version_list(list)
     end
 
-    desc "remove <NAME> [VERSION]", "Iterate through the install files and prompt for the removal of those matching the supplied NAME and VERSION"
+    desc "remove <NAME> [VERSION]",
+      "Iterate through the install files and prompt for the removal of those " +
+      "matching the supplied NAME and VERSION"
     def remove(name, version = nil)
       say "Looking for files matching #{name} #{version}"
       files = installed_index.find_all(name, version)
@@ -162,7 +172,9 @@ module Jim
     end
     map "uninstall" => "remove"
 
-    desc "resolve", "Resolve all the paths listed in a Jimfile and print them to STDOUT. If no Jimfile is set in the options, assumes ./Jimfile."
+    desc "resolve",
+      "Resolve all the paths listed in a Jimfile and print them to STDOUT. " +
+      "If no Jimfile is set in the options, assumes ./Jimfile."
     def resolve
       resolved = bundler.resolve!
       say "Files:"
@@ -172,9 +184,12 @@ module Jim
       resolved
     end
 
-    desc "pack [DIR]", "Runs in order, vendor, bundle, compress. This command simplifies the common workflow of vendoring and re-bundling before committing or deploying changes to a project"
+    desc "pack [DIR]",
+      "Runs in order, vendor, bundle, compress. This command " +
+      "simplifies the common workflow of vendoring and re-bundling " +
+      "before committing or deploying changes to a project"
     def pack(dir = nil)
-      say "packing the Jimfile for this project"
+      say "Packing the Jimfile for this project"
       invoke :vendor, [dir]
       invoke :bundle
       invoke :compress
@@ -207,7 +222,7 @@ module Jim
 
     def print_version_list(list)
       list.each do |file, versions|
-        logger.info "#{file} (#{VersionSorter.rsort(versions.collect {|v| v[0] }).join(', ')})"
+        say"#{file} (#{VersionSorter.rsort(versions.collect {|v| v[0] }).join(', ')})"
       end
     end
 
