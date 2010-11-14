@@ -112,7 +112,11 @@ module Jim
         end
         compressor = ::Closure::Compiler.new
       end
-      compressor.compress(uncompressed)
+      begin
+        compressor.compress(uncompressed)
+      rescue Exception => e
+        puts e.message
+      end
     end
 
     private

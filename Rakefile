@@ -16,11 +16,12 @@ begin
     gem.homepage = "http://github.com/quirkey/jim"
     gem.authors = ["Aaron Quint"]
 
-    gem.add_dependency "downlow", "~> 0.1.3"
-    gem.add_dependency "thor", "~> 0.14.4"
+    gem.add_dependency "downlow", "~>0.1.3"
+    gem.add_dependency "thor", "~>0.14.4"
     gem.add_dependency "yajl-ruby"
-    gem.add_dependency "version_sorter", "~> 1.1.0"
-
+    gem.add_dependency "version_sorter", "~>1.1.0"
+    gem.add_dependency "fssm", "~>0.2.0"
+    
     gem.add_development_dependency "shoulda", ">= 0"
     gem.add_development_dependency "fakeweb", ">= 1.2.8"
     gem.add_development_dependency "mocha"

@@ -34,6 +34,7 @@ Gem::Specification.new do |s|
      "lib/jim/index.rb",
      "lib/jim/installer.rb",
      "lib/jim/rack.rb",
+     "lib/jim/templates/commands",
      "lib/jim/templates/jimfile",
      "lib/jim/version_parser.rb",
      "test/fixtures/infoincomments.js",
@@ -130,6 +131,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<thor>, ["~> 0.14.4"])
       s.add_runtime_dependency(%q<yajl-ruby>, [">= 0"])
       s.add_runtime_dependency(%q<version_sorter>, ["~> 1.1.0"])
+      s.add_runtime_dependency(%q<fssm>, ["~> 0.2.0"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<fakeweb>, [">= 1.2.8"])
       s.add_development_dependency(%q<mocha>, [">= 0"])
@@ -139,6 +141,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<thor>, ["~> 0.14.4"])
       s.add_dependency(%q<yajl-ruby>, [">= 0"])
       s.add_dependency(%q<version_sorter>, ["~> 1.1.0"])
+      s.add_dependency(%q<fssm>, ["~> 0.2.0"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<fakeweb>, [">= 1.2.8"])
       s.add_dependency(%q<mocha>, [">= 0"])
@@ -149,6 +152,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<thor>, ["~> 0.14.4"])
     s.add_dependency(%q<yajl-ruby>, [">= 0"])
     s.add_dependency(%q<version_sorter>, ["~> 1.1.0"])
+    s.add_dependency(%q<fssm>, ["~> 0.2.0"])
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<fakeweb>, [">= 1.2.8"])
     s.add_dependency(%q<mocha>, [">= 0"])

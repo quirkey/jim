@@ -2,6 +2,7 @@ source "http://rubygems.org"
 
 gem "downlow", "~> 0.1.3"
 gem "thor"
+gem "fssm"
 gem "rubydebug"
 gem "yajl-ruby"
 gem "version_sorter", "~> 1.1.0"

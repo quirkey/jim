@@ -1,4 +1,5 @@
 require 'thor'
+require 'fssm'
 
 module Jim
 
@@ -193,6 +194,33 @@ module Jim
       invoke :vendor, [dir]
       invoke :bundle
       invoke :compress
+    end
+
+    desc "watch [DIR]",
+      "Watches your Jimfile and JS files and triggers `bundle` if something " +
+      "changes. Handy for development."
+    def watch(dir = nil)
+      say "Now watching JS files..."
+      FSSM.monitor(Dir.pwd, [File.join('**','*.js'), 'Jimfile']) do
+        update do |base, relative|
+          unless relative.include?('bundled.js')
+            puts "--> #{relative} changed!"
+            system "jim bundle"
+          end
+        end
+
+        create do |base, relative|
+          unless relative.include?('bundled.js')
+            puts "--> #{relative} created!"
+            system "jim bundle"
+          end
+        end
+
+        delete do |base, relative|
+          puts "--> #{relative} deleted!"
+          system "jim bundle"
+        end
+      end
     end
 
     private
