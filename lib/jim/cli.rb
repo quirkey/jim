@@ -4,7 +4,7 @@ require 'readline'
 module Jim
 
   # CLI handles the command line interface for the `jim` binary.
-  # The layout is farily simple. Options are parsed using optparse.rb and
+  # The layout is fairly simple. Options are parsed using optparse.rb and
   # the different public methods represent 1-1 the commands provided by the bin.
   class CLI
 
