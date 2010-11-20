@@ -18,19 +18,26 @@ module Jim
   #
   class Bundler
     class MissingFile < Jim::Error; end
+    class InvalidBundle < Jim::Error; end
 
-    attr_accessor :jimfile, :index, :requirements, :paths, :options
+    attr_accessor :jimfile, :index, :bundles, :paths, :options
 
     # create a new bundler instance passing in the Jimfile as a `Pathname` or a
     # string. `index` is a Jim::Index
     def initialize(jimfile, index = nil, extra_options = {})
       self.jimfile      = jimfile.is_a?(Pathname) ? jimfile.read : jimfile
       self.index        = index || Jim::Index.new
-      self.options      = {}
-      self.requirements = []
+      self.options      = {
+        :compressed_suffix => '.min'
+      }
+      self.bundles      = {}
       parse_jimfile
       self.options = options.merge(extra_options)
-      self.paths        = []
+      self.paths        = {}
+      if options[:bundle_dir]
+        self.options[:bundle_dir] = Pathname.new(self.options[:bundle_dir])
+        self.options[:bundle_dir].mkpath
+      end
       if options[:vendor_dir]
         logger.debug "adding vendor dir to index #{options[:vendor_dir]}"
         self.index.add(options[:vendor_dir])
@@ -39,40 +46,47 @@ module Jim
 
     # resove the requirements specified into Jimfile or raise a MissingFile error
     def resolve!
-      self.requirements.each do |search|
-        name, version = search.strip.split(/\s+/)
-        path = self.index.find(name, version)
-        if !path
-          raise(MissingFile,
-          "Could not find #{name} #{version} in any of these paths #{index.directories.join(':')}")
+      self.bundles.each do |bundle_name, requirements|
+        self.paths[bundle_name] = []
+        requirements.each do |name, version|
+          path = self.index.find(name, version)
+          if !path
+            raise(MissingFile,
+            "Could not find #{name} #{version} in any of these paths #{index.directories.join(':')}")
+          end
+          self.paths[bundle_name] << [path, name, version]
         end
-        self.paths << [path, name, version]
       end
       paths
     end
 
-    # concatenate all the requirements into a single file and write to `to` or to the
-    # path specified in the :bundled_path option
-    def bundle!(to = nil)
+    # concatenate all of the bundles to the dir set in the `bundle_dir` option
+    # or a specific bundle specified by bundle name. Setting `compress` to
+    # true will run the output of each bundle to the Google Closure Compiler.
+    # You can also use the YUI compressor by setting the option :compressor to 'yui'
+    # Raises an error if there is no bundled dir or specific bundle set
+    def bundle!(bundle_name = false, compress = false)
       resolve! if paths.empty?
-      to = options[:bundled_path] if to.nil? && options[:bundled_path]
-      io_for_path(to) do |io|
-        logger.debug "Bundling to #{to}" if to
-        paths.each do |path, name, version|
-          io << path.read << "\n"
+      if bundle_name
+        files = self.paths[bundle_name]
+        if options[:bundle_dir]
+          concatenate(files, path_for_bundle(bundle_name, compress), compress)
+        else
+          concatenate(files, "", compress)
         end
+      elsif options[:bundle_dir]
+        self.paths.each do |bundle_name, files|
+          concatenate(files, path_for_bundle(bundle_name, compress), compress)
+        end
+      else
+        raise(InvalidBundle,
+          "Must set either a :bundle_dir to write files to or a specific bundle to write to STDOUT")
       end
     end
 
-    # concatenate all the requirements into a single file then run through a JS
-    # then write to `to` or to the path specified in the :bundled_path option.
-    # You can also use the YUI compressor by setting the option :compressor to 'yui'
-    def compress!(to = nil)
-      to = options[:compressed_path] if to.nil? && options[:compressed_path]
-      io_for_path(to) do |io|
-        logger.debug "Compressing to #{to}"
-        io << compress_js(bundle!(false))
-      end
+    # Alias to running `bundle!` with compress = true
+    def compress!(bundle_name = false)
+      bundle!(bundle_name, true)
     end
 
     # copy each of the requirements into the dir specified with `dir` or the path
@@ -82,7 +96,7 @@ module Jim
       dir ||= options[:vendor_dir]
       dir ||= 'vendor' # default
       logger.debug "Vendoring #{paths.length} files to #{dir}"
-      paths.each do |path, name, version|
+      paths.collect {|n, p| p }.flatten.each do |path, name, version|
         if index.in_jimhome?(path)
           Jim::Installer.new(path, dir, :shallow => true, :force => force).install
         end
@@ -90,13 +104,9 @@ module Jim
       dir
     end
 
-    # Run the uncompressed test through a JS compressor (closure-compiler) by
+    # Run the uncompressed js through a JS compressor (closure-compiler) by
     # default. Setting options[:compressor] == 'yui' will force the YUI JS Compressor
     def compress_js(uncompressed)
-      # if uncompressed.is_a?(File) && uncompressed.closed?
-      #   puts "uncompressed is a file"
-      #   uncompressed = File.read(uncompressed.path)
-      # end
       if options[:compressor] == 'yui'
         begin
           require "yui/compressor"
@@ -115,34 +125,41 @@ module Jim
       begin
         compressor.compress(uncompressed)
       rescue Exception => e
-        puts e.message
+        logger.error e.message
       end
     end
 
     private
-    def io_for_path(to, &block)
-      case to
-      when IO
-        yield to
-        to.close
-        to
-      when Pathname
-        to.dirname.mkpath
-        io = to.open('w')
-        yield io
-        io.close
-        io
-      when String
-        to = Pathname.new(to)
-        io_for_path(to, &block)
-      else
-        io = ""
-        yield io
-        io
+    def concatenate(paths, io, compress)
+      if io.is_a?(Pathname)
+        io = io.open('w')
+        logger.debug "#{compress ? 'Compressing' : 'Bundling'} to #{io}"
       end
+      final_io, io = io, "" if compress
+      paths.each do |path, name, version|
+        io << path.read << "\n"
+      end
+      if compress
+        final_io << compress_js(io)
+        io = final_io
+      end
+      io.close if io.respond_to?(:close)
+      io
+    end
+
+    def path_for_bundle(bundle_name, compressed = false)
+      options[:bundle_dir] + "#{bundle_name}#{compressed ? options[:compressed_suffix] : ''}.js"
     end
 
     def parse_jimfile
+      json = Yajl::Parser.parse(jimfile)
+      self.bundles = json.delete('bundles')
+      json.each do |k, v|
+        self.options[k.to_sym] = v
+      end
+    end
+
+    def parse_old_jimfile
       jimfile.each_line do |line|
         if /^\/\/\s?([^\:]+)\:\s(.*)$/.match line
           self.options[$1.to_sym] = $2.strip

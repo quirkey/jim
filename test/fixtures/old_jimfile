@@ -1,0 +1,7 @@
+// bundled_path: test/tmp/public/javascripts/bundled.js
+// compressed_path: test/tmp/public/javascripts/compressed.js
+// vendor_dir: test/tmp/public/javascripts/vendor 
+
+jquery 1.4.1
+myproject
+localfile
