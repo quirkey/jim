@@ -34,6 +34,15 @@ class TestJimBundler < Test::Unit::TestCase
         assert @bundler.index.is_a?(Jim::Index)
         assert_equal [@bundler.options[:vendor_dir]] + @directories, @bundler.index.directories
       end
+
+      should "parse old jimfile" do
+        @bundler = Jim::Bundler.new(Pathname.new(fixture_path('old_jimfile')), Jim::Index.new(@directories))
+        assert @bundler
+        assert_equal fixture('old_jimfile'), @bundler.jimfile
+        assert_equal 'test/tmp/public/javascripts', @bundler.bundle_dir.to_s
+        assert_equal 'test/tmp/public/javascripts/vendor', @bundler.options[:vendor_dir].to_s
+        assert @bundler.bundles['default']
+      end
     end
 
     context "resolve!" do
@@ -167,9 +176,17 @@ class TestJimBundler < Test::Unit::TestCase
         assert bundle = File.read(bundle_path + 'base-min.js')
         assert_match(/jQuery/, bundle, "Bundle should include jQuery")
       end
-
-
     end
+
+    context "jimfile_to_json" do
+      should "convert back to JSON string" do
+        json = @bundler.jimfile_to_json
+        assert json
+        assert json.is_a?(String)
+        assert_match(/^\{/, json)
+      end
+    end
+
   end
 
 end

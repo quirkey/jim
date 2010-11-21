@@ -1,6 +1,5 @@
 require 'thor'
 require 'fssm'
-require 'ruby-debug'
 
 module Jim
 

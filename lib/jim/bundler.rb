@@ -21,18 +21,17 @@ module Jim
     class InvalidBundle < Jim::Error; end
 
     attr_accessor :jimfile, :index, :bundles, :paths, :options
-    attr_reader :bundle_dir
+    attr_reader :jimfile, :bundle_dir
 
     # create a new bundler instance passing in the Jimfile as a `Pathname` or a
     # string. `index` is a Jim::Index
     def initialize(jimfile, index = nil, extra_options = {})
-      self.jimfile      = jimfile.is_a?(Pathname) ? jimfile.read : jimfile
       self.index        = index || Jim::Index.new
       self.options      = {
         :compressed_suffix => '.min'
       }
       self.bundles      = {}
-      parse_jimfile
+      self.jimfile      = jimfile
       self.options = options.merge(extra_options)
       self.paths        = {}
       if options[:vendor_dir]
@@ -41,12 +40,31 @@ module Jim
       end
     end
 
+    def jimfile=(file)
+      @jimfile = file.is_a?(Pathname) ? file.read : file
+      # look for old jimfile
+      if @jimfile =~ /^\/\//
+        parse_old_jimfile
+      else
+        parse_jimfile
+      end
+      @jimfile
+    end
+
     def bundle_dir=(new_dir)
       if new_dir
         new_dir = Pathname.new(new_dir)
         new_dir.mkpath
       end
       @bundle_dir = new_dir
+    end
+
+    def jimfile_to_json
+      h = {
+        "bundle_dir" => bundle_dir
+      }.merge(options)
+      h['bundles'] = self.bundles
+      Yajl::Encoder.encode(h, :pretty => true)
     end
 
     # resove the requirements specified into Jimfile or raise a MissingFile error
@@ -163,21 +181,31 @@ module Jim
     def parse_jimfile
       json = Yajl::Parser.parse(jimfile)
       json.each do |k, v|
-        if respond_to?("#{k}=")
-          self.send("#{k}=", v)
-        else
-          self.options[k.to_sym] = v
-        end
+        set_option(k, v)
       end
     end
 
     def parse_old_jimfile
+      bundle = []
       jimfile.each_line do |line|
         if /^\/\/\s?([^\:]+)\:\s(.*)$/.match line
-          self.options[$1.to_sym] = $2.strip
+          k, v = $1, $2.strip
+          if k == 'bundled_path'
+            k, v = 'bundle_dir', File.dirname(v)
+          end
+          set_option(k, v)
         elsif line !~ /^\// && line.strip != ''
-          self.requirements << line
+          bundle << line.split(/\s+/, 2)
         end
+      end
+      self.bundles['default'] = bundle
+    end
+
+    def set_option(k, v)
+      if respond_to?("#{k}=")
+        self.send("#{k}=", v)
+      else
+        self.options[k.to_sym] = v
       end
     end
 
