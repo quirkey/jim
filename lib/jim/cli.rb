@@ -1,5 +1,4 @@
 require 'thor'
-require 'fssm'
 
 module Jim
 
@@ -186,8 +185,12 @@ module Jim
     def resolve
       resolved = bundler.resolve!
       say "Files:"
-      resolved.each do |r|
-        say r.join(" | ")
+      resolved.each do |bundle_name, requirements|
+        say bundle_name, :green
+        say "-----------------------", :green
+        requirements.each do |path, name, version|
+          say [name, version, path].join(" | ") + "\n"
+        end
       end
       resolved
     end
@@ -207,6 +210,8 @@ module Jim
       "Watches your Jimfile and JS files and triggers `bundle` if something " +
       "changes. Handy for development."
     def watch(dir = nil)
+      require 'fssm'
+
       say "Now watching JS files..."
       FSSM.monitor(Dir.pwd, [File.join('**','*.js'), 'Jimfile']) do
         update do |base, relative|

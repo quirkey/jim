@@ -2,7 +2,7 @@ module Jim
   # Index managages a list of directories which are searched to find requirements
   class Index
     attr_reader :directories
-    
+
     def initialize(*directories)
       @directories = [directories].flatten.compact
       @jimhome_re  = /#{Pathname.new(@directories.first).expand_path.to_s}/
@@ -11,7 +11,7 @@ module Jim
     def add(directory)
       @directories.unshift directory
     end
-    
+
     def list(search = nil)
       list = {}
       each_file_in_index('.js') do |filename|
@@ -36,6 +36,7 @@ module Jim
     def find(name, version = nil)
       name     = Pathname.new(name)
       stem     = name.basename
+      version  = version && version.strip != '' ? version.strip : nil
       ext      = '.js'
       possible_paths = if version
         [
@@ -60,17 +61,17 @@ module Jim
       end
       final
     end
-    
+
     def in_jimhome?(path)
       !!(path.to_s =~ @jimhome_re)
     end
-    
+
     def find_all(name, version = nil)
       matched = []
       find(name, version) {|p| matched << p }
       matched
     end
-    
+
     def each_file_in_index(ext, &block)
       Jim.each_path_in_directories(@directories, ext, [], &block)
     end
