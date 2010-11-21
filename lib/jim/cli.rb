@@ -211,26 +211,25 @@ module Jim
       "changes. Handy for development."
     def watch(dir = nil)
       require 'fssm'
-
+      run_update = lambda {|type, path|
+        unless bundler.bundle_paths.any? {|p| path.include?(p) }
+          say("--> #{path} #{type}")
+          system "jim bundle"
+        end
+      }
       say "Now watching JS files..."
+      run_update["started", 'Jimfile']
       FSSM.monitor(Dir.pwd, [File.join('**','*.js'), 'Jimfile']) do
         update do |base, relative|
-          unless relative.include?('bundled.js')
-            puts "--> #{relative} changed!"
-            system "jim bundle"
-          end
+          run_update["changed", relative]
         end
 
         create do |base, relative|
-          unless relative.include?('bundled.js')
-            puts "--> #{relative} created!"
-            system "jim bundle"
-          end
+          run_update["created", relative]
         end
 
         delete do |base, relative|
-          puts "--> #{relative} deleted!"
-          system "jim bundle"
+          run_update["deleted", relative]
         end
       end
     end
@@ -267,7 +266,7 @@ module Jim
 
     def print_version_list(list)
       list.each do |file, versions|
-        say"#{file} (#{VersionSorter.rsort(versions.collect {|v| v[0] }).join(', ')})"
+        say "#{file} (#{VersionSorter.rsort(versions.collect {|v| v[0] }).join(', ')}\n"
       end
     end
 

@@ -132,6 +132,10 @@ module Jim
       dir
     end
 
+    def bundle_paths
+      self.bundles.collect {|name, reqs|  path_for_bundle(name) }
+    end
+
     # Run the uncompressed js through a JS compressor (closure-compiler) by
     # default. Setting options[:compressor] == 'yui' will force the YUI JS Compressor
     def compress_js(uncompressed)
