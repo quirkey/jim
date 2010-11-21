@@ -20,24 +20,32 @@ class TestJimCLI < Test::Unit::TestCase
 
     context "pack" do
       should "run vendor, bundle, compress" do
-        Jim::Bundler.any_instance.expects(:compress_js).returns("compressed.js")
+        Jim::Bundler.any_instance.expects(:compress_js).twice.returns("compressed.js")
         run_cli("pack", "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
         assert_readable tmp_path, 'public', 'javascripts', 'vendor', 'jquery-1.4.1.js'
         assert_readable tmp_path, 'public', 'javascripts', 'vendor', 'myproject-1.2.2.js'
-        assert_readable tmp_path, 'public', 'javascripts', 'bundled.js'
-        assert_readable tmp_path, 'public', 'javascripts', 'compressed.js'
+        assert_readable tmp_path, 'base.js'
+        assert_readable tmp_path, 'base.min.js'
       end
     end
 
     context "bundle" do
-      should "write bundled Jimfile to path" do
-        run_cli("bundle", tmp_path + 'bundle.js', "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
-        assert_readable tmp_path + 'bundle.js'
+      should "write all bundles to bundle_dir" do
+        run_cli("bundle", "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
+        assert_readable tmp_path + 'default.js'
+        assert_readable tmp_path + 'base.js'
       end
 
-      should "write to bundled_path if no path provided" do
-        run_cli("bundle", "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
-        assert_readable tmp_path, 'public', 'javascripts', 'bundled.js'
+      should "write specific bundle to bundle dir" do
+        run_cli("bundle", "base", "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
+        assert_readable tmp_path + 'base.js'
+      end
+
+      should "write bundle to provided bundle dir" do
+        specific_dir = tmp_path + 'specific/'
+        run_cli("bundle", '--bundle_dir', specific_dir.to_s, "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
+        assert_readable specific_dir + 'default.js'
+        assert_readable specific_dir + 'base.js'
       end
     end
 
@@ -46,14 +54,15 @@ class TestJimCLI < Test::Unit::TestCase
         Jim::Bundler.any_instance.stubs(:compress_js).returns("compressed.js")
       end
 
-      should "compress Jimfile to path" do
-        run_cli("compress", tmp_path + 'compressed.js', "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
-        assert_readable tmp_path + 'compressed.js'
+      should "compress all bundles to bundle dir" do
+        run_cli("compress", "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
+        assert_readable tmp_path + 'base.min.js'
+        assert_readable tmp_path + 'default.min.js'
       end
 
-      should "compress to compressed_path if no path provided" do
-        run_cli("compress", "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
-        assert_readable tmp_path, 'public', 'javascripts', 'compressed.js'
+      should "compress specific bundle specified" do
+        run_cli("compress", "base", "-j", fixture_path('Jimfile'), "--jimhome", tmp_path)
+        assert_readable tmp_path + 'base.min.js'
       end
     end
 

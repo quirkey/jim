@@ -1,5 +1,6 @@
 require 'thor'
 require 'fssm'
+require 'ruby-debug'
 
 module Jim
 
@@ -9,7 +10,7 @@ module Jim
   class CLI < ::Thor
     include Thor::Actions
 
-    attr_accessor :jimfile, :jimhome, :debug , :force, :stdout
+    attr_accessor :jimfile, :jimhome, :debug , :force
 
     class_option "jimhome",
         :type => :string,
@@ -82,8 +83,8 @@ module Jim
       Jim::Installer.new(url, jimhome, :force => force, :name => name, :version => version).install
     end
 
-    desc 'bundle [BUNDLED_PATH]',
-      "Bundle all the files listed in a Jimfile and save them to [BUNDLED_PATH]."
+    desc 'bundle [BUNDLE_NAME]',
+      "Bundle the files specified in Jimfile"
     long_desc <<-EOT
       Bundle all the files listed in a Jimfile and save them to [BUNDLED_PATH].
       If the bundled_path is not set, jim will try to use the bundled_path set in
@@ -92,10 +93,16 @@ module Jim
 
       If no Jimfile is set in the options, assumes ./Jimfile.
     EOT
-    def bundle(to = nil)
-      to = STDOUT if stdout
-      io = bundler.bundle!(to)
-      say("Wrote #{io.path} #{File.size(io.path) / 1024}kb", :green) if io.respond_to? :path
+    method_option "bundle_dir",
+                  :type => :string,
+                  :banner => "override the bundle_dir set in the Jimfile"
+    method_option "stdout",
+                  :default => false,
+                  :aliases => '-o',
+                  :type => :boolean,
+                  :banner => "write the bundle to STDOUT"
+    def bundle(bundle_name = nil)
+      make_bundle(bundle_name, false)
     end
 
     desc "compress [COMPRESSED_PATH]",
@@ -111,10 +118,16 @@ module Jim
 
       If no Jimfile is set in the options, assumes ./Jimfile.
     EOT
-    def compress(to = nil)
-      to = STDOUT if stdout
-      io = bundler.compress!(to)
-      say("Wrote #{File.size(io.path) / 1024}kb", :green) if io.respond_to? :path
+    method_option "bundle_dir",
+                  :type => :string,
+                  :banner => "override the bundle_dir set in the Jimfile"
+    method_option "stdout",
+                  :default => false,
+                  :aliases => '-o',
+                  :type => :boolean,
+                  :banner => "write the bundle to STDOUT"
+    def compress(bundle_name = nil)
+      make_bundle(bundle_name, true)
     end
 
     desc "vendor [VENDOR_DIR]",
@@ -251,6 +264,19 @@ module Jim
     def print_version_list(list)
       list.each do |file, versions|
         say"#{file} (#{VersionSorter.rsort(versions.collect {|v| v[0] }).join(', ')})"
+      end
+    end
+
+    def make_bundle(bundle_name, compress = false)
+      bundler.bundle_dir = options[:bundle_dir] if options[:bundle_dir]
+      bundler.bundle_dir = nil if options[:stdout]
+      result = bundler.bundle!(bundle_name, compress)
+      if options[:stdout]
+        puts result
+      else
+        result.each do |path|
+          say("Wrote #{path} #{File.size(path.to_s) / 1024}kb", :green)
+        end
       end
     end
 

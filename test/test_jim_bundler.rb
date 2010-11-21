@@ -26,7 +26,7 @@ class TestJimBundler < Test::Unit::TestCase
       end
 
       should "parse options out of jimfile" do
-        assert_equal 'test/tmp/public/javascripts/', @bundler.options[:bundle_dir].to_s
+        assert_equal 'test/tmp/', @bundler.bundle_dir.to_s
         assert_equal 'test/tmp/public/javascripts/vendor', @bundler.options[:vendor_dir].to_s
       end
 
@@ -78,7 +78,7 @@ class TestJimBundler < Test::Unit::TestCase
     context "bundle!" do
 
       should "concatenate file into a string" do
-        @bundler.options = {}
+        @bundler.bundle_dir = nil
         bundle = @bundler.bundle!("default")
         assert bundle.is_a?(String)
         assert_match(/jQuery/, bundle, "Bundle should include jQuery")
@@ -92,14 +92,14 @@ class TestJimBundler < Test::Unit::TestCase
       end
 
       should "write to file specified in options" do
-        bundle_dir = @bundler.options[:bundle_dir]
+        bundle_dir = @bundler.bundle_dir
         assert @bundler.bundle!
         assert bundle = File.read(bundle_dir + 'default.js')
         assert_match(/jQuery/, bundle, "Bundle should include jQuery")
       end
 
       should "write all files if path is given" do
-        bundle_dir = @bundler.options[:bundle_dir]
+        bundle_dir = @bundler.bundle_dir
         assert @bundler.bundle!
         assert bundle = File.read(bundle_dir + 'default.js')
         assert_match(/jQuery/, bundle, "Bundle should include jQuery")
@@ -108,17 +108,25 @@ class TestJimBundler < Test::Unit::TestCase
       end
 
       should "write specific bundle if given" do
-        bundle_dir = @bundler.options[:bundle_dir]
+        bundle_dir = @bundler.bundle_dir
         assert @bundler.bundle!("base")
         assert bundle = File.read(bundle_dir + 'base.js')
         assert_match(/jQuery/, bundle, "Bundle should include jQuery")
       end
 
       should "raise error if no bundle path or bundle name is specified" do
-        @bundler.options = {}
+        @bundler.bundle_dir = nil
         assert_raise(Jim::Bundler::InvalidBundle) {
           @bundler.bundle!
         }
+      end
+
+      should "return array of paths" do
+        bundle_dir = @bundler.bundle_dir
+        assert paths = @bundler.bundle!
+        assert paths.is_a?(Array)
+        assert_contains paths, bundle_dir + 'base.js'
+        assert_contains paths, bundle_dir + 'default.js'
       end
 
     end
@@ -129,14 +137,14 @@ class TestJimBundler < Test::Unit::TestCase
       end
 
       should "run through google compressor" do
-        @bundler.options = {}
+        @bundler.bundle_dir = nil
         bundle = @bundler.compress!("default")
         assert bundle.is_a?(String)
         assert_match(/jQuery/, bundle, "Bundle should include jQuery")
       end
 
       should "write to dir specified in options" do
-        bundle_path = @bundler.options[:bundle_dir]
+        bundle_path = @bundler.bundle_dir
         assert @bundler.compress!
         assert bundle = File.read(bundle_path + 'default.min.js')
         assert_match(/jQuery/, bundle, "Bundle should include jQuery")
@@ -145,12 +153,21 @@ class TestJimBundler < Test::Unit::TestCase
       end
 
       should "write specific bundle if given" do
-        bundle_path = @bundler.options[:bundle_dir]
+        bundle_path = @bundler.bundle_dir
         assert @bundler.compress!("base")
         assert bundle = File.read(bundle_path + 'base.min.js')
         assert_match(/jQuery/, bundle, "Bundle should include jQuery")
         assert !File.readable?(bundle_path + 'default.min.js')
       end
+
+      should "use compressed_suffix option" do
+        @bundler.options[:compressed_suffix] = '-min'
+        bundle_path = @bundler.bundle_dir
+        assert @bundler.compress!("base")
+        assert bundle = File.read(bundle_path + 'base-min.js')
+        assert_match(/jQuery/, bundle, "Bundle should include jQuery")
+      end
+
 
     end
   end

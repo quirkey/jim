@@ -1,5 +1,5 @@
 {
-  "bundle_dir": "test/tmp/public/javascripts/",
+  "bundle_dir": "test/tmp/",
   "vendor_dir": "test/tmp/public/javascripts/vendor",
   "bundles": {
     "default": [

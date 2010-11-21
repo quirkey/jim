@@ -21,6 +21,7 @@ module Jim
     class InvalidBundle < Jim::Error; end
 
     attr_accessor :jimfile, :index, :bundles, :paths, :options
+    attr_reader :bundle_dir
 
     # create a new bundler instance passing in the Jimfile as a `Pathname` or a
     # string. `index` is a Jim::Index
@@ -34,14 +35,18 @@ module Jim
       parse_jimfile
       self.options = options.merge(extra_options)
       self.paths        = {}
-      if options[:bundle_dir]
-        self.options[:bundle_dir] = Pathname.new(self.options[:bundle_dir])
-        self.options[:bundle_dir].mkpath
-      end
       if options[:vendor_dir]
         logger.debug "adding vendor dir to index #{options[:vendor_dir]}"
         self.index.add(options[:vendor_dir])
       end
+    end
+
+    def bundle_dir=(new_dir)
+      if new_dir
+        new_dir = Pathname.new(new_dir)
+        new_dir.mkpath
+      end
+      @bundle_dir = new_dir
     end
 
     # resove the requirements specified into Jimfile or raise a MissingFile error
@@ -69,14 +74,18 @@ module Jim
       resolve! if paths.empty?
       if bundle_name
         files = self.paths[bundle_name]
-        if options[:bundle_dir]
-          concatenate(files, path_for_bundle(bundle_name, compress), compress)
+        if bundle_dir
+          path = path_for_bundle(bundle_name, compress)
+          concatenate(files, path, compress)
+          [path]
         else
           concatenate(files, "", compress)
         end
-      elsif options[:bundle_dir]
-        self.paths.each do |bundle_name, files|
-          concatenate(files, path_for_bundle(bundle_name, compress), compress)
+      elsif bundle_dir
+        self.paths.collect do |bundle_name, files|
+          path = path_for_bundle(bundle_name, compress)
+          concatenate(files, path, compress)
+          path
         end
       else
         raise(InvalidBundle,
@@ -148,14 +157,17 @@ module Jim
     end
 
     def path_for_bundle(bundle_name, compressed = false)
-      options[:bundle_dir] + "#{bundle_name}#{compressed ? options[:compressed_suffix] : ''}.js"
+      bundle_dir + "#{bundle_name}#{compressed ? options[:compressed_suffix] : ''}.js"
     end
 
     def parse_jimfile
       json = Yajl::Parser.parse(jimfile)
-      self.bundles = json.delete('bundles')
       json.each do |k, v|
-        self.options[k.to_sym] = v
+        if respond_to?("#{k}=")
+          self.send("#{k}=", v)
+        else
+          self.options[k.to_sym] = v
+        end
       end
     end
 
