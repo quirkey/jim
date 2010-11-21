@@ -11,6 +11,8 @@ module Jim
 
     attr_accessor :jimfile, :jimhome, :debug , :force
 
+    source_root File.dirname(__FILE__) + '/templates'
+
     class_option "jimhome",
         :type => :string,
         :banner => "set the install path/JIMHOME dir (default ~/.jim)"
@@ -56,14 +58,7 @@ module Jim
     def init(dir = nil)
       dir = Pathname.new(dir || '')
       jimfile_path = dir + 'Jimfile'
-      if jimfile_path.readable? && !force
-        raise Jim::FileExists.new(jimfile_path)
-      else
-        File.open(jimfile_path, 'w') do |f|
-          f << template('jimfile')
-        end
-        say "Wrote Jimfile to #{jimfile_path}", :green
-      end
+      template('jimfile', jimfile_path)
     end
 
     desc 'install <URL> [NAME] [VERSION]',
@@ -235,6 +230,15 @@ module Jim
       end
     end
 
+    desc "update_jimfile [APP_DIR]",
+      "Converts a Jimfile from the old > 0.3 format to the JSON format."
+    def update_jimfile(dir = nil)
+      dir = Pathname.new(dir || '')
+      bundler
+      copy_file(dir + 'Jimfile', dir + 'Jimfile.old')
+      create_file(dir + 'Jimfile', bundler.jimfile_to_json)
+    end
+
     private
     def index
       @index ||= Jim::Index.new(install_dir, Dir.pwd)
@@ -250,10 +254,6 @@ module Jim
 
     def install_dir
       jimhome + 'lib'
-    end
-
-    def template(path)
-      (Pathname.new(__FILE__).dirname + 'templates' + path).read
     end
 
     def logger

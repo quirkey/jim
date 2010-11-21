@@ -44,6 +44,7 @@ module Jim
       @jimfile = file.is_a?(Pathname) ? file.read : file
       # look for old jimfile
       if @jimfile =~ /^\/\//
+        logger.warn "You're Jimfile is in a deprecated format. Run `jim update_jimfile` to convert it."
         parse_old_jimfile
       else
         parse_jimfile
@@ -195,7 +196,7 @@ module Jim
           end
           set_option(k, v)
         elsif line !~ /^\// && line.strip != ''
-          bundle << line.split(/\s+/, 2)
+          bundle << line.split(/\s+/, 2).compact.collect {|s| s.strip }.reject {|s| s == '' }
         end
       end
       self.bundles['default'] = bundle

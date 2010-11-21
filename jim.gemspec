@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{jim}
-  s.version = "0.2.3"
+  s.version = "0.3.0.pre"
 
-  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
+  s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["Aaron Quint"]
-  s.date = %q{2010-11-14}
+  s.date = %q{2010-11-21}
   s.default_executable = %q{jim}
   s.description = %q{jim is your friendly javascript library manager. He downloads, stores, bundles, vendors and compresses.}
   s.email = %q{aaron@quirkey.com}
@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "bin/jim",
+     "default",
      "jim.gemspec",
      "lib/jim.rb",
      "lib/jim/bundler.rb",
@@ -34,7 +35,6 @@ Gem::Specification.new do |s|
      "lib/jim/index.rb",
      "lib/jim/installer.rb",
      "lib/jim/rack.rb",
-     "lib/jim/templates/commands",
      "lib/jim/templates/jimfile",
      "lib/jim/version_parser.rb",
      "test/fixtures/infoincomments.js",
@@ -46,6 +46,7 @@ Gem::Specification.new do |s|
      "test/fixtures/mustache.js/mustache.js",
      "test/fixtures/mustache.js/package.json",
      "test/fixtures/noversion.js",
+     "test/fixtures/old_jimfile",
      "test/fixtures/sammy-0.5.0/HISTORY.md",
      "test/fixtures/sammy-0.5.0/LICENSE",
      "test/fixtures/sammy-0.5.0/README.md",
