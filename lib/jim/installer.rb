@@ -50,7 +50,7 @@ module Jim
     end
 
     # Fetch and install the files determining their name and version if not provided.
-    # If the fetch_path contains a directory of files, it itterates over the directory
+    # If the fetch_path contains a directory of files, it iterates over the directory
     # installing each file that isn't in IGNORE_DIRS and a name and version can be
     # determined for. It also installs a package.json file along side the JS file
     # that contains meta data including the name and version, also merging with the

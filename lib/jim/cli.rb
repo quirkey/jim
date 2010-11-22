@@ -77,9 +77,9 @@ module Jim
     desc 'bundle [BUNDLE_NAME]',
       "Bundle the files specified in Jimfile"
     long_desc <<-EOT
-      Concatenate all the bundles listed in a Jimfile and save them to the bundle dir
+      Concatenate all the bundles listed in a Jimfile and save them to the bundle dir 
       specified in the options or in the Jimfile.
-
+      
       If [BUNDLE_NAME] is specified, only bundles that specific bundle.
 
       If no Jimfile is set in the options, assumes ./Jimfile.
@@ -103,9 +103,9 @@ module Jim
       Concatenate all the bundles listed in a Jimfile, run them through the google
       closure compiler and save them to the bundle dirspecified in the options or
       in the Jimfile.
-
+      
       If a [BUNDLE_NAME] is specified, only bundle and compress that bundle.
-
+      
       If no Jimfile is set in the options, assumes ./Jimfile.
     EOT
     method_option "bundle_dir",
