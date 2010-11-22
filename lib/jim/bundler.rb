@@ -3,19 +3,29 @@ module Jim
   # versions and then can bundle, compress, or copy those files into specific dirs
   # or files.
   #
-  # A Jimfile has a really simple format:
+  # A Jimfile has a really simple format that's encoded as JSON. Options are
+  # specified as key value pairs and 'bundles' are specified under the "bundles"
+  # attribute. Each item in a bundle can be a simple string, or an array of
+  # [name, version].
   #
-  #     // comments look like JS comments
-  #     // you can set options by adding comments that look like JSON pairs
-  #     // bundle_path: /path/to/bundle.js
+  #        {
+  #          "bundle_dir": "test/tmp/",
+  #          "vendor_dir": "test/tmp/public/javascripts/vendor",
+  #          "bundles": {
+  #            "default": [
+  #              ["jquery", "1.4.1"],
+  #              "myproject",
+  #              "localfile"
+  #            ],
+  #            "base": [
+  #              "jquery"
+  #            ]
+  #          }
+  #        }
   #
-  #     // A requirement is just a name and an optional version
-  #     // requirements are resolved and bundled in order of specification
-  #     jquery 1.4.2
-  #     jquery.color
-  #     sammy 0.5.0
-  #
-  #
+  # Pre jim version 0.3 had a different simpler but proprietary and (possibly confusing)
+  # Jimfile format. Bundler can still read that format and can actually convert
+  # it into the new JSON format for you. Future versions may remove this support.
   class Bundler
     class MissingFile < Jim::Error; end
     class InvalidBundle < Jim::Error; end
@@ -40,6 +50,8 @@ module Jim
       end
     end
 
+    # Set the Jimfile and parse it. If `file` is a `Pathname` read it as a string.
+    # If it's a string assume that its in the Jimfile format.
     def jimfile=(file)
       @jimfile = file.is_a?(Pathname) ? file.read : file
       # look for old jimfile
@@ -52,6 +64,8 @@ module Jim
       @jimfile
     end
 
+    # Set the `bundle_dir` where bundles will be written. If `bundle_dir` is set
+    # to nil, all bundles will be written to STDOUT
     def bundle_dir=(new_dir)
       if new_dir
         new_dir = Pathname.new(new_dir)
@@ -60,6 +74,8 @@ module Jim
       @bundle_dir = new_dir
     end
 
+    # Output the parse Jimfile requirements and options as a Jimfile-ready
+    # JSON-encoded string
     def jimfile_to_json
       h = {
         "bundle_dir" => bundle_dir
@@ -78,7 +94,8 @@ module Jim
       Yajl::Encoder.encode(h, :pretty => true)
     end
 
-    # resove the requirements specified into Jimfile or raise a MissingFile error
+    # Resolve the requirements specified in the Jimfile for each bundle to `paths`
+    # Raises MissingFile error
     def resolve!
       self.bundles.each do |bundle_name, requirements|
         self.paths[bundle_name] = []
@@ -94,7 +111,7 @@ module Jim
       paths
     end
 
-    # concatenate all of the bundles to the dir set in the `bundle_dir` option
+    # Concatenate all of the bundles to the dir set in `bundle_dir`
     # or a specific bundle specified by bundle name. Setting `compress` to
     # true will run the output of each bundle to the Google Closure Compiler.
     # You can also use the YUI compressor by setting the option :compressor to 'yui'
@@ -122,12 +139,12 @@ module Jim
       end
     end
 
-    # Alias to running `bundle!` with compress = true
+    # Alias to running `bundle!` with `compress` = `true`
     def compress!(bundle_name = false)
       bundle!(bundle_name, true)
     end
 
-    # copy each of the requirements into the dir specified with `dir` or the path
+    # Copy each of the requirements into the dir specified with `dir` or the path
     # specified with the :vendor_dir option. Returns the dir it was vendored to.
     def vendor!(dir = nil, force = false)
       resolve! if paths.empty?
@@ -142,6 +159,7 @@ module Jim
       dir
     end
 
+    # Returns an array of `Pathname`s where each of the bundles will be written
     def bundle_paths
       self.bundles.collect {|name, reqs|  path_for_bundle(name) }
     end

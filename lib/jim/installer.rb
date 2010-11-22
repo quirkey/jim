@@ -20,28 +20,28 @@ module Jim
       \.([^\/]+)
     }
 
-    # get the tmp_root where files are staged
+    # Get the tmp_root where files are staged
     def self.tmp_root
       @tmp_root ||= Pathname.new('/tmp/jim')
     end
 
-    # set the tmp_root where files are staged. Default: '/tmp/jim'
+    # Set the tmp_root where files are staged. Default: '/tmp/jim'
     def self.tmp_root=(new_tmp_root)
       @tmp_root = Pathname.new(new_tmp_root)
     end
 
     attr_reader :fetch_path, :install_path, :options, :fetched_path, :name, :version, :package_json
 
-    # create an installer. fetch_path is anything that Downlow can understand.
-    # install path is the final directory
+    # Create an installer. fetch_path is anything that Downlow can understand.
+    # Install path is the final directory
     def initialize(fetch_path, install_path, options = {})
       @fetch_path   = Pathname.new(fetch_path)
       @install_path = Pathname.new(install_path)
       @options      = options
     end
 
-    # fetch the file at fetch_path with and stage into a tmp directory.
-    # returns the staged directory of fetched file(s).
+    # Fetch the file at fetch_path with and stage into a tmp directory.
+    # Returns the staged directory of fetched file(s).
     def fetch
       logger.info "Fetching #{fetch_path}"
       @fetched_path = Downlow.get(fetch_path, tmp_path, :tmp_dir => tmp_root)
@@ -49,8 +49,8 @@ module Jim
       @fetched_path
     end
 
-    # fetch and install the files determining their name and version if not provided.
-    # if the fetch_path contains a directory of files, it itterates over the directory
+    # Fetch and install the files determining their name and version if not provided.
+    # If the fetch_path contains a directory of files, it itterates over the directory
     # installing each file that isn't in IGNORE_DIRS and a name and version can be
     # determined for. It also installs a package.json file along side the JS file
     # that contains meta data including the name and version, also merging with the
@@ -118,7 +118,7 @@ module Jim
       final_path
     end
 
-    # determine the name and version of the @fetched_path. Tries a number of
+    # Determine the name and version of the @fetched_path. Tries a number of
     # strategies in order until both name and version are found:
     #
     # * from options (options[:name] ...)

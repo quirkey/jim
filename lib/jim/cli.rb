@@ -1,14 +1,12 @@
 require 'thor'
 
 module Jim
-
-  # CLI handles the command line interface for the `jim` binary.
-  # The layout is farily simple. Options are parsed using optparse.rb and
-  # the different public methods represent 1-1 the commands provided by the bin.
+  # CLI handles the command line interface for the `jim` binary. It is a `Thor`
+  # application.
   class CLI < ::Thor
     include Thor::Actions
 
-    attr_accessor :jimfile, :jimhome, :debug , :force
+    attr_accessor :jimfile, :jimhome, :debug, :force
 
     source_root File.dirname(__FILE__) + '/templates'
 
@@ -79,10 +77,10 @@ module Jim
     desc 'bundle [BUNDLE_NAME]',
       "Bundle the files specified in Jimfile"
     long_desc <<-EOT
-      Bundle all the files listed in a Jimfile and save them to [BUNDLED_PATH].
-      If the bundled_path is not set, jim will try to use the bundled_path set in
-      the Jimfile. If no bundled_path is found - it will output the entire bundle
-      to STDOUT.
+      Concatenate all the bundles listed in a Jimfile and save them to the bundle dir
+      specified in the options or in the Jimfile.
+
+      If [BUNDLE_NAME] is specified, only bundles that specific bundle.
 
       If no Jimfile is set in the options, assumes ./Jimfile.
     EOT
@@ -98,16 +96,15 @@ module Jim
       make_bundle(bundle_name, false)
     end
 
-    desc "compress [COMPRESSED_PATH]",
+    desc "compress [BUNDLE_NAME]",
       "Bundle all the files listed in a Jimfile, run through the google closure " +
       "compiler and save them to [COMPRESSED_PATH]."
     long_desc <<-EOT
-      Bundle all the files listed in a Jimfile, run through the google closure
-      compiler and save them to [compressed_path].
+      Concatenate all the bundles listed in a Jimfile, run them through the google
+      closure compiler and save them to the bundle dirspecified in the options or
+      in the Jimfile.
 
-      If the compressed_path is not set, jim will try to use the compressed_path
-      set in the Jimfile. If no compressed_path is found - it will output the
-      entire compressed bundle to STDOUT.
+      If a [BUNDLE_NAME] is specified, only bundle and compress that bundle.
 
       If no Jimfile is set in the options, assumes ./Jimfile.
     EOT
@@ -239,7 +236,7 @@ module Jim
     end
 
     desc "update_jimfile [APP_DIR]",
-      "Converts a Jimfile from the old > 0.3 format to the JSON format."
+      "Converts a Jimfile from the old pre 0.3 format to the JSON format."
     def update_jimfile(dir = nil)
       dir = Pathname.new(dir || '')
       bundler
