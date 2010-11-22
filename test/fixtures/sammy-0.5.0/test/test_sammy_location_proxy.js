@@ -1,6 +1,6 @@
 (function($) {
   with(QUnit) {
-    
+
     context('Sammy', 'HashLocationProxy', {
       before: function() {
         this.app = new Sammy.Application;
@@ -45,7 +45,7 @@
       }
     });
 
-    
+
     context('Sammy', 'DataLocationProxy', {
       before: function() {
         this.app = new Sammy.Application(function() {

@@ -49,15 +49,15 @@
          this.app.store('cache').clear('mycache');
          ok(!this.app.cache('mycache'))
        });
-       
-      
+
+
        context('Sammy', 'Template', {
          before: function() {
            this.app = new Sammy.Application(function() {
              this.use(Sammy.Template);
            });
            this.context = new this.app.context_prototype(this.app, 'get', '#/', {});
-           
+
            this.alias_app = new Sammy.Application(function() {
              this.use(Sammy.Template, 'tpl');
            });
@@ -85,8 +85,8 @@
          ok($.isFunction(this.alias_context.tpl));
          ok(this.alias_context.tpl.toString().match(/srender/));
        });
-    
-    
+
+
        context('Sammy.NestedParams', 'parsing', {
          before: function () {
            this.app = new Sammy.Application(function() {
@@ -105,7 +105,7 @@
          $('#nested_params_test_form').submit();
          soon(function() {
            ok(app.form_params);
-           equal(app.form_params['author'], 'Thoreau');        
+           equal(app.form_params['author'], 'Thoreau');
            app.unload();
          }, this, 1, 2);
        })
@@ -129,7 +129,7 @@
            equal(app.form_params['poll']['name'], 'Which beverage do you like best?');
            equal(app.form_params['poll']['priority'], '10');
            app.unload();
-         }, this, 1, 3);      
+         }, this, 1, 3);
        })
        .should('parse nested hashes', function() {
          var app = this.app;
@@ -164,7 +164,7 @@
            equal(app.form_params['woods']['trees'][0]['name'], 'Spruce');
            equal(app.form_params['woods']['trees'][1]['name'], 'Maple');
            app.unload();
-         }, this, 1, 3);            
+         }, this, 1, 3);
        })
        .should('parse arrays in nested hashes in nested arrays', function() {
          var app = this.app;
@@ -175,7 +175,7 @@
            equal(app.form_params['pages'][0]['words'][0], 'Woods');
            equal(app.form_params['pages'][1]['words'][0], 'Money');
            app.unload();
-         }, this, 1, 3);      
+         }, this, 1, 3);
        })
        .should('parse complex hashes in nested arrays in nested hashes', function() {
          var app = this.app;
@@ -200,7 +200,7 @@
            app.unload();
          }, this, 1, 2);
        });
-       
+
        context('Sammy.NestedParams', 'bad fields', {
          before: function () {
            this.app = new Sammy.Application(function() {
@@ -214,8 +214,8 @@
            app._parseFormParams($('#bad_nested_params_form'));
          });
        });
-       
-       
+
+
        // Pretty much a copy of the Template tests
        context('Sammy', 'Mustache', {
           before: function() {
@@ -252,7 +252,7 @@
           ok($.isFunction(this.alias_context.ms));
           ok(this.alias_context.ms.toString().match(/Mustache/));
         });
-      
+
       context('Sammy', 'JSON', {
         before: function() {
           this.app = new Sammy.Application(function() {
@@ -274,8 +274,8 @@
       .should('stringify JSON if object is an object', function() {
         equal(this.context.json({test: "123"}),"{\"test\":\"123\"}");
       });
-      
-      
+
+
       context('Sammy', 'Haml', {
         before: function() {
           this.app = new Sammy.Application(function() {
@@ -291,6 +291,6 @@
         var template = ".mytemplate= title";
         deepEqual(this.context.haml(template, {title: "HAML!!"}), "<div class=\"mytemplate\">HAML!!\n</div>");
       });
-      
+
     };
 })(jQuery);

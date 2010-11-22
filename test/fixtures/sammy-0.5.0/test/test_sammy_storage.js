@@ -87,7 +87,7 @@
             equal(fired, 'bar');
             $('#main').unbind('set-test_store.foo');
           });
-        }) 
+        })
         .should('fetch value or run callback', function() {
           ok(!this.store.get('foo'));
           this.store.fetch('foo', function() {
@@ -108,7 +108,7 @@
         });
       }
     });
-  
+
       context('Sammy.Storage', {
         before: function() {
           this.app = new Sammy.Application(function() {
@@ -123,7 +123,7 @@
       .should('add the store method to event contexts', function() {
         ok($.isFunction(this.context.store));
       });
-    
+
       context('Sammy.Storage', 'store', {
         before: function() {
           var store = null;

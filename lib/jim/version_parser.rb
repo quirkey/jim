@@ -8,9 +8,9 @@ module Jim
       extension = f.scan(/\.[^\.\d\s\-\_][^\.]*$/)[0]
       if NOT_EXTENSIONS.include?(extension)
         extension = nil
-      else 
+      else
         f.gsub!(/#{extension}$/, '')
-      end 
+      end
 
       name, after_name, delimiter, version = f.scan(/^([a-z\.\-\_]+)(([\.\-\_\s])v?(([\w\d]{6,7})|(\d[\d\w\.]*)))?$/i)[0]
       [name || f, version || "0"]
