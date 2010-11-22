@@ -116,7 +116,7 @@ with a specific command.
 ### Why not implement it in JavaScript itself?
 
 CommonJS has certainly come a long way in a year, but in general the file 
-system support and variety of libraries just isnt completely there yet for 
+system support and variety of libraries just isn't completely there yet for 
 this type of project (IMHO). Also, I love Ruby and writing this was actually 
 fun and pretty fast. 
 
@@ -128,9 +128,12 @@ just being lazy about it)
 Probably?? Its all very new at this point so please test it out and let me 
 know.
 
-## Thanks
+## Contributors
 
-Thanks to Yehuda Katz for talking through some of the ideas with me.
+Jim is mostly written by Aaron Quint, but not without the help of 
+[these fine individuals.](https://github.com/quirkey/jim/contributors)
+
+Also, Thanks to Yehuda Katz for talking through some of the original ideas.
 
 ## Note on Patches/Pull Requests
  
