@@ -105,7 +105,8 @@ Otherwise and also before deploys, etc, use the command line tool from your proj
     # What you run before deploys. Runs vendor -> bundle -> compress.
     $ jim pack
 
-In order for `compress` to work, you need either the yui-compressor gem or the closure-compiler gem. Closure is the default.
+In order for `compress` to work, you need either the yui-compressor gem or the 
+closure-compiler gem. Closure is the default.
 
 Run `jim help` for a full list of commands and `jim help [COMMAND]` for help 
 with a specific command.
@@ -114,13 +115,18 @@ with a specific command.
 
 ### Why not implement it in JavaScript itself?
 
-CommonJS has certainly come a long way in a year, but in general the file system support and variety of libraries just isnt completely there yet for this type of project (IMHO). Also, I love Ruby and writing this was actually fun and pretty fast. 
+CommonJS has certainly come a long way in a year, but in general the file 
+system support and variety of libraries just isnt completely there yet for 
+this type of project (IMHO). Also, I love Ruby and writing this was actually 
+fun and pretty fast. 
 
-With that said, I would gladly welcome anyone cloning the API in CommonJS (I'm just being lazy about it)
+With that said, I would gladly welcome anyone cloning the API in CommonJS (I'm 
+just being lazy about it)
 
 ### Does it work with __ library or __ development platform?
 
-Probably?? Its all very new at this point so please test it out and let me know.
+Probably?? Its all very new at this point so please test it out and let me 
+know.
 
 ## Thanks
 
@@ -133,7 +139,8 @@ Thanks to Yehuda Katz for talking through some of the ideas with me.
 * Add tests for it. This is important so I don't break it in a
   future version unintentionally.
 * Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
+  (if you want to have your own version, that is fine but bump version in a 
+  commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches
 
 ## Copyright

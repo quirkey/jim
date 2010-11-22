@@ -1,3 +1,16 @@
+== 0.3.0.pre [11-21-10]
+
+* Major rewrite of the bundler
+  * Jimfile is now a JSON formatted file
+  * Jimfile allows for multiple named bundles
+  * bundle and compress bundle _all_ the bundles unless a specific name is 
+    specified
+
+* Jim::Cli is now built on top of Thor, cleaner and more organized/compatible.
+* Jim::Rack has tests (thanks collin for the start)
+* Jim::Rack works with multiple bundles
+* `jim watch` uses FSSM to watch the directory and re-bundle on changes. (Thanks manalang)
+
 == 0.2.3 [09-26-10]
 
 * Fixed logging issues
