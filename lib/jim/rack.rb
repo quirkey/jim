@@ -7,8 +7,7 @@ module Jim
   #
   # :jimfile: Path to your Jimfile (default ./Jimfile)
   # :jimhome: Path to your JIMHOME directory (default ENV['JIMHOME'] or ~/.jim)
-  # :bundled_uri: URI to serve the bundled requirements
-  # :compressed_uri: URI to serve the compressed requirements
+  # :bundle_uri: URI to serve the bundled requirements
   class Rack
 
     def initialize(app, options = {})
@@ -16,8 +15,9 @@ module Jim
       jimfile = Pathname.new(options[:jimfile] || 'Jimfile')
       jimhome = Pathname.new(options[:jimhome] || ENV['JIMHOME'] || '~/.jim').expand_path
       @bundler = Jim::Bundler.new(jimfile, Jim::Index.new(jimhome), options)
-      @bundled_uri    = options[:bundled_uri] || @bundler.options[:bundled_path]
-      @compressed_uri = options[:compressed_uri] || @bundler.options[:compressed_path]
+      # unset the bundlers bundle dir so it returns a string
+      @bundler.bundle_dir = nil
+      @bundle_uri = options[:bundle_uri] || '/javascripts/'
     end
 
     def call(env)
@@ -26,24 +26,35 @@ module Jim
 
     def _call(env)
       uri = env['PATH_INFO']
-      if uri == @bundled_uri
-        run_action(:bundle!)
-      elsif uri == @compressed_uri
-        run_action(:compress!)
+      if uri =~ bundle_matcher
+        name = $1
+        if name =~ compressed_matcher
+          run_action(:compress!, name.gsub(compressed_matcher, ''))
+        else
+          run_action(:bundle!, name)
+        end
       else
         @app.call(env)
       end
     end
 
-    def run_action(which)
-      # wrap body in an array for compatibility with Rack and 1.9
-      # because the Rack response must respond to each, but String no longer
-      # does in 1.9
+    private
+    def bundle_matcher
+      @bundle_matcher ||= /^#{@bundle_uri}([\w\d\-\.]+)\.js$/
+    end
+
+    def compressed_matcher
+      @compressed_matcher ||= /#{@bundler.options[:compressed_suffix]}$/
+    end
+
+    def run_action(action, *args)
       begin
-        [200, {'Content-Type' => 'text/javascript'}, [@bundler.send(which, false)]]
+        [200, {
+          'Content-Type' => 'text/javascript'
+        }, [@bundler.send(action , *args)]]
       rescue => e
         response = <<-EOT
-          <p>Jim failed in helping you out. There was an error when trying to #{which}.</p>
+          <p>Jim failed in helping you out. There was an error when trying to run #{action}(#{args}).</p>
           <p>#{e}</p>
           <pre>#{e.backtrace}</pre>
         EOT
