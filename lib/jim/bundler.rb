@@ -64,7 +64,17 @@ module Jim
       h = {
         "bundle_dir" => bundle_dir
       }.merge(options)
-      h['bundles'] = self.bundles
+      h['bundles'] = {}
+      self.bundles.each do |bundle_name, requirements|
+        h['bundles']['bundle_name'] = []
+        requirements.each do |name, version|
+          h['bundles']['bundle_name'] << if version.nil? || version.strip == ''
+            name
+          else
+            [name, version]
+          end
+        end
+      end
       Yajl::Encoder.encode(h, :pretty => true)
     end
 

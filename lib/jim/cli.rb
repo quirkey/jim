@@ -128,6 +128,8 @@ module Jim
     def vendor(dir = nil)
       dir = bundler.vendor!(dir, force)
       say("Vendored files to #{dir}", :green)
+    rescue Jim::Error => e
+      say e.message, :red
     end
 
     desc "list [SEARCH]",
@@ -193,6 +195,8 @@ module Jim
         end
       end
       resolved
+    rescue Jim::Error => e
+      say e.message, :red
     end
 
     desc "pack [DIR]",
@@ -281,6 +285,8 @@ module Jim
           say("Wrote #{path} #{File.size(path.to_s) / 1024}kb", :green)
         end
       end
+    rescue Jim::Error => e
+      say e.message, :red
     end
 
   end
