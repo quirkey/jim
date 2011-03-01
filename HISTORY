@@ -1,4 +1,4 @@
-== 0.3.0.pre [11-21-10]
+== 0.3.1 [02-28-11]
 
 * Major rewrite of the bundler
   * Jimfile is now a JSON formatted file
@@ -10,6 +10,7 @@
 * Jim::Rack has tests (thanks collin for the start)
 * Jim::Rack works with multiple bundles
 * `jim watch` uses FSSM to watch the directory and re-bundle on changes. (Thanks manalang)
+* `jim update_jimfile` upgrades the jimfile to the new JSON format
 
 == 0.2.3 [09-26-10]
 
