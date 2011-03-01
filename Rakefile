@@ -1,5 +1,8 @@
 require 'rubygems'
-require 'rake'
+require 'bundler'
+
+Bundler.require
+
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
 
@@ -54,7 +57,6 @@ rescue LoadError
   end
 end
 
-task :test 
 
 task :default => :test
 
