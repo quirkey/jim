@@ -83,9 +83,9 @@ module Jim
       }.merge(options)
       h['bundles'] = {}
       self.bundles.each do |bundle_name, requirements|
-        h['bundles']['bundle_name'] = []
+        h['bundles'][bundle_name] = []
         requirements.each do |name, version|
-          h['bundles']['bundle_name'] << if version.nil? || version.strip == ''
+          h['bundles'][bundle_name] << if version.nil? || version.strip == ''
             name
           else
             [name, version]
