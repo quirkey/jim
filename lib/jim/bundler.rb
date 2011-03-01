@@ -25,7 +25,8 @@ module Jim
   #
   # Pre jim version 0.3 had a different simpler but proprietary and (possibly confusing)
   # Jimfile format. Bundler can still read that format and can actually convert
-  # it into the new JSON format for you. Future versions may remove this support.
+  # it into the new JSON format for you. See `Jim::CLI.update_jimfile`.
+  # Future versions may remove this support.
   class Bundler
     class MissingFile < Jim::Error; end
     class InvalidBundle < Jim::Error; end
