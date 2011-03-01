@@ -29,6 +29,14 @@ class TestJimRack < Test::Unit::TestCase
       assert_equal 'text/javascript', last_response.headers['Content-Type']
     end
 
+    should "get non default bundle" do
+      Jim::Bundler.any_instance.expects(:bundle!).with('base').once.returns('jQuery')
+      get "#{@bundle_uri}base.js"
+      assert last_response
+      assert_equal 'jQuery', last_response.body
+      assert_equal 'text/javascript', last_response.headers['Content-Type']
+    end
+
     should "get individual compressed bundle" do
       Jim::Bundler.any_instance.expects(:compress!).with('default').once.returns('jQuery')
       get "#{@bundle_uri}default.min.js"
