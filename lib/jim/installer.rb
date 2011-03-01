@@ -43,7 +43,7 @@ module Jim
     # Fetch the file at fetch_path with and stage into a tmp directory.
     # Returns the staged directory of fetched file(s).
     def fetch
-      logger.info "Fetching #{fetch_path}"
+      logger.debug "Fetching #{fetch_path}"
       @fetched_path = Downlow.get(fetch_path, tmp_path, :tmp_dir => tmp_root)
       logger.debug "Fetched #{@fetched_path}"
       @fetched_path
@@ -87,10 +87,10 @@ module Jim
           :package_json => package_json.merge("name" => nil)
         })
         Jim.each_path_in_directories([@fetched_path], '.js', IGNORE_DIRS) do |subfile|
-          logger.info "Found file #{subfile}"
+          logger.debug "Found file #{subfile}"
           installed_paths << Jim::Installer.new(subfile, install_path, sub_options).install
         end
-        logger.info "Extracted to #{install_path}, #{installed_paths.length} file(s)"
+        logger.debug "Extracted to #{install_path}, #{installed_paths.length} file(s)"
         return installed_paths
       end
 
@@ -100,7 +100,7 @@ module Jim
         if options[:force]
           FileUtils.rm_rf(final_path)
         elsif Digest::MD5.hexdigest(File.read(final_path)) == Digest::MD5.hexdigest(File.read(@fetched_path))
-          logger.info "Duplicate file, skipping"
+          logger.warn "Duplicate file, skipping"
           return final_path
         else
           raise(Jim::FileExists.new(final_path))
@@ -111,7 +111,7 @@ module Jim
       # install json
       install_package_json(final_path.dirname + 'package.json') if !options[:shallow]
       installed = final_path.directory? ? Dir.glob(final_path + '**/*').length : 1
-      logger.info "Extracted to #{final_path}, #{installed} file(s)"
+      logger.debug "Extracted to #{final_path}, #{installed} file(s)"
       final_path
     ensure
       FileUtils.rm_rf(@fetched_path) if @fetched_path && @fetched_path.exist?
