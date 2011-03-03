@@ -46,8 +46,8 @@ module Jim
       # parse the options
       self.jimfile = Pathname.new(options[:jimfile] || 'Jimfile').expand_path
       self.force = options[:force]
-      self.debug = options[:debug]
-      logger.level = Logger::DEBUG if debug
+      self.debug = self.class.debugging || options[:debug]
+      logger.level = Logger::DEBUG if self.debug
     end
 
     desc 'init [APPDIR]',

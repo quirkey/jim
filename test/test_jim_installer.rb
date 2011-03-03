@@ -114,15 +114,13 @@ class TestJimInstaller < Test::Unit::TestCase
       end
 
       context "with a file that seems to be installed already" do
-        should "raise error" do
+        should "return false" do
           @installer = Jim::Installer.new(fixture_path('jquery-1.4.1.js'), tmp_path)
           assert @installer.install
           @install_path = File.join(tmp_path, 'lib', 'jquery-1.4.1')
           assert_readable @install_path, 'jquery.js'
           @installer = Jim::Installer.new(fixture_path('jquery.color.js'), tmp_path, :name => 'jquery', :version => '1.4.1')
-          assert_raise(Jim::FileExists) {
-            @installer.install
-          }
+          assert !@installer.install
         end
       end
 

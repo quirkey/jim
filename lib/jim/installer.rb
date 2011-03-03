@@ -103,7 +103,8 @@ module Jim
           logger.warn "Duplicate file, skipping"
           return final_path
         else
-          raise(Jim::FileExists.new(final_path))
+          logger.error "Trying to install to #{final_path}, but file already exists and is different."
+          return false
         end
       end
 
