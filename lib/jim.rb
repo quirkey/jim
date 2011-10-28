@@ -5,7 +5,8 @@ require 'version_sorter'
 require 'digest/md5'
 
 module Jim
-  VERSION = '0.3.1'
+  VERSION = File.read(File.expand_path("../VERSION", File.dirname(__FILE__))).chomp
+
 
   class Error < RuntimeError; end
   class InstallError < Error; end
