@@ -5,7 +5,7 @@ require 'version_sorter'
 require 'digest/md5'
 
 module Jim
-  VERSION = '0.3.1'
+  VERSION = '0.3.2'
 
   class Error < RuntimeError; end
   class InstallError < Error; end
