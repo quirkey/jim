@@ -3,7 +3,6 @@ require 'test/unit'
 require 'shoulda'
 require 'fakeweb'
 require 'mocha'
-require 'leftright'
 # require 'test_benchmark'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))

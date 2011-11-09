@@ -197,9 +197,11 @@ module Jim
         logger.debug "#{compress ? 'Compressing' : 'Bundling'} to #{io}"
       end
       final_io, io = io, "" if compress
+      content = []
       paths.each do |path, name, version|
-        io << path.read << "\n"
+        content << path.read
       end
+      io << content.join("\n")
       if compress
         final_io << compress_js(io)
         io = final_io

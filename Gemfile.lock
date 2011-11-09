@@ -12,7 +12,6 @@ GEM
       bundler (~> 1.0.0)
       git (>= 1.2.5)
       rake
-    leftright (0.9.0)
     mocha (0.9.8)
       rake
     rack (1.2.1)
@@ -34,7 +33,6 @@ DEPENDENCIES
   fakeweb (>= 1.2.8)
   fssm
   jeweler
-  leftright
   mocha
   rack-test
   rake
