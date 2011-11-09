@@ -4,15 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{jim}
+  s.name = "jim"
   s.version = "0.3.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Aaron Quint"]
-  s.date = %q{2011-03-01}
-  s.default_executable = %q{jim}
-  s.description = %q{jim is your friendly javascript library manager. He downloads, stores, bundles, vendors and compresses.}
-  s.email = %q{aaron@quirkey.com}
+  s.date = "2011-11-09"
+  s.description = "jim is your friendly javascript library manager. He downloads, stores, bundles, vendors and compresses."
+  s.email = "aaron@quirkey.com"
   s.executables = ["jim"]
   s.extra_rdoc_files = [
     "LICENSE",
@@ -107,10 +106,10 @@ Gem::Specification.new do |s|
     "test/test_jim_rack.rb",
     "test/test_jim_version_parser.rb"
   ]
-  s.homepage = %q{http://github.com/quirkey/jim}
+  s.homepage = "http://github.com/quirkey/jim"
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.7}
-  s.summary = %q{jim is your friendly javascript library manager}
+  s.rubygems_version = "1.8.10"
+  s.summary = "jim is your friendly javascript library manager"
   s.test_files = [
     "test/fixtures/sammy-0.5.0/examples/backend/app.rb",
     "test/fixtures/sammy-0.5.0/vendor/jsdoc/jsdoc.rb",
@@ -124,82 +123,27 @@ Gem::Specification.new do |s|
   ]
 
   if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<rake>, [">= 0"])
-      s.add_runtime_dependency(%q<jeweler>, [">= 0"])
-      s.add_runtime_dependency(%q<test-unit>, [">= 0"])
       s.add_runtime_dependency(%q<downlow>, ["~> 0.1.3"])
       s.add_runtime_dependency(%q<thor>, [">= 0"])
       s.add_runtime_dependency(%q<fssm>, [">= 0"])
       s.add_runtime_dependency(%q<yajl-ruby>, [">= 0"])
       s.add_runtime_dependency(%q<version_sorter>, ["~> 1.1.0"])
-      s.add_runtime_dependency(%q<leftright>, [">= 0"])
-      s.add_runtime_dependency(%q<shoulda>, [">= 0"])
-      s.add_runtime_dependency(%q<fakeweb>, [">= 1.2.8"])
-      s.add_runtime_dependency(%q<rack-test>, [">= 0"])
-      s.add_runtime_dependency(%q<mocha>, [">= 0"])
-      s.add_runtime_dependency(%q<downlow>, ["~> 0.1.4"])
-      s.add_runtime_dependency(%q<thor>, ["~> 0.14.4"])
-      s.add_runtime_dependency(%q<yajl-ruby>, [">= 0"])
-      s.add_runtime_dependency(%q<version_sorter>, ["~> 1.1.0"])
-      s.add_runtime_dependency(%q<fssm>, ["~> 0.2.0"])
-      s.add_development_dependency(%q<shoulda>, [">= 0"])
-      s.add_development_dependency(%q<fakeweb>, [">= 1.2.8"])
-      s.add_development_dependency(%q<mocha>, [">= 0"])
-      s.add_development_dependency(%q<leftright>, [">= 0"])
-      s.add_development_dependency(%q<rack-test>, [">= 0.5.4"])
     else
-      s.add_dependency(%q<rake>, [">= 0"])
-      s.add_dependency(%q<jeweler>, [">= 0"])
-      s.add_dependency(%q<test-unit>, [">= 0"])
       s.add_dependency(%q<downlow>, ["~> 0.1.3"])
       s.add_dependency(%q<thor>, [">= 0"])
       s.add_dependency(%q<fssm>, [">= 0"])
       s.add_dependency(%q<yajl-ruby>, [">= 0"])
       s.add_dependency(%q<version_sorter>, ["~> 1.1.0"])
-      s.add_dependency(%q<leftright>, [">= 0"])
-      s.add_dependency(%q<shoulda>, [">= 0"])
-      s.add_dependency(%q<fakeweb>, [">= 1.2.8"])
-      s.add_dependency(%q<rack-test>, [">= 0"])
-      s.add_dependency(%q<mocha>, [">= 0"])
-      s.add_dependency(%q<downlow>, ["~> 0.1.4"])
-      s.add_dependency(%q<thor>, ["~> 0.14.4"])
-      s.add_dependency(%q<yajl-ruby>, [">= 0"])
-      s.add_dependency(%q<version_sorter>, ["~> 1.1.0"])
-      s.add_dependency(%q<fssm>, ["~> 0.2.0"])
-      s.add_dependency(%q<shoulda>, [">= 0"])
-      s.add_dependency(%q<fakeweb>, [">= 1.2.8"])
-      s.add_dependency(%q<mocha>, [">= 0"])
-      s.add_dependency(%q<leftright>, [">= 0"])
-      s.add_dependency(%q<rack-test>, [">= 0.5.4"])
     end
   else
-    s.add_dependency(%q<rake>, [">= 0"])
-    s.add_dependency(%q<jeweler>, [">= 0"])
-    s.add_dependency(%q<test-unit>, [">= 0"])
     s.add_dependency(%q<downlow>, ["~> 0.1.3"])
     s.add_dependency(%q<thor>, [">= 0"])
     s.add_dependency(%q<fssm>, [">= 0"])
     s.add_dependency(%q<yajl-ruby>, [">= 0"])
     s.add_dependency(%q<version_sorter>, ["~> 1.1.0"])
-    s.add_dependency(%q<leftright>, [">= 0"])
-    s.add_dependency(%q<shoulda>, [">= 0"])
-    s.add_dependency(%q<fakeweb>, [">= 1.2.8"])
-    s.add_dependency(%q<rack-test>, [">= 0"])
-    s.add_dependency(%q<mocha>, [">= 0"])
-    s.add_dependency(%q<downlow>, ["~> 0.1.4"])
-    s.add_dependency(%q<thor>, ["~> 0.14.4"])
-    s.add_dependency(%q<yajl-ruby>, [">= 0"])
-    s.add_dependency(%q<version_sorter>, ["~> 1.1.0"])
-    s.add_dependency(%q<fssm>, ["~> 0.2.0"])
-    s.add_dependency(%q<shoulda>, [">= 0"])
-    s.add_dependency(%q<fakeweb>, [">= 1.2.8"])
-    s.add_dependency(%q<mocha>, [">= 0"])
-    s.add_dependency(%q<leftright>, [">= 0"])
-    s.add_dependency(%q<rack-test>, [">= 0.5.4"])
   end
 end
 
