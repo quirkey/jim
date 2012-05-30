@@ -46,7 +46,7 @@ module Jim
       # parse the options
       self.jimfile = Pathname.new(options[:jimfile] || 'Jimfile').expand_path
       self.force = options[:force]
-      self.debug = self.class.debugging || options[:debug]
+      self.debug = self.class.respond_to?(:debugging) ? self.class.debugging : options[:debug]
       logger.level = Logger::DEBUG if self.debug
     end
 
