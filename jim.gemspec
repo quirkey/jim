@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "jim"
-  s.version = "0.3.2"
+  s.version = "0.3.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Aaron Quint"]
-  s.date = "2011-11-09"
+  s.date = "2012-05-30"
   s.description = "jim is your friendly javascript library manager. He downloads, stores, bundles, vendors and compresses."
   s.email = "aaron@quirkey.com"
   s.executables = ["jim"]
@@ -108,40 +108,29 @@ Gem::Specification.new do |s|
   ]
   s.homepage = "http://github.com/quirkey/jim"
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.10"
+  s.rubygems_version = "1.8.17"
   s.summary = "jim is your friendly javascript library manager"
-  s.test_files = [
-    "test/fixtures/sammy-0.5.0/examples/backend/app.rb",
-    "test/fixtures/sammy-0.5.0/vendor/jsdoc/jsdoc.rb",
-    "test/helper.rb",
-    "test/test_jim_bundler.rb",
-    "test/test_jim_cli.rb",
-    "test/test_jim_index.rb",
-    "test/test_jim_installer.rb",
-    "test/test_jim_rack.rb",
-    "test/test_jim_version_parser.rb"
-  ]
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<downlow>, ["~> 0.1.3"])
-      s.add_runtime_dependency(%q<thor>, [">= 0"])
-      s.add_runtime_dependency(%q<fssm>, [">= 0"])
+      s.add_runtime_dependency(%q<thor>, ["~> 0.15"])
+      s.add_runtime_dependency(%q<listen>, [">= 0"])
       s.add_runtime_dependency(%q<yajl-ruby>, [">= 0"])
       s.add_runtime_dependency(%q<version_sorter>, ["~> 1.1.0"])
     else
       s.add_dependency(%q<downlow>, ["~> 0.1.3"])
-      s.add_dependency(%q<thor>, [">= 0"])
-      s.add_dependency(%q<fssm>, [">= 0"])
+      s.add_dependency(%q<thor>, ["~> 0.15"])
+      s.add_dependency(%q<listen>, [">= 0"])
       s.add_dependency(%q<yajl-ruby>, [">= 0"])
       s.add_dependency(%q<version_sorter>, ["~> 1.1.0"])
     end
   else
     s.add_dependency(%q<downlow>, ["~> 0.1.3"])
-    s.add_dependency(%q<thor>, [">= 0"])
-    s.add_dependency(%q<fssm>, [">= 0"])
+    s.add_dependency(%q<thor>, ["~> 0.15"])
+    s.add_dependency(%q<listen>, [">= 0"])
     s.add_dependency(%q<yajl-ruby>, [">= 0"])
     s.add_dependency(%q<version_sorter>, ["~> 1.1.0"])
   end
