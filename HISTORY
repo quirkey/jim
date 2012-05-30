@@ -1,3 +1,8 @@
+== 0.3.3 [05-29-12]
+
+* Update dependencies (Thor, etc)
+* Move to listen gem (replaces FSSM)
+
 == 0.3.2 [11-09-11]
 
 * Dont raise error on install anymore, just return false (better for the CLI)

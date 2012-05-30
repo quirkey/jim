@@ -211,7 +211,7 @@ module Jim
       "Watches your Jimfile and JS files and triggers `bundle` if something " +
       "changes. Handy for development."
     def watch(dir = nil)
-      require 'fssm'
+      require 'listen'
       run_update = lambda {|type, path|
         unless bundler.bundle_paths.any? {|p| path.include?(p) }
           say("--> #{path} #{type}")
@@ -220,16 +220,17 @@ module Jim
       }
       say "Now watching JS files..."
       run_update["started", 'Jimfile']
-      FSSM.monitor(Dir.pwd, [File.join('**','*.js'), 'Jimfile']) do
-        update do |base, relative|
+      dir ||= Dir.pwd
+      Listen.to(File.expand_path(dir), :filter => /(\.js$|Jimfile)/) do |modified, added, removed|
+        modified.each do |relative|
           run_update["changed", relative]
         end
 
-        create do |base, relative|
+        added.each do |relative|
           run_update["created", relative]
         end
 
-        delete do |base, relative|
+        removed.each do |relative|
           run_update["deleted", relative]
         end
       end
